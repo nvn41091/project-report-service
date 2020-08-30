@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @ComponentScan("com.nvn41091")
-@EnableJpaRepositories(basePackages = "com.nvn41091.model")
+@EnableJpaRepositories("com.nvn41091.repository")
 @EntityScan(basePackages = "com.nvn41091.model")
 @EnableTransactionManagement
 public class SecurityJwtApplication {

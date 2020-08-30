@@ -1,8 +1,9 @@
 package com.nvn41091.security;
 
-import com.nvn41091.service.dto.JwtResponse;
-import com.nvn41091.service.dto.User;
+import com.nvn41091.model.User;
+import com.nvn41091.repository.UserRepository;
 import com.nvn41091.utils.JwtTokenUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +20,9 @@ public class JwtAuthenticationController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
+    private UserRepository repository;
+
+    @Autowired
     private JwtTokenUtils jwtTokenUtils;
 
     @Autowired
@@ -26,11 +30,16 @@ public class JwtAuthenticationController {
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody User user) throws Exception {
-        authenticate(user.getUsername(), user.getPassword());
+        authenticate(user.getUserName(), user.getPasswordHash());
         final UserDetails userDetails = userDetailsService
-                .loadUserByUsername(user.getUsername());
+                .loadUserByUsername(user.getUserName());
         final String token = jwtTokenUtils.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponse(token));
+        final String generatedString = RandomStringUtils.random(15, true, true);
+        repository.updateUserByCookieLogin(generatedString, userDetails.getUsername());
+        return ResponseEntity.ok()
+                .header("Authorization", token)
+                .header("Set-Cookie", "cookieLogin=" + generatedString)
+                .build();
     }
 
     private void authenticate(String username, String password) throws Exception {

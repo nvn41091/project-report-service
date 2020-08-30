@@ -1,26 +1,33 @@
 package com.nvn41091.service.dto;
 
+import com.nvn41091.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.util.Collection;
 
-public class User implements Serializable, UserDetails {
+public class UserDetailImpl implements Serializable, UserDetails {
     private static final long serialVersionUID = 5926468583005150707L;
-    private String username;
-    private String password;
+    private User user;
 
-    public User() {
+    public UserDetailImpl() {
     }
 
-    public User(String username, String password) {
-        this.setUsername(username);
-        this.setPassword(password);
+    public UserDetailImpl(User user) {
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getUsername() {
-        return this.username;
+        return this.user.getUserName();
     }
 
     @Override
@@ -43,19 +50,12 @@ public class User implements Serializable, UserDetails {
         return true;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
 
     public String getPassword() {
-        return this.password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
+        return this.user.getPasswordHash();
     }
 }

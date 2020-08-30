@@ -1,4 +1,4 @@
-package com.nvn41091.model;
+package com.nvn41091.service.dto;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

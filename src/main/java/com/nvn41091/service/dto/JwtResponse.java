@@ -1,4 +1,4 @@
-package com.nvn41091.model;
+package com.nvn41091.service.dto;
 
 import java.io.Serializable;
 

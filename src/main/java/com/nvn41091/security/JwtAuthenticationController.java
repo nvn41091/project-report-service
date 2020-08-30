@@ -1,7 +1,7 @@
 package com.nvn41091.security;
 
-import com.nvn41091.model.JwtResponse;
-import com.nvn41091.model.User;
+import com.nvn41091.service.dto.JwtResponse;
+import com.nvn41091.service.dto.User;
 import com.nvn41091.utils.JwtTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +10,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

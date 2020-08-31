@@ -2,6 +2,7 @@ package com.nvn41091.security;
 
 import com.nvn41091.model.User;
 import com.nvn41091.repository.UserRepository;
+import com.nvn41091.utils.FindsUtils;
 import com.nvn41091.utils.JwtTokenUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @RestController
@@ -31,14 +33,18 @@ public class JwtAuthenticationController {
     private JwtUserDetailsService userDetailsService;
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody User user, HttpSession session) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody User user,
+                                                       HttpSession session,
+                                                       HttpServletRequest request) throws Exception {
         authenticate(user.getUserName(), user.getPasswordHash());
         final UserDetails userDetails = userDetailsService
                 .loadUserByUsername(user.getUserName());
         final String token = jwtTokenUtils.generateToken(userDetails);
         final String randomString = RandomStringUtils.random(15, true, true);
         session.setAttribute("sessionLogin", randomString);
-        repository.updateUserByCookieLogin(randomString, userDetails.getUsername());
+        final String ipLogin = FindsUtils.getClientIpAddr(request);
+        final String macLogin = FindsUtils.findMacAddress();
+        repository.updateUserBySessionLoginAndIpLoginAndMacLogin(randomString, ipLogin, macLogin, userDetails.getUsername());
         return ResponseEntity.ok()
                 .header("Authorization", token)
                 .build();

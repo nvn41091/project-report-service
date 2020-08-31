@@ -12,6 +12,7 @@ import com.nvn41091.service.dto.UserDetailImpl;
 import com.nvn41091.utils.FindsUtils;
 import com.nvn41091.utils.JwtTokenUtils;
 import io.jsonwebtoken.SignatureException;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,9 +30,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
     private JwtTokenUtils jwtTokenUtil;
 
+    @SneakyThrows
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) {
         final String requestTokenHeader = request.getHeader("Authorization");
         String username = null;
         String jwtToken = null;
@@ -53,9 +54,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (username != null
                 && SecurityContextHolder.getContext().getAuthentication() == null
                 && request.getSession().getAttribute("sessionLogin") != null) {
-            System.out.println(FindsUtils.getClientIpAddr(request));
-            User user = this.repository.findUserByUserNameAndSessionLogin(username,
-                    request.getSession().getAttribute("sessionLogin").toString());
+            String ipLogin = FindsUtils.getClientIpAddr(request);
+            String macLogin = FindsUtils.findMacAddress();
+            User user = this.repository.findUserByUserNameAndSessionLoginAndIpLoginAndMacLogin(username,
+                    request.getSession().getAttribute("sessionLogin").toString(), ipLogin, macLogin);
 
             if (user != null) {
                 UserDetailImpl userDetails = new UserDetailImpl(user);

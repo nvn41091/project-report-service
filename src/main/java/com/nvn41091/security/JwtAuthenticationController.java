@@ -13,6 +13,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+
 @RestController
 @CrossOrigin
 public class JwtAuthenticationController {
@@ -29,16 +31,16 @@ public class JwtAuthenticationController {
     private JwtUserDetailsService userDetailsService;
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody User user) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody User user, HttpSession session) throws Exception {
         authenticate(user.getUserName(), user.getPasswordHash());
         final UserDetails userDetails = userDetailsService
                 .loadUserByUsername(user.getUserName());
         final String token = jwtTokenUtils.generateToken(userDetails);
-        final String generatedString = RandomStringUtils.random(15, true, true);
-        repository.updateUserByCookieLogin(generatedString, userDetails.getUsername());
+        final String randomString = RandomStringUtils.random(15, true, true);
+        session.setAttribute("sessionLogin", randomString);
+        repository.updateUserByCookieLogin(randomString, userDetails.getUsername());
         return ResponseEntity.ok()
                 .header("Authorization", token)
-                .header("Set-Cookie", "cookieLogin=" + generatedString)
                 .build();
     }
 

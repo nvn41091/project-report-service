@@ -3,19 +3,18 @@ package com.nvn41091.security;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.nvn41091.model.User;
 import com.nvn41091.repository.UserRepository;
 import com.nvn41091.service.dto.UserDetailImpl;
+import com.nvn41091.utils.FindsUtils;
 import com.nvn41091.utils.JwtTokenUtils;
 import io.jsonwebtoken.SignatureException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -51,31 +50,24 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
 
         // Once we get the token validate it.
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            String cookieLogin = null;
-            if (request.getCookies() != null) {
-                for (Cookie cookie : request.getCookies()) {
-                    if (cookie.getName().equals("cookieLogin")) {
-                        cookieLogin = cookie.getValue();
-                        break;
-                    }
-                }
-            }
-            if (cookieLogin != null) {
-                User user = this.repository.findUserByUserNameAndCookieLogin(username, cookieLogin);
+        if (username != null
+                && SecurityContextHolder.getContext().getAuthentication() == null
+                && request.getSession().getAttribute("sessionLogin") != null) {
+            System.out.println(FindsUtils.getClientIpAddr(request));
+            User user = this.repository.findUserByUserNameAndSessionLogin(username,
+                    request.getSession().getAttribute("sessionLogin").toString());
 
-                if (user != null) {
-                    UserDetailImpl userDetails = new UserDetailImpl(user);
-                    if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
-                        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                                userDetails, null, userDetails.getAuthorities());
-                        usernamePasswordAuthenticationToken
-                                .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                        // After setting the Authentication in the context, we specify
-                        // that the current user is authenticated. So it passes the
-                        // Spring Security Configurations successfully.
-                        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-                    }
+            if (user != null) {
+                UserDetailImpl userDetails = new UserDetailImpl(user);
+                if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities());
+                    usernamePasswordAuthenticationToken
+                            .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    // After setting the Authentication in the context, we specify
+                    // that the current user is authenticated. So it passes the
+                    // Spring Security Configurations successfully.
+                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
                 }
             }
         }

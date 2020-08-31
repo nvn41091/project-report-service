@@ -22,7 +22,7 @@ public class User {
     private Timestamp resetDate;
     private String lastModifiedBy;
     private Timestamp lastModifiedDate;
-    private String cookieLogin;
+    private String sessionLogin;
 
     @Id
     @Column(name = "id")
@@ -176,13 +176,13 @@ public class User {
     }
 
     @Basic
-    @Column(name = "cookie_login")
-    public String getCookieLogin() {
-        return cookieLogin;
+    @Column(name = "session_login")
+    public String getSessionLogin() {
+        return sessionLogin;
     }
 
-    public void setCookieLogin(String cookieLogin) {
-        this.cookieLogin = cookieLogin;
+    public void setSessionLogin(String sessionLogin) {
+        this.sessionLogin = sessionLogin;
     }
 
     @Override
@@ -205,11 +205,11 @@ public class User {
                 Objects.equals(resetDate, user.resetDate) &&
                 Objects.equals(lastModifiedBy, user.lastModifiedBy) &&
                 Objects.equals(lastModifiedDate, user.lastModifiedDate) &&
-                Objects.equals(cookieLogin, user.cookieLogin);
+                Objects.equals(sessionLogin, user.sessionLogin);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userName, passwordHash, fullName, email, imageUrl, status, langKey, activationKey, resetKey, createdBy, createDate, resetDate, lastModifiedBy, lastModifiedDate, cookieLogin);
+        return Objects.hash(id, userName, passwordHash, fullName, email, imageUrl, status, langKey, activationKey, resetKey, createdBy, createDate, resetDate, lastModifiedBy, lastModifiedDate, sessionLogin);
     }
 }

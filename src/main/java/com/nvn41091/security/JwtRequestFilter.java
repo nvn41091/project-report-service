@@ -55,9 +55,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 && SecurityContextHolder.getContext().getAuthentication() == null
                 && request.getSession().getAttribute("sessionLogin") != null) {
             String ipLogin = FindsUtils.getClientIpAddr(request);
-            String macLogin = FindsUtils.findMacAddress();
-            User user = this.repository.findUserByUserNameAndSessionLoginAndIpLoginAndMacLogin(username,
-                    request.getSession().getAttribute("sessionLogin").toString(), ipLogin, macLogin);
+            User user = this.repository.findUserByUserNameAndSessionLoginAndIpLogin(username,
+                    request.getSession().getAttribute("sessionLogin").toString(), ipLogin);
 
             if (user != null) {
                 UserDetailImpl userDetails = new UserDetailImpl(user);

@@ -24,7 +24,6 @@ public class User {
     private Timestamp lastModifiedDate;
     private String sessionLogin;
     private String ipLogin;
-    private String macLogin;
 
     @Id
     @Column(name = "id")
@@ -197,16 +196,6 @@ public class User {
         this.ipLogin = ipLogin;
     }
 
-    @Basic
-    @Column(name = "mac_login")
-    public String getMacLogin() {
-        return macLogin;
-    }
-
-    public void setMacLogin(String macLogin) {
-        this.macLogin = macLogin;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -228,12 +217,11 @@ public class User {
                 Objects.equals(lastModifiedBy, user.lastModifiedBy) &&
                 Objects.equals(lastModifiedDate, user.lastModifiedDate) &&
                 Objects.equals(sessionLogin, user.sessionLogin) &&
-                Objects.equals(ipLogin, user.ipLogin) &&
-                Objects.equals(macLogin, user.macLogin);
+                Objects.equals(ipLogin, user.ipLogin);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userName, passwordHash, fullName, email, imageUrl, status, langKey, activationKey, resetKey, createdBy, createDate, resetDate, lastModifiedBy, lastModifiedDate, sessionLogin, ipLogin, macLogin);
+        return Objects.hash(id, userName, passwordHash, fullName, email, imageUrl, status, langKey, activationKey, resetKey, createdBy, createDate, resetDate, lastModifiedBy, lastModifiedDate, sessionLogin, ipLogin);
     }
 }

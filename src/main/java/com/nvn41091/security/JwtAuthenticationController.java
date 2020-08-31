@@ -43,8 +43,7 @@ public class JwtAuthenticationController {
         final String randomString = RandomStringUtils.random(15, true, true);
         session.setAttribute("sessionLogin", randomString);
         final String ipLogin = FindsUtils.getClientIpAddr(request);
-        final String macLogin = FindsUtils.findMacAddress();
-        repository.updateUserBySessionLoginAndIpLoginAndMacLogin(randomString, ipLogin, macLogin, userDetails.getUsername());
+        repository.updateUserBySessionLoginAndIpLogin(randomString, ipLogin, userDetails.getUsername());
         return ResponseEntity.ok()
                 .header("Authorization", token)
                 .build();

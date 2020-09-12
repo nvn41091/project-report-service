@@ -1,19 +1,20 @@
 package com.nvn41091.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
 @Table(name = "user")
-public class User {
-    private long id;
+public class User implements Serializable {
+    private Long id;
     private String userName;
     private String passwordHash;
     private String fullName;
     private String email;
     private String imageUrl;
-    private int status;
+    private Boolean status;
     private String langKey;
     private String activationKey;
     private String resetKey;
@@ -22,17 +23,24 @@ public class User {
     private Timestamp resetDate;
     private String lastModifiedBy;
     private Timestamp lastModifiedDate;
-    private String sessionLogin;
-    private String ipLogin;
+    private String fingerprint;
+
+    public User() {
+    }
+
+    public User(Long id, String email) {
+        this.id = id;
+        this.email = email;
+    }
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -88,11 +96,11 @@ public class User {
 
     @Basic
     @Column(name = "status")
-    public int getStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
@@ -176,24 +184,12 @@ public class User {
         this.lastModifiedDate = lastModifiedDate;
     }
 
-    @Basic
-    @Column(name = "session_login")
-    public String getSessionLogin() {
-        return sessionLogin;
+    public String getFingerprint() {
+        return fingerprint;
     }
 
-    public void setSessionLogin(String sessionLogin) {
-        this.sessionLogin = sessionLogin;
-    }
-
-    @Basic
-    @Column(name = "ip_login")
-    public String getIpLogin() {
-        return ipLogin;
-    }
-
-    public void setIpLogin(String ipLogin) {
-        this.ipLogin = ipLogin;
+    public void setFingerprint(String fingerprint) {
+        this.fingerprint = fingerprint;
     }
 
     @Override
@@ -201,8 +197,8 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id &&
-                status == user.status &&
+        return id.equals(user.id) &&
+                status.equals(user.status) &&
                 Objects.equals(userName, user.userName) &&
                 Objects.equals(passwordHash, user.passwordHash) &&
                 Objects.equals(fullName, user.fullName) &&
@@ -216,12 +212,11 @@ public class User {
                 Objects.equals(resetDate, user.resetDate) &&
                 Objects.equals(lastModifiedBy, user.lastModifiedBy) &&
                 Objects.equals(lastModifiedDate, user.lastModifiedDate) &&
-                Objects.equals(sessionLogin, user.sessionLogin) &&
-                Objects.equals(ipLogin, user.ipLogin);
+                Objects.equals(fingerprint, user.fingerprint);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userName, passwordHash, fullName, email, imageUrl, status, langKey, activationKey, resetKey, createdBy, createDate, resetDate, lastModifiedBy, lastModifiedDate, sessionLogin, ipLogin);
+        return Objects.hash(id, userName, passwordHash, fullName, email, imageUrl, status, langKey, activationKey, resetKey, createdBy, createDate, resetDate, lastModifiedBy, lastModifiedDate, fingerprint);
     }
 }

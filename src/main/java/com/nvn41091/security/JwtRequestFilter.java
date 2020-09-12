@@ -1,18 +1,16 @@
 package com.nvn41091.security;
 
-import java.io.IOException;
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.nvn41091.model.User;
 import com.nvn41091.repository.UserRepository;
 import com.nvn41091.service.dto.UserDetailImpl;
-import com.nvn41091.utils.FindsUtils;
 import com.nvn41091.utils.JwtTokenUtils;
 import io.jsonwebtoken.SignatureException;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,20 +42,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             } catch (SignatureException e) {
                 logger.error("Invalid Sign");
             } catch (IllegalArgumentException e) {
-                System.out.println("Unable to get JWT Token");
+                logger.error("Unable to get JWT Token");
             } catch (ExpiredJwtException e) {
-                System.out.println("JWT Token has expired");
+                logger.error("JWT Token has expired");
             }
         }
+        String fingerprint = request.getHeader("fingerprint");
 
         // Once we get the token validate it.
-        if (username != null
-                && SecurityContextHolder.getContext().getAuthentication() == null
-                && request.getSession().getAttribute("sessionLogin") != null) {
-            String ipLogin = FindsUtils.getClientIpAddr(request);
-            User user = this.repository.findUserByUserNameAndSessionLoginAndIpLogin(username,
-                    request.getSession().getAttribute("sessionLogin").toString(), ipLogin);
-
+        if (StringUtils.isNoneEmpty(username) && StringUtils.isNoneEmpty(fingerprint)) {
+            User user = this.repository.findUserByUserNameAndFingerprint(username, fingerprint);
             if (user != null) {
                 UserDetailImpl userDetails = new UserDetailImpl(user);
                 if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {

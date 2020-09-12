@@ -2,10 +2,9 @@ package com.nvn41091.security;
 
 import com.nvn41091.model.User;
 import com.nvn41091.repository.UserRepository;
-import com.nvn41091.utils.FindsUtils;
 import com.nvn41091.utils.JwtTokenUtils;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,7 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import java.util.Collections;
 
 @RestController
 @CrossOrigin
@@ -32,21 +31,19 @@ public class JwtAuthenticationController {
     @Autowired
     private JwtUserDetailsService userDetailsService;
 
-    @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+    @PostMapping(value = "/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody User user,
-                                                       HttpSession session,
-                                                       HttpServletRequest request) throws Exception {
+                                                         HttpServletRequest request) throws Exception {
         authenticate(user.getUserName(), user.getPasswordHash());
         final UserDetails userDetails = userDetailsService
                 .loadUserByUsername(user.getUserName());
         final String token = jwtTokenUtils.generateToken(userDetails);
-        final String randomString = RandomStringUtils.random(15, true, true);
-        session.setAttribute("sessionLogin", randomString);
-        final String ipLogin = FindsUtils.getClientIpAddr(request);
-        repository.updateUserBySessionLoginAndIpLogin(randomString, ipLogin, userDetails.getUsername());
-        return ResponseEntity.ok()
-                .header("Authorization", token)
-                .build();
+        final String fingerprint = request.getHeader("fingerprint");
+        repository.updateUserByFingerPrint(fingerprint, user.getUserName());
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", token);
+        headers.add("Access-Control-Expose-Headers", "Authorization");
+        return ResponseEntity.ok().headers(headers).body(Collections.singletonMap("username", user.getUserName()));
     }
 
     private void authenticate(String username, String password) throws Exception {

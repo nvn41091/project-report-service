@@ -47,7 +47,7 @@ public class UserDetailImpl implements Serializable, UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return user.getStatus();
     }
 
     @Override

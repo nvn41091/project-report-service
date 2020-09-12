@@ -14,13 +14,10 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     User findUserByUserName(String userName);
 
-    User findUserByUserNameAndSessionLoginAndIpLogin(String username, String sessionLogin, String ipLogin);
+    User findUserByUserNameAndFingerprint(String username, String fingerprint);
 
-    @Modifying
     @Transactional
-    @Query("UPDATE User SET sessionLogin = :sessionLogin, ipLogin = :ipLogin WHERE userName = :userName")
-    void updateUserBySessionLoginAndIpLogin(
-            @Param("sessionLogin") String sessionLogin,
-            @Param("ipLogin") String ipLogin,
-            @Param("userName") String userName);
+    @Modifying
+    @Query("UPDATE User SET fingerprint = :fingerprint WHERE userName = :username")
+    void updateUserByFingerPrint(@Param("fingerprint") String fingerPrint, @Param("username") String username);
 }

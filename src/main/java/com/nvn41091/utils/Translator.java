@@ -40,7 +40,7 @@ public class Translator {
         try {
             Locale locale = LocaleContextHolder.getLocale();
             return messageSource.getMessage(msgCode, null, locale);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
             return "";
         }

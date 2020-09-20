@@ -57,9 +57,12 @@ public class JwtAuthenticationController {
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
+    public ResponseEntity<?> register(@RequestBody User user, HttpServletRequest request) {
         user.setPasswordHash(encoder.encode(user.getPasswordHash()));
         user.setCreateDate(new Timestamp(System.currentTimeMillis()));
+        String lang = request.getHeader("Accept-Language").split(",")[0];
+        user.setLangKey(lang);
+        user.setStatus(true);
         User userCreated = repository.save(user);
         logger.info(">>>>>>>>> CREATE USER SUCCESS - USER ID: " + userCreated.getId());
         return ResponseEntity.ok().build();

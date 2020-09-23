@@ -20,7 +20,7 @@ public class BeanConfiguration {
     public ResourceBundleMessageSource messageSource() {
         ResourceBundleMessageSource  messageSource
                 = new ResourceBundleMessageSource ();
-        messageSource.setBasename("classpath:i18n/messages");
+        messageSource.setBasename("i18n/messages");
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setUseCodeAsDefaultMessage(true);
         return messageSource;

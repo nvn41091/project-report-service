@@ -31,8 +31,11 @@ public class UserServiceImpl implements UserService {
         user.setStatus(true);
         if (StringUtils.isNoneEmpty(user.getEmail())) {
             if (repository.findAllByEmail(user.getEmail()).size() > 0) {
-                throw new BadRequestAlertException(Translator.toLocale("register.existUsername"), "register.existUsername", "register.existUsername");
+                throw new BadRequestAlertException(Translator.toLocale("register.existEmail"), "user", "existEmail");
             }
+        }
+        if (repository.findAllByUserName(user.getUserName()).size() > 0) {
+            throw new BadRequestAlertException(Translator.toLocale("register.existUsername"), "user", "existUsername");
         }
         return repository.save(user);
     }

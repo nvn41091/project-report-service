@@ -2,6 +2,7 @@ package com.nvn41091.security;
 
 import com.nvn41091.model.User;
 import com.nvn41091.repository.UserRepository;
+import com.nvn41091.service.UserService;
 import com.nvn41091.utils.JwtTokenUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,7 @@ public class JwtAuthenticationController {
     private UserRepository repository;
 
     @Autowired
-    private PasswordEncoder encoder;
+    private UserService userService;
 
     @Autowired
     private JwtTokenUtils jwtTokenUtils;
@@ -58,12 +59,7 @@ public class JwtAuthenticationController {
 
     @PostMapping(value = "/register")
     public ResponseEntity<?> register(@RequestBody User user, HttpServletRequest request) {
-        user.setPasswordHash(encoder.encode(user.getPasswordHash()));
-        user.setCreateDate(new Timestamp(System.currentTimeMillis()));
-        String lang = request.getHeader("Accept-Language").split(",")[0];
-        user.setLangKey(lang);
-        user.setStatus(true);
-        User userCreated = repository.save(user);
+        User userCreated = userService.save(user, request);
         logger.info(">>>>>>>>> CREATE USER SUCCESS - USER ID: " + userCreated.getId());
         return ResponseEntity.ok().build();
     }

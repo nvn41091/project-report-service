@@ -17,6 +17,10 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     User findUserByUserNameAndFingerprint(String username, String fingerprint);
 
+    List<User> findAllByUserName(String userName);
+
+    List<User> findAllByEmail(String email);
+
     @Transactional
     @Modifying
     @Query("UPDATE User SET fingerprint = :fingerprint WHERE userName = :username")

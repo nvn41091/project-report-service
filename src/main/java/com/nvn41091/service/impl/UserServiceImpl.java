@@ -2,7 +2,9 @@ package com.nvn41091.service.impl;
 
 import com.nvn41091.model.User;
 import com.nvn41091.repository.UserRepository;
+import com.nvn41091.rest.errors.BadRequestAlertException;
 import com.nvn41091.service.UserService;
+import com.nvn41091.utils.Translator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,7 +31,7 @@ public class UserServiceImpl implements UserService {
         user.setStatus(true);
         if (StringUtils.isNoneEmpty(user.getEmail())) {
             if (repository.findAllByEmail(user.getEmail()).size() > 0) {
-
+                throw new BadRequestAlertException(Translator.toLocale("register.existUsername"), "register.existUsername", "register.existUsername");
             }
         }
         return repository.save(user);

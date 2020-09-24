@@ -14,15 +14,14 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Timestamp;
+import javax.transaction.Transactional;
 import java.util.Collections;
 
 @RestController
-@CrossOrigin
+@Transactional
 public class JwtAuthenticationController {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationController.class);

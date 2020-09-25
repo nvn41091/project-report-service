@@ -382,7 +382,7 @@ public class DataUtil {
     }
 
     public static String makeLikeParam(String s) {
-        if (StringUtils.isEmpty(s)) return s;
+        if (StringUtils.isEmpty(s)) return null;
         s = s.trim().toLowerCase().replace("!", Constants.DEFAULT_ESCAPE_CHAR + "!")
                 .replace("%", Constants.DEFAULT_ESCAPE_CHAR + "%")
                 .replace("_", Constants.DEFAULT_ESCAPE_CHAR + "_");

@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -21,10 +23,14 @@ import javax.transaction.Transactional;
 import java.util.Collections;
 
 @RestController
+@CrossOrigin
 @Transactional
 public class JwtAuthenticationController {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationController.class);
+
+    @Autowired
+    private JavaMailSender javaMailSender;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -52,7 +58,6 @@ public class JwtAuthenticationController {
         repository.updateUserByFingerPrint(fingerprint, user.getUserName());
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", token);
-        headers.add("Access-Control-Expose-Headers", "Authorization");
         return ResponseEntity.ok().headers(headers).body(Collections.singletonMap("username", user.getUserName()));
     }
 
@@ -60,7 +65,7 @@ public class JwtAuthenticationController {
     public ResponseEntity<?> register(@RequestBody User user, HttpServletRequest request) {
         User userCreated = userService.save(user, request);
         logger.info(">>>>>>>>> CREATE USER SUCCESS - USER ID: " + userCreated.getId());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().build(); 
     }
 
     private void authenticate(String username, String password) throws Exception {

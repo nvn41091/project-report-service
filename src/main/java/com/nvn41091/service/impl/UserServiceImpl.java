@@ -5,9 +5,7 @@ import com.nvn41091.repository.UserRepository;
 import com.nvn41091.rest.errors.BadRequestAlertException;
 import com.nvn41091.service.UserService;
 import com.nvn41091.utils.DataUtil;
-import com.nvn41091.utils.FindsUtils;
 import com.nvn41091.utils.Translator;
-import com.nvn41091.utils.Validates;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
-import java.util.List;
 
 @Service
 @Transactional
@@ -47,6 +44,11 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestAlertException(Translator.toLocale("register.existUsername"), "user", "existUsername");
         }
         return repository.save(user);
+    }
+
+    @Override
+    public void delete(User user) {
+        this.repository.delete(user);
     }
 
     @Override

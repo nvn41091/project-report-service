@@ -10,6 +10,8 @@ public interface UserService {
 
     User save(User user, HttpServletRequest request);
 
+    void delete(User user);
+
     Page<User> doSearch(User user, Pageable pageable);
 
 }

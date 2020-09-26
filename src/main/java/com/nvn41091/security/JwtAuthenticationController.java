@@ -63,7 +63,7 @@ public class JwtAuthenticationController {
 
     @PostMapping(value = "/register")
     public ResponseEntity<?> register(@RequestBody User user, HttpServletRequest request) {
-        User userCreated = userService.save(user, request);
+        User userCreated = userService.saveNoLogin(user, request);
         logger.info(">>>>>>>>> CREATE USER SUCCESS - USER ID: " + userCreated.getId());
         return ResponseEntity.ok().build(); 
     }

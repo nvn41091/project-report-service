@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface UserService {
 
-    User save(User user, HttpServletRequest request);
+    User saveNoLogin(User user, HttpServletRequest request);
+
+    User saveToLogin(User user);
 
     void delete(User user);
 

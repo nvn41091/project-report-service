@@ -1,6 +1,6 @@
 package com.nvn41091.service.dto;
 
-import com.nvn41091.model.User;
+import com.nvn41091.domain.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

@@ -1,6 +1,6 @@
 package com.nvn41091.repository;
 
-import com.nvn41091.model.User;
+import com.nvn41091.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

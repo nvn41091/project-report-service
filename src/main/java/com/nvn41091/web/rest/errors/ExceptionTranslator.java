@@ -1,4 +1,4 @@
-package com.nvn41091.rest.errors;
+package com.nvn41091.web.rest.errors;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import org.springframework.beans.factory.annotation.Value;
@@ -92,7 +92,7 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
 
     @ExceptionHandler
     public ResponseEntity<Problem> handleEmailAlreadyUsedException(com.nvn41091.service.EmailAlreadyUsedException ex, NativeWebRequest request) {
-        com.nvn41091.rest.errors.EmailAlreadyUsedException problem = new com.nvn41091.rest.errors.EmailAlreadyUsedException();
+        EmailAlreadyUsedException problem = new EmailAlreadyUsedException();
         return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  true, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
     }
 
@@ -104,11 +104,11 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
 
     @ExceptionHandler
     public ResponseEntity<Problem> handleInvalidPasswordException(com.nvn41091.service.InvalidPasswordException ex, NativeWebRequest request) {
-        return create(new com.nvn41091.rest.errors.InvalidPasswordException(), request);
+        return create(new InvalidPasswordException(), request);
     }
 
     @ExceptionHandler
-    public ResponseEntity<Problem> handleBadRequestAlertException(com.nvn41091.rest.errors.BadRequestAlertException ex, NativeWebRequest request) {
+    public ResponseEntity<Problem> handleBadRequestAlertException(BadRequestAlertException ex, NativeWebRequest request) {
         return create(ex, request, HeaderUtil.createFailureAlert(applicationName, true, ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));
     }
 

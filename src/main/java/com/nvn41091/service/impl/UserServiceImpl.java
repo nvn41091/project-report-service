@@ -1,8 +1,8 @@
 package com.nvn41091.service.impl;
 
-import com.nvn41091.model.User;
+import com.nvn41091.domain.User;
 import com.nvn41091.repository.UserRepository;
-import com.nvn41091.rest.errors.BadRequestAlertException;
+import com.nvn41091.web.rest.errors.BadRequestAlertException;
 import com.nvn41091.security.SecurityUtils;
 import com.nvn41091.service.UserService;
 import com.nvn41091.utils.DataUtil;

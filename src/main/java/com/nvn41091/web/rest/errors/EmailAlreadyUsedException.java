@@ -1,6 +1,6 @@
-package com.nvn41091.rest.errors;
+package com.nvn41091.web.rest.errors;
 
-public class EmailAlreadyUsedException extends com.nvn41091.rest.errors.BadRequestAlertException {
+public class EmailAlreadyUsedException extends BadRequestAlertException {
 
     private static final long serialVersionUID = 1L;
 

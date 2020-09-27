@@ -1,4 +1,4 @@
-package com.nvn41091.rest.errors;
+package com.nvn41091.web.rest.errors;
 
 import com.nvn41091.utils.DataUtil;
 import org.springframework.web.multipart.MultipartFile;

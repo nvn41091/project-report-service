@@ -1,4 +1,4 @@
-package com.nvn41091.model;
+package com.nvn41091.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;

@@ -1,0 +1,40 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.nvn41091",
+      "nativeLanguage": "en"
+    },
+    "jhipsterVersion": "6.10.1",
+    "applicationType": "monolith",
+    "baseName": "SecurityJwt",
+    "packageName": "com.nvn41091",
+    "packageFolder": "com/nvn41091",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "YjIyZTVkNDEzMmQ1YmU2ZGM0MmQwMDg0N2NiNWViNjExNDljMGMxNWM3NGNhNDRjY2YxMDc0MzJlZGFlODJhY2Y0OWFhZDZmNmM2NmI0ODc5MTQzMjUzZjIxZGI1MDhiYjk5MDYyOTE1OWE2MGEyYTI0ZDljYzBiOTdiZjQ1ZjM=",
+    "embeddableLaunchScript": false,
+    "useSass": true,
+    "creationTimestamp": 1598525152738,
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": ["en"],
+    "blueprints": [],
+    "skipClient": true
+  }
+}

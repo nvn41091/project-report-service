@@ -1,6 +1,6 @@
 package com.nvn41091.security;
 
-import com.nvn41091.model.User;
+import com.nvn41091.domain.User;
 import com.nvn41091.repository.UserRepository;
 import com.nvn41091.service.UserService;
 import com.nvn41091.utils.JwtTokenUtils;
@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;

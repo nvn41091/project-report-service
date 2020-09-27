@@ -1,4 +1,4 @@
-package com.nvn41091.rest.errors;
+package com.nvn41091.web.rest.errors;
 
 import org.zalando.problem.AbstractThrowableProblem;
 import org.zalando.problem.Status;

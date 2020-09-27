@@ -1,0 +1,10 @@
+entity CompanyUser {
+	id Long
+    userId Long
+    companyId Long
+    updateTime Instant
+}
+dto CompanyUser with mapstruct
+paginate CompanyUser with pagination
+service CompanyUser with serviceClass
+service CompanyUser with serviceImpl

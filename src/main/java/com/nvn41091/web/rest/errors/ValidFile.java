@@ -1,4 +1,4 @@
-package com.nvn41091.rest.errors;
+package com.nvn41091.web.rest.errors;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = com.nvn41091.rest.errors.FileValidator.class)
+@Constraint(validatedBy = FileValidator.class)
 public @interface ValidFile {
 
     String message() default "Invalid file format";

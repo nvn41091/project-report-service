@@ -3,4 +3,4 @@
  *
  * More information on https://github.com/zalando/problem-spring-web
  */
-package com.nvn41091.rest.errors;
+package com.nvn41091.web.rest.errors;

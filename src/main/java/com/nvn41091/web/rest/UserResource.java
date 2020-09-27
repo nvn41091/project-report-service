@@ -1,7 +1,7 @@
-package com.nvn41091.rest;
+package com.nvn41091.web.rest;
 
-import com.nvn41091.model.User;
-import com.nvn41091.rest.errors.BadRequestAlertException;
+import com.nvn41091.domain.User;
+import com.nvn41091.web.rest.errors.BadRequestAlertException;
 import com.nvn41091.service.UserService;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;

@@ -1,4 +1,4 @@
-package com.nvn41091.rest.errors;
+package com.nvn41091.web.rest.errors;
 
 import java.io.Serializable;
 

@@ -28,6 +28,8 @@ public class CompanyDTO implements Serializable {
 
     private Instant updateTime;
 
+    private Boolean status;
+
     
     public Long getId() {
         return id;
@@ -85,6 +87,14 @@ public class CompanyDTO implements Serializable {
         this.updateTime = updateTime;
     }
 
+    public Boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -113,6 +123,7 @@ public class CompanyDTO implements Serializable {
             ", email='" + getEmail() + "'" +
             ", description='" + getDescription() + "'" +
             ", updateTime='" + getUpdateTime() + "'" +
+            ", status='" + isStatus() + "'" +
             "}";
     }
 }

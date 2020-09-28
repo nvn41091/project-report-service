@@ -52,6 +52,9 @@ public class CompanyResourceIT {
     private static final Instant DEFAULT_UPDATE_TIME = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_UPDATE_TIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
+    private static final Boolean DEFAULT_STATUS = false;
+    private static final Boolean UPDATED_STATUS = true;
+
     @Autowired
     private CompanyRepository companyRepository;
 
@@ -82,7 +85,8 @@ public class CompanyResourceIT {
             .tel(DEFAULT_TEL)
             .email(DEFAULT_EMAIL)
             .description(DEFAULT_DESCRIPTION)
-            .updateTime(DEFAULT_UPDATE_TIME);
+            .updateTime(DEFAULT_UPDATE_TIME)
+            .status(DEFAULT_STATUS);
         return company;
     }
     /**
@@ -98,7 +102,8 @@ public class CompanyResourceIT {
             .tel(UPDATED_TEL)
             .email(UPDATED_EMAIL)
             .description(UPDATED_DESCRIPTION)
-            .updateTime(UPDATED_UPDATE_TIME);
+            .updateTime(UPDATED_UPDATE_TIME)
+            .status(UPDATED_STATUS);
         return company;
     }
 
@@ -128,6 +133,7 @@ public class CompanyResourceIT {
         assertThat(testCompany.getEmail()).isEqualTo(DEFAULT_EMAIL);
         assertThat(testCompany.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testCompany.getUpdateTime()).isEqualTo(DEFAULT_UPDATE_TIME);
+        assertThat(testCompany.isStatus()).isEqualTo(DEFAULT_STATUS);
     }
 
     @Test
@@ -167,7 +173,8 @@ public class CompanyResourceIT {
             .andExpect(jsonPath("$.[*].tel").value(hasItem(DEFAULT_TEL)))
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].updateTime").value(hasItem(DEFAULT_UPDATE_TIME.toString())));
+            .andExpect(jsonPath("$.[*].updateTime").value(hasItem(DEFAULT_UPDATE_TIME.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())));
     }
     
     @Test
@@ -186,7 +193,8 @@ public class CompanyResourceIT {
             .andExpect(jsonPath("$.tel").value(DEFAULT_TEL))
             .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.updateTime").value(DEFAULT_UPDATE_TIME.toString()));
+            .andExpect(jsonPath("$.updateTime").value(DEFAULT_UPDATE_TIME.toString()))
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.booleanValue()));
     }
     @Test
     @Transactional
@@ -214,7 +222,8 @@ public class CompanyResourceIT {
             .tel(UPDATED_TEL)
             .email(UPDATED_EMAIL)
             .description(UPDATED_DESCRIPTION)
-            .updateTime(UPDATED_UPDATE_TIME);
+            .updateTime(UPDATED_UPDATE_TIME)
+            .status(UPDATED_STATUS);
         CompanyDTO companyDTO = companyMapper.toDto(updatedCompany);
 
         restCompanyMockMvc.perform(put("/api/companies")
@@ -232,6 +241,7 @@ public class CompanyResourceIT {
         assertThat(testCompany.getEmail()).isEqualTo(UPDATED_EMAIL);
         assertThat(testCompany.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testCompany.getUpdateTime()).isEqualTo(UPDATED_UPDATE_TIME);
+        assertThat(testCompany.isStatus()).isEqualTo(UPDATED_STATUS);
     }
 
     @Test

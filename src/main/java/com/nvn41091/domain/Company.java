@@ -46,6 +46,9 @@ public class Company implements Serializable {
     @Column(name = "update_time")
     private Instant updateTime;
 
+    @Column(name = "status")
+    private Boolean status;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -132,6 +135,19 @@ public class Company implements Serializable {
     public void setUpdateTime(Instant updateTime) {
         this.updateTime = updateTime;
     }
+
+    public Boolean isStatus() {
+        return status;
+    }
+
+    public Company status(Boolean status) {
+        this.status = status;
+        return this;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -161,6 +177,7 @@ public class Company implements Serializable {
             ", email='" + getEmail() + "'" +
             ", description='" + getDescription() + "'" +
             ", updateTime='" + getUpdateTime() + "'" +
+            ", status='" + isStatus() + "'" +
             "}";
     }
 }

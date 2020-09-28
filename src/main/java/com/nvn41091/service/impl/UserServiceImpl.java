@@ -81,6 +81,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(User user) {
+        if (repository.findAllById(user.getId()).size() == 0) {
+            throw new BadRequestAlertException(Translator.toLocale("error.user.notExist"), "user", "user.notExist");
+        }
         this.repository.delete(user);
     }
 

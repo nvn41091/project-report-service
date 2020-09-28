@@ -24,12 +24,10 @@ import java.util.Collections;
 @RestController
 @CrossOrigin
 @Transactional
+@RequestMapping("/api")
 public class JwtAuthenticationController {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationController.class);
-
-    @Autowired
-    private JavaMailSender javaMailSender;
 
     @Autowired
     private AuthenticationManager authenticationManager;

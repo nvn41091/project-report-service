@@ -22,10 +22,10 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserResource {
 
-    @Value("${clientApp.name}")
+    @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
     private final Logger log = LoggerFactory.getLogger(UserResource.class);

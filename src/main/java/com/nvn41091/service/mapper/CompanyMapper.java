@@ -12,6 +12,8 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {})
 public interface CompanyMapper extends EntityMapper<CompanyDTO, Company> {
 
+
+
     default Company fromId(Long id) {
         if (id == null) {
             return null;

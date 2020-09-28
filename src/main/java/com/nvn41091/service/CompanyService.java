@@ -28,6 +28,8 @@ public interface CompanyService {
      */
     Page<CompanyDTO> findAll(Pageable pageable);
 
+    Page<CompanyDTO> doSearch(CompanyDTO companyDTO, Pageable pageable);
+
 
     /**
      * Get the "id" company.

@@ -45,7 +45,7 @@ public class CompanyServiceImpl implements CompanyService {
             // Validate truong hop them moi
         } else {
             // Validate truong hop update
-            if (!companyRepository.existsById(companyDTO.getId())) {
+            if (companyRepository.findAllById(companyDTO.getId()).size() == 0) {
                 throw new BadRequestAlertException(Translator.toLocale("error.company.notExist"), "company", "company.notExist");
             }
         }
@@ -94,6 +94,9 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Company : {}", id);
+        if (companyRepository.findAllById(id).size() == 0) {
+            throw new BadRequestAlertException(Translator.toLocale("error.company.notExist"), "company", "company.notExist");
+        }
         companyRepository.deleteById(id);
     }
 }

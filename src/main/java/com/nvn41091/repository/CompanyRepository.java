@@ -40,4 +40,6 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 
     @Query("SELECT u from Company u WHERE upper(u.tel) = upper(:tel) and ( :id is null or u.id != :id) ")
     List<Company> findAllByTelAndIdNotEqual(@Param("tel") String tel, @Param("id") Long id);
+
+    List<Company> findAllById(Long id);
 }

@@ -24,11 +24,11 @@ public class Company implements Serializable {
     private Long id;
 
     @Size(max = 100)
-    @Column(name = "code", length = 100)
+    @Column(name = "code", length = 100, nullable = false)
     private String code;
 
     @Size(max = 250)
-    @Column(name = "name", length = 250)
+    @Column(name = "name", length = 250, nullable = false)
     private String name;
 
     @Size(max = 30)

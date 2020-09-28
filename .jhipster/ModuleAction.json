@@ -1,0 +1,29 @@
+{
+  "name": "ModuleAction",
+  "fields": [
+    {
+      "fieldName": "moduleId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "actionId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "updateTime",
+      "fieldType": "Instant"
+    }
+  ],
+  "relationships": [],
+  "changelogDate": "20200928102506",
+  "entityTableName": "module_action",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

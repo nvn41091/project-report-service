@@ -1,0 +1,15 @@
+entity Module {
+	id Long
+    code String maxlength(100)
+    name String maxlength(300)
+    description String maxlength(500)
+    status Boolean
+    pathUrl String maxlength(200)
+    icon String maxlength(150)
+    isGroup Boolean
+    updateTime Instant
+}
+dto Module with mapstruct
+paginate Module with pagination
+service Module with serviceClass
+service Module with serviceImpl

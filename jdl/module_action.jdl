@@ -1,0 +1,10 @@
+entity ModuleAction {
+	id Long
+    moduleId Long
+    actionId Long
+    updateTime Instant
+}
+dto ModuleAction with mapstruct
+paginate ModuleAction with pagination
+service ModuleAction with serviceClass
+service ModuleAction with serviceImpl

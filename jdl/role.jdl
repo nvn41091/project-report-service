@@ -1,0 +1,12 @@
+entity Role {
+	id Long
+    code String maxlength(100)
+    name String maxlength(300)
+    description String maxlength(500)
+    updateTime Instant
+    status Boolean
+}
+dto Role with mapstruct
+paginate Role with pagination
+service Role with serviceClass
+service Role with serviceImpl

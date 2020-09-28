@@ -1,0 +1,11 @@
+entity RoleModule {
+	id Long
+	roleId Long
+    moduleId Long
+    actionId Long
+    updateTime Instant
+}
+dto RoleModule with mapstruct
+paginate RoleModule with pagination
+service RoleModule with serviceClass
+service RoleModule with serviceImpl

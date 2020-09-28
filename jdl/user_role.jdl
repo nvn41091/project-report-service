@@ -1,0 +1,10 @@
+entity UserRole {
+	id Long
+	userId Long
+    roleId Long
+    updateTime Instant
+}
+dto UserRole with mapstruct
+paginate UserRole with pagination
+service UserRole with serviceClass
+service UserRole with serviceImpl

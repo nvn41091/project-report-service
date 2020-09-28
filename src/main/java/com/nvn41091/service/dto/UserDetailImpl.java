@@ -2,10 +2,13 @@ package com.nvn41091.service.dto;
 
 import com.nvn41091.domain.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class UserDetailImpl implements Serializable, UserDetails {
     private static final long serialVersionUID = 5926468583005150707L;

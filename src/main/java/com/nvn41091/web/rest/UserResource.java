@@ -14,6 +14,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -47,6 +49,7 @@ public class UserResource {
     }
 
     @PostMapping("/delete")
+    @PreAuthorize("hasAuthority(\"USER#DELETE\")")
     public ResponseEntity<Void> delete(@RequestBody User user) {
         log.debug("REST request to delete user : {}", user);
         userService.delete(user);
@@ -54,6 +57,7 @@ public class UserResource {
     }
 
     @PostMapping("/insert")
+    @PreAuthorize("hasAuthority(\"USER#INSERT\")")
     public ResponseEntity<User> createUser(@RequestBody User user) throws URISyntaxException {
         log.debug("REST request to insert user : {}", user);
         if (user.getId() != null) {
@@ -66,6 +70,7 @@ public class UserResource {
     }
 
     @PostMapping("/update")
+    @PreAuthorize("hasAuthority(\"USER#UPDATE\")")
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         log.debug("REST request to update user : {}", user);
         if (user.getId() == null) {

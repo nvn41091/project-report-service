@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +53,7 @@ public class CompanyResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/insert")
+    @PreAuthorize("hasAuthority(\"COMPANY#INSERT\")")
     public ResponseEntity<CompanyDTO> createCompany(@Valid @RequestBody CompanyDTO companyDTO) throws URISyntaxException {
         log.debug("REST request to save Company : {}", companyDTO);
         if (companyDTO.getId() != null) {
@@ -73,6 +75,7 @@ public class CompanyResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/update")
+    @PreAuthorize("hasAuthority(\"COMPANY#UPDATE\")")
     public ResponseEntity<CompanyDTO> updateCompany(@Valid @RequestBody CompanyDTO companyDTO) throws URISyntaxException {
         log.debug("REST request to update Company : {}", companyDTO);
         if (companyDTO.getId() == null) {
@@ -105,6 +108,7 @@ public class CompanyResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the companyDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/companies/{id}")
+    @PreAuthorize("hasAuthority(\"COMPANY#DELETE\")")
     public ResponseEntity<CompanyDTO> getCompany(@PathVariable Long id) {
         log.debug("REST request to get Company : {}", id);
         Optional<CompanyDTO> companyDTO = companyService.findOne(id);

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +53,7 @@ public class ActionResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/insert")
+    @PreAuthorize("hasAuthority(\"ACTION#INSERT\")")
     public ResponseEntity<ActionDTO> createAction(@Valid @RequestBody ActionDTO actionDTO) throws URISyntaxException {
         log.debug("REST request to save Action : {}", actionDTO);
         if (actionDTO.getId() != null) {
@@ -73,6 +75,7 @@ public class ActionResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/update")
+    @PreAuthorize("hasAuthority(\"ACTION#UPDATE\")")
     public ResponseEntity<ActionDTO> updateAction(@Valid @RequestBody ActionDTO actionDTO) throws URISyntaxException {
         log.debug("REST request to update Action : {}", actionDTO);
         if (actionDTO.getId() == null) {
@@ -91,6 +94,7 @@ public class ActionResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of actions in body.
      */
     @PostMapping("/doSearch")
+    @PreAuthorize("hasAuthority(\"ACTION#SEARCH\")")
     public ResponseEntity<List<ActionDTO>> doSearch(@RequestBody ActionDTO actionDTO, Pageable pageable) {
         log.debug("REST request to get a page of Actions");
         Page<ActionDTO> page = actionService.doSearch(actionDTO, pageable);
@@ -105,6 +109,7 @@ public class ActionResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority(\"ACTION#DELETE\")")
     public ResponseEntity<Void> deleteAction(@PathVariable Long id) {
         log.debug("REST request to delete Action : {}", id);
         actionService.delete(id);

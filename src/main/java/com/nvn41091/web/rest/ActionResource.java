@@ -51,7 +51,7 @@ public class ActionResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new actionDTO, or with status {@code 400 (Bad Request)} if the action has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/actions")
+    @PostMapping("/insert")
     public ResponseEntity<ActionDTO> createAction(@Valid @RequestBody ActionDTO actionDTO) throws URISyntaxException {
         log.debug("REST request to save Action : {}", actionDTO);
         if (actionDTO.getId() != null) {
@@ -72,7 +72,7 @@ public class ActionResource {
      * or with status {@code 500 (Internal Server Error)} if the actionDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/actions")
+    @PutMapping("/update")
     public ResponseEntity<ActionDTO> updateAction(@Valid @RequestBody ActionDTO actionDTO) throws URISyntaxException {
         log.debug("REST request to update Action : {}", actionDTO);
         if (actionDTO.getId() == null) {
@@ -90,25 +90,12 @@ public class ActionResource {
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of actions in body.
      */
-    @GetMapping("/actions")
-    public ResponseEntity<List<ActionDTO>> getAllActions(Pageable pageable) {
+    @PostMapping("/doSearch")
+    public ResponseEntity<List<ActionDTO>> getAllActions(@RequestBody ActionDTO actionDTO, Pageable pageable) {
         log.debug("REST request to get a page of Actions");
         Page<ActionDTO> page = actionService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
-    }
-
-    /**
-     * {@code GET  /actions/:id} : get the "id" action.
-     *
-     * @param id the id of the actionDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the actionDTO, or with status {@code 404 (Not Found)}.
-     */
-    @GetMapping("/actions/{id}")
-    public ResponseEntity<ActionDTO> getAction(@PathVariable Long id) {
-        log.debug("REST request to get Action : {}", id);
-        Optional<ActionDTO> actionDTO = actionService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(actionDTO);
     }
 
     /**

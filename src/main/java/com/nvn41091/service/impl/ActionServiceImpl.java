@@ -13,7 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.time.Instant;
 
 /**
  * Service Implementation for managing {@link Action}.
@@ -36,6 +36,7 @@ public class ActionServiceImpl implements ActionService {
     @Override
     public ActionDTO save(ActionDTO actionDTO) {
         log.debug("Request to save Action : {}", actionDTO);
+        actionDTO.setUpdateTime(Instant.now());
         Action action = actionMapper.toEntity(actionDTO);
         action = actionRepository.save(action);
         return actionMapper.toDto(action);

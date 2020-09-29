@@ -28,7 +28,7 @@ import java.util.Optional;
  * REST controller for managing {@link com.nvn41091.domain.Action}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/action")
 public class ActionResource {
 
     private final Logger log = LoggerFactory.getLogger(ActionResource.class);
@@ -104,7 +104,7 @@ public class ActionResource {
      * @param id the id of the actionDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/actions/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteAction(@PathVariable Long id) {
         log.debug("REST request to delete Action : {}", id);
         actionService.delete(id);

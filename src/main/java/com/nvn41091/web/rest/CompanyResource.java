@@ -102,26 +102,13 @@ public class CompanyResource {
     }
 
     /**
-     * {@code GET  /companies/:id} : get the "id" company.
-     *
-     * @param id the id of the companyDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the companyDTO, or with status {@code 404 (Not Found)}.
-     */
-    @GetMapping("/companies/{id}")
-    @PreAuthorize("hasAuthority(\"COMPANY#DELETE\")")
-    public ResponseEntity<CompanyDTO> getCompany(@PathVariable Long id) {
-        log.debug("REST request to get Company : {}", id);
-        Optional<CompanyDTO> companyDTO = companyService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(companyDTO);
-    }
-
-    /**
      * {@code DELETE  /companies/:id} : delete the "id" company.
      *
      * @param id the id of the companyDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority(\"COMPANY#DELETE\")")
     public ResponseEntity<Void> deleteCompany(@PathVariable Long id) {
         log.debug("REST request to delete Company : {}", id);
         companyService.delete(id);

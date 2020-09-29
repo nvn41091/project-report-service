@@ -5,6 +5,9 @@ import com.nvn41091.domain.Action;
 import com.nvn41091.repository.ActionRepository;
 import com.nvn41091.service.dto.ActionDTO;
 import com.nvn41091.service.mapper.ActionMapper;
+import com.nvn41091.utils.DataUtil;
+import com.nvn41091.utils.Translator;
+import com.nvn41091.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +39,17 @@ public class ActionServiceImpl implements ActionService {
     @Override
     public ActionDTO save(ActionDTO actionDTO) {
         log.debug("Request to save Action : {}", actionDTO);
+        if (actionDTO.getId() == null) {
+            // valdate truong them moi
+        } else {
+            // Validate truong cap nhat
+            if (actionRepository.findAllById(actionDTO.getId()).size() == 0) {
+                throw new BadRequestAlertException(Translator.toLocale("error.action.notExist"), "action", "action.notExist");
+            }
+        }
+        if (actionRepository.findAllByCodeAndIdNotEqual(actionDTO.getCode(), actionDTO.getId()).size() > 0) {
+            throw new BadRequestAlertException(Translator.toLocale("error.action.codeExist"), "action", "action.exits");
+        }
         actionDTO.setUpdateTime(Instant.now());
         Action action = actionMapper.toEntity(actionDTO);
         action = actionRepository.save(action);
@@ -46,13 +60,18 @@ public class ActionServiceImpl implements ActionService {
     @Transactional(readOnly = true)
     public Page<ActionDTO> doSearch(ActionDTO actionDTO, Pageable pageable) {
         log.debug("Request to find Actions");
-        return actionRepository.findAll(pageable)
-            .map(actionMapper::toDto);
+        return actionRepository.doSearch(DataUtil.makeLikeParam(actionDTO.getCode()),
+                DataUtil.makeLikeParam(actionDTO.getName()),
+                actionDTO.isStatus(), pageable)
+                .map(actionMapper::toDto);
     }
 
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Action : {}", id);
+        if (actionRepository.findAllById(id).size() == 0) {
+            throw new BadRequestAlertException(Translator.toLocale("error.action.notExist"), "action", "action.notExist");
+        }
         actionRepository.deleteById(id);
     }
 }

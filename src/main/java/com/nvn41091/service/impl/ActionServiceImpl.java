@@ -43,18 +43,9 @@ public class ActionServiceImpl implements ActionService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ActionDTO> findAll(Pageable pageable) {
-        log.debug("Request to get all Actions");
+    public Page<ActionDTO> doSearch(ActionDTO actionDTO, Pageable pageable) {
+        log.debug("Request to find Actions");
         return actionRepository.findAll(pageable)
-            .map(actionMapper::toDto);
-    }
-
-
-    @Override
-    @Transactional(readOnly = true)
-    public Optional<ActionDTO> findOne(Long id) {
-        log.debug("Request to get Action : {}", id);
-        return actionRepository.findById(id)
             .map(actionMapper::toDto);
     }
 

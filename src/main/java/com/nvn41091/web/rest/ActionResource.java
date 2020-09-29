@@ -91,9 +91,9 @@ public class ActionResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of actions in body.
      */
     @PostMapping("/doSearch")
-    public ResponseEntity<List<ActionDTO>> getAllActions(@RequestBody ActionDTO actionDTO, Pageable pageable) {
+    public ResponseEntity<List<ActionDTO>> doSearch(@RequestBody ActionDTO actionDTO, Pageable pageable) {
         log.debug("REST request to get a page of Actions");
-        Page<ActionDTO> page = actionService.findAll(pageable);
+        Page<ActionDTO> page = actionService.doSearch(actionDTO, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

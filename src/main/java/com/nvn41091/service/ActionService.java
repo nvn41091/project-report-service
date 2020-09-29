@@ -26,16 +26,7 @@ public interface ActionService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<ActionDTO> findAll(Pageable pageable);
-
-
-    /**
-     * Get the "id" action.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
-    Optional<ActionDTO> findOne(Long id);
+    Page<ActionDTO> doSearch(ActionDTO actionDTO, Pageable pageable);
 
     /**
      * Delete the "id" action.

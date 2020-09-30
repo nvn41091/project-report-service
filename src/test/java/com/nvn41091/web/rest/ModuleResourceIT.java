@@ -52,11 +52,11 @@ public class ModuleResourceIT {
     private static final String DEFAULT_ICON = "AAAAAAAAAA";
     private static final String UPDATED_ICON = "BBBBBBBBBB";
 
-    private static final Boolean DEFAULT_IS_GROUP = false;
-    private static final Boolean UPDATED_IS_GROUP = true;
-
     private static final Instant DEFAULT_UPDATE_TIME = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_UPDATE_TIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
+    private static final Long DEFAULT_PARENT_ID = 1L;
+    private static final Long UPDATED_PARENT_ID = 2L;
 
     @Autowired
     private ModuleRepository moduleRepository;
@@ -89,8 +89,8 @@ public class ModuleResourceIT {
             .status(DEFAULT_STATUS)
             .pathUrl(DEFAULT_PATH_URL)
             .icon(DEFAULT_ICON)
-            .isGroup(DEFAULT_IS_GROUP)
-            .updateTime(DEFAULT_UPDATE_TIME);
+            .updateTime(DEFAULT_UPDATE_TIME)
+            .parentId(DEFAULT_PARENT_ID);
         return module;
     }
     /**
@@ -107,8 +107,8 @@ public class ModuleResourceIT {
             .status(UPDATED_STATUS)
             .pathUrl(UPDATED_PATH_URL)
             .icon(UPDATED_ICON)
-            .isGroup(UPDATED_IS_GROUP)
-            .updateTime(UPDATED_UPDATE_TIME);
+            .updateTime(UPDATED_UPDATE_TIME)
+            .parentId(UPDATED_PARENT_ID);
         return module;
     }
 
@@ -138,8 +138,8 @@ public class ModuleResourceIT {
         assertThat(testModule.isStatus()).isEqualTo(DEFAULT_STATUS);
         assertThat(testModule.getPathUrl()).isEqualTo(DEFAULT_PATH_URL);
         assertThat(testModule.getIcon()).isEqualTo(DEFAULT_ICON);
-        assertThat(testModule.isIsGroup()).isEqualTo(DEFAULT_IS_GROUP);
         assertThat(testModule.getUpdateTime()).isEqualTo(DEFAULT_UPDATE_TIME);
+        assertThat(testModule.getParentId()).isEqualTo(DEFAULT_PARENT_ID);
     }
 
     @Test
@@ -180,8 +180,8 @@ public class ModuleResourceIT {
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())))
             .andExpect(jsonPath("$.[*].pathUrl").value(hasItem(DEFAULT_PATH_URL)))
             .andExpect(jsonPath("$.[*].icon").value(hasItem(DEFAULT_ICON)))
-            .andExpect(jsonPath("$.[*].isGroup").value(hasItem(DEFAULT_IS_GROUP.booleanValue())))
-            .andExpect(jsonPath("$.[*].updateTime").value(hasItem(DEFAULT_UPDATE_TIME.toString())));
+            .andExpect(jsonPath("$.[*].updateTime").value(hasItem(DEFAULT_UPDATE_TIME.toString())))
+            .andExpect(jsonPath("$.[*].parentId").value(hasItem(DEFAULT_PARENT_ID.intValue())));
     }
     
     @Test
@@ -201,8 +201,8 @@ public class ModuleResourceIT {
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.booleanValue()))
             .andExpect(jsonPath("$.pathUrl").value(DEFAULT_PATH_URL))
             .andExpect(jsonPath("$.icon").value(DEFAULT_ICON))
-            .andExpect(jsonPath("$.isGroup").value(DEFAULT_IS_GROUP.booleanValue()))
-            .andExpect(jsonPath("$.updateTime").value(DEFAULT_UPDATE_TIME.toString()));
+            .andExpect(jsonPath("$.updateTime").value(DEFAULT_UPDATE_TIME.toString()))
+            .andExpect(jsonPath("$.parentId").value(DEFAULT_PARENT_ID.intValue()));
     }
     @Test
     @Transactional
@@ -231,8 +231,8 @@ public class ModuleResourceIT {
             .status(UPDATED_STATUS)
             .pathUrl(UPDATED_PATH_URL)
             .icon(UPDATED_ICON)
-            .isGroup(UPDATED_IS_GROUP)
-            .updateTime(UPDATED_UPDATE_TIME);
+            .updateTime(UPDATED_UPDATE_TIME)
+            .parentId(UPDATED_PARENT_ID);
         ModuleDTO moduleDTO = moduleMapper.toDto(updatedModule);
 
         restModuleMockMvc.perform(put("/api/modules")
@@ -250,8 +250,8 @@ public class ModuleResourceIT {
         assertThat(testModule.isStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testModule.getPathUrl()).isEqualTo(UPDATED_PATH_URL);
         assertThat(testModule.getIcon()).isEqualTo(UPDATED_ICON);
-        assertThat(testModule.isIsGroup()).isEqualTo(UPDATED_IS_GROUP);
         assertThat(testModule.getUpdateTime()).isEqualTo(UPDATED_UPDATE_TIME);
+        assertThat(testModule.getParentId()).isEqualTo(UPDATED_PARENT_ID);
     }
 
     @Test

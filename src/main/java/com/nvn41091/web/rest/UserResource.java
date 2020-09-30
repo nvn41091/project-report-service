@@ -38,6 +38,7 @@ public class UserResource {
     private UserService userService;
 
     @PostMapping("/doSearch")
+//    @PreAuthorize("hasAuthority(\"USER#SEARCH\")")
     public ResponseEntity<List<User>> doSearch(@RequestBody User user, Pageable pageable) {
         log.debug("REST request to search user : {}", user);
         if (pageable == null) {

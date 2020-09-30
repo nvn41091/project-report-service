@@ -5,6 +5,7 @@ import com.nvn41091.service.dto.ModuleDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -26,7 +27,7 @@ public interface ModuleService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<ModuleDTO> findAll(Pageable pageable);
+    Page<ModuleDTO> doSearch(ModuleDTO moduleDTO, Pageable pageable);
 
 
     /**
@@ -43,4 +44,6 @@ public interface ModuleService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    List<ModuleDTO> findAllParent();
 }

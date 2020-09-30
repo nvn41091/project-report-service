@@ -28,7 +28,7 @@ import java.util.Optional;
  * REST controller for managing {@link com.nvn41091.domain.Module}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/module")
 public class ModuleResource {
 
     private final Logger log = LoggerFactory.getLogger(ModuleResource.class);
@@ -51,7 +51,7 @@ public class ModuleResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new moduleDTO, or with status {@code 400 (Bad Request)} if the module has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/modules")
+    @PostMapping("/insert")
     public ResponseEntity<ModuleDTO> createModule(@Valid @RequestBody ModuleDTO moduleDTO) throws URISyntaxException {
         log.debug("REST request to save Module : {}", moduleDTO);
         if (moduleDTO.getId() != null) {
@@ -59,8 +59,8 @@ public class ModuleResource {
         }
         ModuleDTO result = moduleService.save(moduleDTO);
         return ResponseEntity.created(new URI("/api/modules/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                .body(result);
     }
 
     /**
@@ -72,7 +72,7 @@ public class ModuleResource {
      * or with status {@code 500 (Internal Server Error)} if the moduleDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/modules")
+    @PutMapping("/update")
     public ResponseEntity<ModuleDTO> updateModule(@Valid @RequestBody ModuleDTO moduleDTO) throws URISyntaxException {
         log.debug("REST request to update Module : {}", moduleDTO);
         if (moduleDTO.getId() == null) {
@@ -80,8 +80,8 @@ public class ModuleResource {
         }
         ModuleDTO result = moduleService.save(moduleDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, moduleDTO.getId().toString()))
-            .body(result);
+                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, moduleDTO.getId().toString()))
+                .body(result);
     }
 
     /**
@@ -90,25 +90,12 @@ public class ModuleResource {
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of modules in body.
      */
-    @GetMapping("/modules")
-    public ResponseEntity<List<ModuleDTO>> getAllModules(Pageable pageable) {
-        log.debug("REST request to get a page of Modules");
-        Page<ModuleDTO> page = moduleService.findAll(pageable);
+    @PostMapping("/doSearch")
+    public ResponseEntity<List<ModuleDTO>> doSearch(@RequestBody ModuleDTO moduleDTO, Pageable pageable) {
+        log.debug("REST request to find Modules");
+        Page<ModuleDTO> page = moduleService.doSearch(moduleDTO, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
-    }
-
-    /**
-     * {@code GET  /modules/:id} : get the "id" module.
-     *
-     * @param id the id of the moduleDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the moduleDTO, or with status {@code 404 (Not Found)}.
-     */
-    @GetMapping("/modules/{id}")
-    public ResponseEntity<ModuleDTO> getModule(@PathVariable Long id) {
-        log.debug("REST request to get Module : {}", id);
-        Optional<ModuleDTO> moduleDTO = moduleService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(moduleDTO);
     }
 
     /**
@@ -117,10 +104,22 @@ public class ModuleResource {
      * @param id the id of the moduleDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/modules/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteModule(@PathVariable Long id) {
         log.debug("REST request to delete Module : {}", id);
         moduleService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+    /**
+     * {@code GET  /getAllParent} : get all parent module.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of parent modules in body.
+     */
+    @GetMapping("/getAllParent")
+    public ResponseEntity<List<ModuleDTO>> findAllParent() {
+        log.debug("REST request to get all parent Modules");
+        List<ModuleDTO> parent = moduleService.findAllParent();
+        return ResponseEntity.ok().body(parent);
     }
 }

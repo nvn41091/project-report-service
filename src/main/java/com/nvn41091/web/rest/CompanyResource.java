@@ -94,6 +94,7 @@ public class CompanyResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of companies in body.
      */
     @PostMapping("/doSearch")
+//    @PreAuthorize("hasAuthority(\"COMPANY#SEARCH\")")
     public ResponseEntity<List<CompanyDTO>> getAllCompanies(@RequestBody CompanyDTO companyDTO, Pageable pageable) {
         log.debug("REST request to get a page of Companies");
         Page<CompanyDTO> page = companyService.doSearch(companyDTO, pageable);

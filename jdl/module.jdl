@@ -6,8 +6,8 @@ entity Module {
     status Boolean
     pathUrl String maxlength(200)
     icon String maxlength(150)
-    isGroup Boolean
     updateTime Instant
+    parentId Long
 }
 dto Module with mapstruct
 paginate Module with pagination

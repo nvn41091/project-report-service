@@ -28,9 +28,9 @@ public class ModuleDTO implements Serializable {
     @Size(max = 150)
     private String icon;
 
-    private Boolean isGroup;
-
     private Instant updateTime;
+
+    private Long parentId;
 
     
     public Long getId() {
@@ -89,20 +89,20 @@ public class ModuleDTO implements Serializable {
         this.icon = icon;
     }
 
-    public Boolean isIsGroup() {
-        return isGroup;
-    }
-
-    public void setIsGroup(Boolean isGroup) {
-        this.isGroup = isGroup;
-    }
-
     public Instant getUpdateTime() {
         return updateTime;
     }
 
     public void setUpdateTime(Instant updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
 
     @Override
@@ -133,8 +133,8 @@ public class ModuleDTO implements Serializable {
             ", status='" + isStatus() + "'" +
             ", pathUrl='" + getPathUrl() + "'" +
             ", icon='" + getIcon() + "'" +
-            ", isGroup='" + isIsGroup() + "'" +
             ", updateTime='" + getUpdateTime() + "'" +
+            ", parentId=" + getParentId() +
             "}";
     }
 }

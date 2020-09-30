@@ -94,7 +94,7 @@ public class ActionResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of actions in body.
      */
     @PostMapping("/doSearch")
-    @PreAuthorize("hasAuthority(\"ACTION#SEARCH\")")
+//    @PreAuthorize("hasAuthority(\"ACTION#SEARCH\")")
     public ResponseEntity<List<ActionDTO>> doSearch(@RequestBody ActionDTO actionDTO, Pageable pageable) {
         log.debug("REST request to get a page of Actions");
         Page<ActionDTO> page = actionService.doSearch(actionDTO, pageable);

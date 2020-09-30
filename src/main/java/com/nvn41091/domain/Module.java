@@ -46,11 +46,11 @@ public class Module implements Serializable {
     @Column(name = "icon", length = 150)
     private String icon;
 
-    @Column(name = "is_group")
-    private Boolean isGroup;
-
     @Column(name = "update_time")
     private Instant updateTime;
+
+    @Column(name = "parent_id")
+    private Long parentId;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -139,19 +139,6 @@ public class Module implements Serializable {
         this.icon = icon;
     }
 
-    public Boolean isIsGroup() {
-        return isGroup;
-    }
-
-    public Module isGroup(Boolean isGroup) {
-        this.isGroup = isGroup;
-        return this;
-    }
-
-    public void setIsGroup(Boolean isGroup) {
-        this.isGroup = isGroup;
-    }
-
     public Instant getUpdateTime() {
         return updateTime;
     }
@@ -163,6 +150,19 @@ public class Module implements Serializable {
 
     public void setUpdateTime(Instant updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public Module parentId(Long parentId) {
+        this.parentId = parentId;
+        return this;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
@@ -193,8 +193,8 @@ public class Module implements Serializable {
             ", status='" + isStatus() + "'" +
             ", pathUrl='" + getPathUrl() + "'" +
             ", icon='" + getIcon() + "'" +
-            ", isGroup='" + isIsGroup() + "'" +
             ", updateTime='" + getUpdateTime() + "'" +
+            ", parentId=" + getParentId() +
             "}";
     }
 }

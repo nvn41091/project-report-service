@@ -34,10 +34,10 @@
             <column name="icon" type="varchar(150)">
                 <constraints nullable="true" />
             </column>
-            <column name="is_group" type="boolean">
+            <column name="update_time" type="datetime">
                 <constraints nullable="true" />
             </column>
-            <column name="update_time" type="datetime">
+            <column name="parent_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
@@ -70,8 +70,8 @@
             <column name="status" type="boolean"/>
             <column name="path_url" type="string"/>
             <column name="icon" type="string"/>
-            <column name="is_group" type="boolean"/>
             <column name="update_time" type="datetime"/>
+            <column name="parent_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

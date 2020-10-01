@@ -32,6 +32,8 @@ public class ModuleDTO implements Serializable {
 
     private Long parentId;
 
+    private String actionId;
+
     
     public Long getId() {
         return id;
@@ -103,6 +105,18 @@ public class ModuleDTO implements Serializable {
 
     public void setParentId(Long parentId) {
         this.parentId = parentId;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public String getActionId() {
+        return actionId;
+    }
+
+    public void setActionId(String actionId) {
+        this.actionId = actionId;
     }
 
     @Override

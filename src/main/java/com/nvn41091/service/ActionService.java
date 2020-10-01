@@ -5,6 +5,7 @@ import com.nvn41091.service.dto.ActionDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -27,6 +28,8 @@ public interface ActionService {
      * @return the list of entities.
      */
     Page<ActionDTO> doSearch(ActionDTO actionDTO, Pageable pageable);
+
+    List<ActionDTO> getAll();
 
     /**
      * Delete the "id" action.

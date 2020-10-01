@@ -5,6 +5,8 @@ import com.nvn41091.domain.ModuleAction;
 import com.nvn41091.repository.ModuleActionRepository;
 import com.nvn41091.service.dto.ModuleActionDTO;
 import com.nvn41091.service.mapper.ModuleActionMapper;
+import com.nvn41091.utils.DataUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.time.Instant;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link ModuleAction}.
@@ -46,7 +50,7 @@ public class ModuleActionServiceImpl implements ModuleActionService {
     public Page<ModuleActionDTO> findAll(Pageable pageable) {
         log.debug("Request to get all ModuleActions");
         return moduleActionRepository.findAll(pageable)
-            .map(moduleActionMapper::toDto);
+                .map(moduleActionMapper::toDto);
     }
 
 
@@ -55,12 +59,53 @@ public class ModuleActionServiceImpl implements ModuleActionService {
     public Optional<ModuleActionDTO> findOne(Long id) {
         log.debug("Request to get ModuleAction : {}", id);
         return moduleActionRepository.findById(id)
-            .map(moduleActionMapper::toDto);
+                .map(moduleActionMapper::toDto);
     }
 
     @Override
     public void delete(Long id) {
         log.debug("Request to delete ModuleAction : {}", id);
         moduleActionRepository.deleteById(id);
+    }
+
+    @Override
+    public List<ModuleActionDTO> getAllByModuleId(Long id) {
+        return moduleActionRepository.getAllByModuleId(id).stream()
+                .map(moduleActionMapper::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateByModule(String actionId, Long moduleId) {
+        List<String> lstAction = new ArrayList<>();
+        if (StringUtils.isNoneEmpty(actionId)) {
+            lstAction = Arrays.asList(actionId.split(",").clone());
+        }
+        List<ModuleAction> selected = new ArrayList<>();
+        for (String action : lstAction) {
+            ModuleAction moduleAction = new ModuleAction();
+            moduleAction.setActionId(DataUtil.safeToLong(action));
+            moduleAction.setModuleId(moduleId);
+            moduleAction.setUpdateTime(Instant.now());
+            selected.add(moduleAction);
+        }
+        List<ModuleAction> origin = moduleActionRepository.getAllByModuleId(moduleId);
+        Iterator<ModuleAction> i = origin.listIterator();
+        Iterator<ModuleAction> j = selected.listIterator();
+        while (i.hasNext()) {
+            ModuleAction nextOrigin = i.next();
+            boolean isUncheck = true;
+            while (j.hasNext()) {
+                ModuleAction nextSelected = j.next();
+                if (nextSelected.getModuleId().equals(nextOrigin.getModuleId()) && nextSelected.getActionId().equals(nextOrigin.getActionId())) {
+                    j.remove();
+                    isUncheck = false;
+                }
+            }
+            if (!isUncheck) {
+                i.remove();
+            }
+        }
+        moduleActionRepository.deleteInBatch(origin);
+        moduleActionRepository.saveAll(selected);
     }
 }

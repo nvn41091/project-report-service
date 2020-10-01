@@ -87,15 +87,13 @@ public class ModuleResource {
     /**
      * {@code GET  /modules} : get all the modules.
      *
-     * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of modules in body.
      */
     @PostMapping("/doSearch")
-    public ResponseEntity<List<ModuleDTO>> doSearch(@RequestBody ModuleDTO moduleDTO, Pageable pageable) {
+    public ResponseEntity<List<ModuleDTO>> doSearch(@RequestBody ModuleDTO moduleDTO) {
         log.debug("REST request to find Modules");
-        Page<ModuleDTO> page = moduleService.doSearch(moduleDTO, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+        List<ModuleDTO> lst = moduleService.doSearch(moduleDTO);
+        return ResponseEntity.ok().body(lst);
     }
 
     /**

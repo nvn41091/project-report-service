@@ -1,5 +1,6 @@
 package com.nvn41091.service.impl;
 
+import com.nvn41091.service.ModuleActionService;
 import com.nvn41091.service.ModuleService;
 import com.nvn41091.domain.Module;
 import com.nvn41091.repository.ModuleRepository;
@@ -8,6 +9,7 @@ import com.nvn41091.service.mapper.ModuleMapper;
 import com.nvn41091.utils.DataUtil;
 import com.nvn41091.utils.Translator;
 import com.nvn41091.web.rest.errors.BadRequestAlertException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,11 +34,14 @@ public class ModuleServiceImpl implements ModuleService {
 
     private final ModuleRepository moduleRepository;
 
+    private final ModuleActionService moduleActionService;
+
     private final ModuleMapper moduleMapper;
 
-    public ModuleServiceImpl(ModuleRepository moduleRepository, ModuleMapper moduleMapper) {
+    public ModuleServiceImpl(ModuleRepository moduleRepository, ModuleMapper moduleMapper, ModuleActionService moduleActionService) {
         this.moduleRepository = moduleRepository;
         this.moduleMapper = moduleMapper;
+        this.moduleActionService = moduleActionService;
     }
 
     @Override
@@ -49,11 +54,17 @@ public class ModuleServiceImpl implements ModuleService {
             if (moduleRepository.findAllById(moduleDTO.getId()).size() == 0) {
                 throw new BadRequestAlertException(Translator.toLocale("error.module.notExist"), "module", "module.notExist");
             }
+            if (StringUtils.isNoneEmpty(moduleDTO.getPathUrl())) {
+                if (moduleRepository.findAllByParentId(moduleDTO.getId()).size() > 0) {
+                    throw new BadRequestAlertException(Translator.toLocale("error.module.changeToGroup"), "module", "module.changeToGroup");
+                }
+            }
         }
         if (moduleRepository.findAllByCodeAndIdNotContains(moduleDTO.getCode(), moduleDTO.getId()).size() > 0) {
             throw new BadRequestAlertException(Translator.toLocale("error.module.codeExist"), "module", "module.codeExist");
         }
         moduleDTO.setUpdateTime(Instant.now());
+        this.moduleActionService.updateByModule(moduleDTO.getActionId(), moduleDTO.getId());
         Module module = moduleMapper.toEntity(moduleDTO);
         module = moduleRepository.save(module);
         return moduleMapper.toDto(module);
@@ -61,10 +72,10 @@ public class ModuleServiceImpl implements ModuleService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ModuleDTO> doSearch(ModuleDTO moduleDTO, Pageable pageable) {
+    public List<ModuleDTO> doSearch(ModuleDTO moduleDTO) {
         log.debug("Request to get all Modules");
-        return moduleRepository.doSearch(DataUtil.makeLikeParam(moduleDTO.getCode()), DataUtil.makeLikeParam(moduleDTO.getName()), moduleDTO.isStatus(), moduleDTO.getParentId(), pageable)
-                .map(moduleMapper::toDto);
+        return moduleRepository.doSearch(DataUtil.makeLikeParam(moduleDTO.getCode()), DataUtil.makeLikeParam(moduleDTO.getName()), moduleDTO.isStatus(), moduleDTO.getParentId())
+                .stream().map(moduleMapper::toDto).collect(Collectors.toList());
     }
 
 
@@ -81,6 +92,9 @@ public class ModuleServiceImpl implements ModuleService {
         log.debug("Request to delete Module : {}", id);
         if (moduleRepository.findAllById(id).size() == 0) {
             throw new BadRequestAlertException(Translator.toLocale("error.module.notExist"), "module", "module.notExist");
+        }
+        if (moduleRepository.findAllByParentId(id).size() > 0) {
+            throw new BadRequestAlertException(Translator.toLocale("error.module.parentExist"), "module", "module.parentExist");
         }
         moduleRepository.deleteById(id);
     }

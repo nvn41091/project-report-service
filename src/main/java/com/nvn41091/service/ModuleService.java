@@ -24,10 +24,9 @@ public interface ModuleService {
     /**
      * Get all the modules.
      *
-     * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<ModuleDTO> doSearch(ModuleDTO moduleDTO, Pageable pageable);
+    List<ModuleDTO> doSearch(ModuleDTO moduleDTO);
 
 
     /**

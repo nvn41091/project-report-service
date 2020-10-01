@@ -102,6 +102,12 @@ public class ActionResource {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
+    @GetMapping("/getAll")
+    public ResponseEntity<List<ActionDTO>> getAll() {
+        List<ActionDTO> lst = actionService.getAll();
+        return ResponseEntity.ok().body(lst);
+    }
+
     /**
      * {@code DELETE  /actions/:id} : delete the "id" action.
      *

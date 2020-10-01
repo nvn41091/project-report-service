@@ -21,16 +21,13 @@ public interface ModuleRepository extends JpaRepository<Module, Long> {
             "AND (:code is null or lower(c.code) like %:code% ESCAPE '&') " +
             "AND (:name is null or lower(c.name) like %:name% ESCAPE '&') " +
             "AND (:status is null or c.status = :status) " +
-            "AND (:parentId is null or c.parentId = :parentId)",
-            countQuery = "SELECT count(c) from Module c where 1=1 " +
-                    "AND (:code is null or lower(c.code) like %:code% ESCAPE '&') " +
-                    "AND (:name is null or lower(c.name) like %:name% ESCAPE '&') " +
-                    "AND (:status is null or c.status = :status) " +
-                    "AND (:parentId is null or c.parentId = :parentId)")
-    Page<Module> doSearch(@Param("code") String code, @Param("name") String name, @Param("status") Boolean status,
-                          @Param("parentId") Long id, Pageable pageable);
+            "AND (:parentId is null or c.parentId = :parentId)")
+    List<Module> doSearch(@Param("code") String code, @Param("name") String name, @Param("status") Boolean status,
+                          @Param("parentId") Long id);
 
     List<Module> findAllById(Long id);
+
+    List<Module> findAllByParentId(Long parentId);
 
     @Query("SELECT u from Module u WHERE upper(u.code) = upper(:code) and (:id is null or u.id != :id) ")
     List<Module> findAllByCodeAndIdNotContains(@Param("code") String code, @Param("id") Long id);

@@ -53,7 +53,7 @@ public class ActionResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/insert")
-    @PreAuthorize("hasAuthority(\"ACTION#INSERT\")")
+//    @PreAuthorize("hasAuthority(\"ACTION#INSERT\")")
     public ResponseEntity<ActionDTO> createAction(@Valid @RequestBody ActionDTO actionDTO) throws URISyntaxException {
         log.debug("REST request to save Action : {}", actionDTO);
         if (actionDTO.getId() != null) {
@@ -75,7 +75,7 @@ public class ActionResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/update")
-    @PreAuthorize("hasAuthority(\"ACTION#UPDATE\")")
+//    @PreAuthorize("hasAuthority(\"ACTION#UPDATE\")")
     public ResponseEntity<ActionDTO> updateAction(@Valid @RequestBody ActionDTO actionDTO) throws URISyntaxException {
         log.debug("REST request to update Action : {}", actionDTO);
         if (actionDTO.getId() == null) {
@@ -115,7 +115,7 @@ public class ActionResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAuthority(\"ACTION#DELETE\")")
+//    @PreAuthorize("hasAuthority(\"ACTION#DELETE\")")
     public ResponseEntity<Void> deleteAction(@PathVariable Long id) {
         log.debug("REST request to delete Action : {}", id);
         actionService.delete(id);

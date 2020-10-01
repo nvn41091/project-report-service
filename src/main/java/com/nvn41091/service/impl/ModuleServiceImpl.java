@@ -64,9 +64,9 @@ public class ModuleServiceImpl implements ModuleService {
             throw new BadRequestAlertException(Translator.toLocale("error.module.codeExist"), "module", "module.codeExist");
         }
         moduleDTO.setUpdateTime(Instant.now());
-        this.moduleActionService.updateByModule(moduleDTO.getActionId(), moduleDTO.getId());
         Module module = moduleMapper.toEntity(moduleDTO);
         module = moduleRepository.save(module);
+        this.moduleActionService.updateByModule(moduleDTO.getActionId(), module.getId());
         return moduleMapper.toDto(module);
     }
 

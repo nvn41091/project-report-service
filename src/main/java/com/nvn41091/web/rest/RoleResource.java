@@ -28,7 +28,7 @@ import java.util.Optional;
  * REST controller for managing {@link com.nvn41091.domain.Role}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/role")
 public class RoleResource {
 
     private final Logger log = LoggerFactory.getLogger(RoleResource.class);
@@ -51,7 +51,7 @@ public class RoleResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new roleDTO, or with status {@code 400 (Bad Request)} if the role has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/roles")
+    @PostMapping("/insert")
     public ResponseEntity<RoleDTO> createRole(@Valid @RequestBody RoleDTO roleDTO) throws URISyntaxException {
         log.debug("REST request to save Role : {}", roleDTO);
         if (roleDTO.getId() != null) {
@@ -72,7 +72,7 @@ public class RoleResource {
      * or with status {@code 500 (Internal Server Error)} if the roleDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/roles")
+    @PutMapping("/update")
     public ResponseEntity<RoleDTO> updateRole(@Valid @RequestBody RoleDTO roleDTO) throws URISyntaxException {
         log.debug("REST request to update Role : {}", roleDTO);
         if (roleDTO.getId() == null) {
@@ -90,25 +90,12 @@ public class RoleResource {
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of roles in body.
      */
-    @GetMapping("/roles")
-    public ResponseEntity<List<RoleDTO>> getAllRoles(Pageable pageable) {
+    @PostMapping("/doSearch")
+    public ResponseEntity<List<RoleDTO>> doSearch(@RequestBody RoleDTO roleDTO, Pageable pageable) {
         log.debug("REST request to get a page of Roles");
-        Page<RoleDTO> page = roleService.findAll(pageable);
+        Page<RoleDTO> page = roleService.doSearch(roleDTO, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
-    }
-
-    /**
-     * {@code GET  /roles/:id} : get the "id" role.
-     *
-     * @param id the id of the roleDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the roleDTO, or with status {@code 404 (Not Found)}.
-     */
-    @GetMapping("/roles/{id}")
-    public ResponseEntity<RoleDTO> getRole(@PathVariable Long id) {
-        log.debug("REST request to get Role : {}", id);
-        Optional<RoleDTO> roleDTO = roleService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(roleDTO);
     }
 
     /**
@@ -117,7 +104,7 @@ public class RoleResource {
      * @param id the id of the roleDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/roles/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
         log.debug("REST request to delete Role : {}", id);
         roleService.delete(id);

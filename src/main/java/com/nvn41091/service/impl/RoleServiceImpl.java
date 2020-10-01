@@ -5,6 +5,7 @@ import com.nvn41091.domain.Role;
 import com.nvn41091.repository.RoleRepository;
 import com.nvn41091.service.dto.RoleDTO;
 import com.nvn41091.service.mapper.RoleMapper;
+import com.nvn41091.utils.DataUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +50,14 @@ public class RoleServiceImpl implements RoleService {
             .map(roleMapper::toDto);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Page<RoleDTO> doSearch(RoleDTO roleDTO, Pageable pageable) {
+        return roleRepository.doSearch(DataUtil.makeLikeParam(roleDTO.getCode()),
+                DataUtil.makeLikeParam(roleDTO.getName()),
+                roleDTO.isStatus(), pageable)
+                .map(roleMapper::toDto);
+    }
 
     @Override
     @Transactional(readOnly = true)

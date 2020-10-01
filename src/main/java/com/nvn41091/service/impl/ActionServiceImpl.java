@@ -70,7 +70,7 @@ public class ActionServiceImpl implements ActionService {
 
     @Override
     public List<ActionDTO> getAll() {
-        return actionRepository.findAll().stream().map(actionMapper::toDto).collect(Collectors.toList());
+        return actionRepository.getAllByStatus(true).stream().map(actionMapper::toDto).collect(Collectors.toList());
     }
 
     @Override

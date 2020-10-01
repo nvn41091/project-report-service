@@ -32,4 +32,6 @@ public interface ActionRepository extends JpaRepository<Action, Long> {
     List<Action> findAllByCodeAndIdNotEqual(@Param("code") String code, @Param("id") Long id);
 
     List<Action> findAllById(Long id);
+
+    List<Action> getAllByStatus(Boolean status);
 }

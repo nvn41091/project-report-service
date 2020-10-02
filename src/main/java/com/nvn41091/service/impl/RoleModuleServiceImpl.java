@@ -71,7 +71,7 @@ public class RoleModuleServiceImpl implements RoleModuleService {
     @Override
     public List<TreeViewDTO> getALl(Long id) {
         return roleModuleRepository.getAllModuleAndActionByRoleId(id)
-                .stream().map(objects -> new TreeViewDTO(DataUtil.safeToLong(objects[0]),
+                .stream().map(objects -> new TreeViewDTO(DataUtil.safeToString(objects[0]),
                         DataUtil.safeToLong(objects[2]),
                         DataUtil.safeToString(objects[1]),
                         DataUtil.safeToBoolean(objects[3]))).collect(Collectors.toList());

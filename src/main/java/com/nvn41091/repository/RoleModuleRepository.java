@@ -18,9 +18,13 @@ public interface RoleModuleRepository extends JpaRepository<RoleModule, Long> {
 
     @Query(value = "SELECT m.id, m.name, m.parent_id, NULL AS checked  " +
             "FROM module m  " +
-            "WHERE m.STATUS = 1 " +
+            "WHERE m.STATUS = 1 and id in (SELECT DISTINCT module_id FROM module_action) " +
             "UNION ALL " +
-            "SELECT -1 as id, a.name, m.module_id as parent_id, " +
+            "SELECT m.id, m.name, m.parent_id, NULL AS checked " +
+            "from module m " +
+            "WHERE id in (SELECT DISTINCT parent_id from module where id in (SELECT DISTINCT module_id FROM module_action) and status = 1) " +
+            "UNION ALL " +
+            "SELECT CONCAT('#',m.action_id) as id, a.name, m.module_id as parent_id, " +
             " case " +
             "  when rm.id is null then false " +
             "  else true " +

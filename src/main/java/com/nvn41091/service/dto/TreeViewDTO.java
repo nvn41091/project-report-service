@@ -1,23 +1,23 @@
 package com.nvn41091.service.dto;
 
 public class TreeViewDTO {
-    private Long id;
+    private String id;
     private Long parentId;
     private String name;
     private Boolean checked;
 
-    public TreeViewDTO(Long id, Long parentId, String name, Boolean checked) {
+    public TreeViewDTO(String id, Long parentId, String name, Boolean checked) {
         this.id = id;
         this.parentId = parentId;
         this.name = name;
         this.checked = checked;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

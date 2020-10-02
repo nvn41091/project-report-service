@@ -207,6 +207,9 @@ public class DataUtil {
         if (obj1 == null || obj1 instanceof Boolean) {
             return (Boolean) obj1;
         }
+        if (safeToLong(obj1).equals(1L) || safeToLong(obj1).equals(0L)) {
+            return safeToLong(obj1).equals(1L) ? Boolean.TRUE : Boolean.FALSE;
+        }
         return false;
     }
 

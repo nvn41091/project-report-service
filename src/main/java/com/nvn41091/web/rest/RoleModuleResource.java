@@ -48,4 +48,14 @@ public class RoleModuleResource {
     public ResponseEntity<List<TreeViewDTO>> getAll(@PathVariable Long id) {
         return ResponseEntity.ok().body(roleModuleService.getALl(id));
     }
+
+    @PostMapping("/save/{id}")
+    public ResponseEntity<List<RoleModuleDTO>> createRoleModule(@RequestBody List<RoleModuleDTO> lst,
+                                                                @PathVariable("id") Long roleId) throws URISyntaxException {
+        log.debug("REST request to save RoleModule : {}", lst);
+        List<RoleModuleDTO> result = roleModuleService.save(lst, roleId);
+        return ResponseEntity.created(new URI("/api/roleModule/save/" + roleId))
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, String.valueOf(roleId)))
+                .body(result);
+    }
 }

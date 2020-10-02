@@ -16,7 +16,7 @@ import java.util.List;
 @Repository
 public interface RoleModuleRepository extends JpaRepository<RoleModule, Long> {
 
-    @Query(value = "SELECT m.id, m.name, m.parent_id, NULL AS checked  " +
+    @Query(value = "SELECT * FROM ( SELECT m.id, m.name, m.parent_id, NULL AS checked  " +
             "FROM module m  " +
             "WHERE m.STATUS = 1 and id in (SELECT DISTINCT module_id FROM module_action) " +
             "UNION ALL " +
@@ -33,6 +33,10 @@ public interface RoleModuleRepository extends JpaRepository<RoleModule, Long> {
             " WHERE " +
             "  m.module_id IN ( SELECT id FROM module WHERE parent_id IS NOT NULL AND STATUS = 1 )  " +
             " AND m.action_id IN ( SELECT id FROM action WHERE STATUS = 1 )  " +
-            " ) m INNER JOIN action a on m.action_id = a.id LEFT JOIN (SELECT * FROM role_module where role_id = :id) rm on rm.module_id = m.module_id ", nativeQuery = true)
+            " ) m INNER JOIN action a on m.action_id = a.id " +
+            "LEFT JOIN (SELECT * FROM role_module where role_id = :id) rm " +
+            "on rm.module_id = m.module_id and rm.action_id = m.action_id ) t order by t.name", nativeQuery = true)
     List<Object[]> getAllModuleAndActionByRoleId(@Param("id") Long id);
+
+    List<RoleModule> getAllByRoleId(Long id);
 }

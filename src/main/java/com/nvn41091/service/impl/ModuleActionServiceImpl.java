@@ -90,10 +90,10 @@ public class ModuleActionServiceImpl implements ModuleActionService {
         }
         List<ModuleAction> origin = moduleActionRepository.getAllByModuleId(moduleId);
         Iterator<ModuleAction> i = origin.listIterator();
-        Iterator<ModuleAction> j = selected.listIterator();
         while (i.hasNext()) {
             ModuleAction nextOrigin = i.next();
             boolean isUncheck = true;
+            Iterator<ModuleAction> j = selected.listIterator();
             while (j.hasNext()) {
                 ModuleAction nextSelected = j.next();
                 if (nextSelected.getModuleId().equals(nextOrigin.getModuleId()) && nextSelected.getActionId().equals(nextOrigin.getActionId())) {

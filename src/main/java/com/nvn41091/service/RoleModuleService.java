@@ -17,10 +17,10 @@ public interface RoleModuleService {
     /**
      * Save a roleModule.
      *
-     * @param roleModuleDTO the entity to save.
+     * @param lst the list entity to save.
      * @return the persisted entity.
      */
-    RoleModuleDTO save(RoleModuleDTO roleModuleDTO);
+    List<RoleModuleDTO> save(List<RoleModuleDTO> lst, Long roleId);
 
     /**
      * Get all the roleModules.

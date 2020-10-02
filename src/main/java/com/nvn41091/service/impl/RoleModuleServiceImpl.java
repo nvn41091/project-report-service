@@ -1,5 +1,6 @@
 package com.nvn41091.service.impl;
 
+import com.nvn41091.domain.ModuleAction;
 import com.nvn41091.service.RoleModuleService;
 import com.nvn41091.domain.RoleModule;
 import com.nvn41091.repository.RoleModuleRepository;
@@ -15,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,11 +41,32 @@ public class RoleModuleServiceImpl implements RoleModuleService {
     }
 
     @Override
-    public RoleModuleDTO save(RoleModuleDTO roleModuleDTO) {
-        log.debug("Request to save RoleModule : {}", roleModuleDTO);
-        RoleModule roleModule = roleModuleMapper.toEntity(roleModuleDTO);
-        roleModule = roleModuleRepository.save(roleModule);
-        return roleModuleMapper.toDto(roleModule);
+    public List<RoleModuleDTO> save(List<RoleModuleDTO> lst, Long roleId) {
+        log.debug("Request to save list RoleModule : {}", lst);
+        List<RoleModule> selected = lst.stream().map(roleModuleMapper::toEntity).collect(Collectors.toList());
+        List<RoleModule> origin = roleModuleRepository.getAllByRoleId(roleId);
+        Iterator<RoleModule> i = origin.listIterator();
+        while (i.hasNext()) {
+            RoleModule nextOrigin = i.next();
+            boolean isUncheck = true;
+            Iterator<RoleModule> j = selected.listIterator();
+            while (j.hasNext()) {
+                RoleModule nextSelected = j.next();
+                if (nextSelected.getModuleId().equals(nextOrigin.getModuleId())
+                        && nextSelected.getActionId().equals(nextOrigin.getActionId())
+                        && nextSelected.getRoleId().equals(nextOrigin.getRoleId())) {
+                    j.remove();
+                    isUncheck = false;
+                    break;
+                }
+            }
+            if (!isUncheck) {
+                i.remove();
+            }
+        }
+        roleModuleRepository.deleteInBatch(origin);
+        selected = roleModuleRepository.saveAll(selected);
+        return roleModuleMapper.toDto(selected);
     }
 
     @Override
@@ -50,7 +74,7 @@ public class RoleModuleServiceImpl implements RoleModuleService {
     public Page<RoleModuleDTO> findAll(Pageable pageable) {
         log.debug("Request to get all RoleModules");
         return roleModuleRepository.findAll(pageable)
-            .map(roleModuleMapper::toDto);
+                .map(roleModuleMapper::toDto);
     }
 
 
@@ -59,7 +83,7 @@ public class RoleModuleServiceImpl implements RoleModuleService {
     public Optional<RoleModuleDTO> findOne(Long id) {
         log.debug("Request to get RoleModule : {}", id);
         return roleModuleRepository.findById(id)
-            .map(roleModuleMapper::toDto);
+                .map(roleModuleMapper::toDto);
     }
 
     @Override

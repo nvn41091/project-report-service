@@ -1,5 +1,6 @@
 package com.nvn41091.service.impl;
 
+import com.nvn41091.repository.RoleModuleRepository;
 import com.nvn41091.service.RoleService;
 import com.nvn41091.domain.Role;
 import com.nvn41091.repository.RoleRepository;
@@ -32,9 +33,12 @@ public class RoleServiceImpl implements RoleService {
 
     private final RoleMapper roleMapper;
 
-    public RoleServiceImpl(RoleRepository roleRepository, RoleMapper roleMapper) {
+    private final RoleModuleRepository roleModuleRepository;
+
+    public RoleServiceImpl(RoleRepository roleRepository, RoleMapper roleMapper, RoleModuleRepository roleModuleRepository) {
         this.roleRepository = roleRepository;
         this.roleMapper = roleMapper;
+        this.roleModuleRepository = roleModuleRepository;
     }
 
     @Override
@@ -89,5 +93,6 @@ public class RoleServiceImpl implements RoleService {
             throw new BadRequestAlertException(Translator.toLocale("error.role.notFound"), "role", "role.notFound");
         }
         roleRepository.deleteById(id);
+        roleModuleRepository.deleteAllByRoleId(id);
     }
 }

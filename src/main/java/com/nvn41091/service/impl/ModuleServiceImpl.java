@@ -58,6 +58,15 @@ public class ModuleServiceImpl implements ModuleService {
                 if (moduleRepository.findAllByParentId(moduleDTO.getId()).size() > 0) {
                     throw new BadRequestAlertException(Translator.toLocale("error.module.changeToGroup"), "module", "module.changeToGroup");
                 }
+            } else {
+                if (moduleDTO.getStatus().equals(Boolean.FALSE) && moduleRepository.findAllByParentIdAndStatus(moduleDTO.getId(), Boolean.TRUE).size() > 0) {
+                    throw new BadRequestAlertException(Translator.toLocale("error.module.dontLockMenu"), "module", "module.dontLockMenu");
+                }
+            }
+        }
+        if (moduleDTO.getParentId() != null && moduleDTO.getStatus().equals(Boolean.TRUE)) {
+            if (moduleRepository.findAllByIdAndStatus(moduleDTO.getParentId(), Boolean.FALSE).size() > 0) {
+                throw new BadRequestAlertException(Translator.toLocale("error.module.parentLock"), "module", "module.parentLock");
             }
         }
         if (moduleRepository.findAllByCodeAndIdNotContains(moduleDTO.getCode(), moduleDTO.getId()).size() > 0) {

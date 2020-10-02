@@ -39,4 +39,6 @@ public interface RoleModuleRepository extends JpaRepository<RoleModule, Long> {
     List<Object[]> getAllModuleAndActionByRoleId(@Param("id") Long id);
 
     List<RoleModule> getAllByRoleId(Long id);
+
+    void deleteAllByRoleId(Long roleId);
 }

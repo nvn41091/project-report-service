@@ -29,6 +29,10 @@ public interface ModuleRepository extends JpaRepository<Module, Long> {
 
     List<Module> findAllByParentId(Long parentId);
 
+    List<Module> findAllByIdAndStatus(Long id, Boolean status);
+
+    List<Module> findAllByParentIdAndStatus(Long parentId, Boolean status);
+
     @Query("SELECT u from Module u WHERE upper(u.code) = upper(:code) and (:id is null or u.id <> :id) ")
     List<Module> findAllByCodeAndIdNotContains(@Param("code") String code, @Param("id") Long id);
 

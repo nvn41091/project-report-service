@@ -6,6 +6,8 @@ import com.nvn41091.repository.RoleRepository;
 import com.nvn41091.service.dto.RoleDTO;
 import com.nvn41091.service.mapper.RoleMapper;
 import com.nvn41091.utils.DataUtil;
+import com.nvn41091.utils.Translator;
+import com.nvn41091.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.Optional;
 
 /**
@@ -37,6 +40,18 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public RoleDTO save(RoleDTO roleDTO) {
         log.debug("Request to save Role : {}", roleDTO);
+        if (roleDTO.getId() != null) {
+            // Validate cap nhat
+            if (roleRepository.findAllById(roleDTO.getId()).size() == 0) {
+                throw new BadRequestAlertException(Translator.toLocale("error.role.notFound"), "role", "role.notFound");
+            }
+        } else {
+            // Validate them moi
+        }
+        if (roleRepository.findAllByCodeAndIdNotEqual(roleDTO.getCode(), roleDTO.getId()).size() > 0) {
+            throw new BadRequestAlertException(Translator.toLocale("error.role.codeExist"), "role", "role.codeExist");
+        }
+        roleDTO.setUpdateTime(Instant.now());
         Role role = roleMapper.toEntity(roleDTO);
         role = roleRepository.save(role);
         return roleMapper.toDto(role);
@@ -70,6 +85,9 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Role : {}", id);
+        if (roleRepository.findAllById(id).size() == 0) {
+            throw new BadRequestAlertException(Translator.toLocale("error.role.notFound"), "role", "role.notFound");
+        }
         roleRepository.deleteById(id);
     }
 }

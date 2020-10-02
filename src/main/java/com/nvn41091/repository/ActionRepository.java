@@ -28,7 +28,7 @@ public interface ActionRepository extends JpaRepository<Action, Long> {
                     "AND (:status is null or c.status = :status)")
     Page<Action> doSearch(@Param("code") String code, @Param("name") String name, @Param("status") Boolean status, Pageable pageable);
 
-    @Query("SELECT u from Action u WHERE upper(u.code) = upper(:code) and ( :id is null or u.id != :id) ")
+    @Query("SELECT u from Action u WHERE upper(u.code) = upper(:code) and ( :id is null or u.id <> :id) ")
     List<Action> findAllByCodeAndIdNotEqual(@Param("code") String code, @Param("id") Long id);
 
     List<Action> findAllById(Long id);

@@ -32,13 +32,13 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
     Page<Company> doSearch(@Param("code") String code, @Param("name") String name,
                            @Param("email") String email, @Param("tel") String tel, @Param("status") Boolean status, Pageable pageable);
 
-    @Query("SELECT u from Company u WHERE upper(u.code) = upper(:code) and ( :id is null or u.id != :id) ")
+    @Query("SELECT u from Company u WHERE upper(u.code) = upper(:code) and ( :id is null or u.id <> :id) ")
     List<Company> findAllByCodeAndIdNotEqual(@Param("code") String code, @Param("id") Long id);
 
-    @Query("SELECT u from Company u WHERE upper(u.email) = upper(:email) and ( :id is null or u.id != :id) ")
+    @Query("SELECT u from Company u WHERE upper(u.email) = upper(:email) and ( :id is null or u.id <> :id) ")
     List<Company> findAllByEmailAndIdNotEqual(@Param("email") String email, @Param("id") Long id);
 
-    @Query("SELECT u from Company u WHERE upper(u.tel) = upper(:tel) and ( :id is null or u.id != :id) ")
+    @Query("SELECT u from Company u WHERE upper(u.tel) = upper(:tel) and ( :id is null or u.id <> :id) ")
     List<Company> findAllByTelAndIdNotEqual(@Param("tel") String tel, @Param("id") Long id);
 
     List<Company> findAllById(Long id);

@@ -27,10 +27,10 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("SELECT u from User u WHERE upper(u.userName) = upper(:userName) ")
     List<User> findAllByUserName(@Param("userName") String userName);
 
-    @Query("SELECT u from User u WHERE upper(u.userName) = upper(:userName) and ( :id is null or u.id != :id) ")
+    @Query("SELECT u from User u WHERE upper(u.userName) = upper(:userName) and ( :id is null or u.id <> :id) ")
     List<User> findAllByUserNameAndIdNotEqual(@Param("userName") String userName, @Param("id") Long id);
 
-    @Query("SELECT u from User u WHERE upper(u.email) = upper(:email) and ( :id is null or u.id != :id) ")
+    @Query("SELECT u from User u WHERE upper(u.email) = upper(:email) and ( :id is null or u.id <> :id) ")
     List<User> findAllByEmailAndIdNotEqual(@Param("email") String email, @Param("id") Long id);
 
     List<User> findAllByEmail(String email);

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +53,7 @@ public class ModuleResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/insert")
+    @PreAuthorize("hasAuthority(\"MODULE#INSERT\")")
     public ResponseEntity<ModuleDTO> createModule(@Valid @RequestBody ModuleDTO moduleDTO) throws URISyntaxException {
         log.debug("REST request to save Module : {}", moduleDTO);
         if (moduleDTO.getId() != null) {
@@ -73,6 +75,7 @@ public class ModuleResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/update")
+    @PreAuthorize("hasAuthority(\"MODULE#UPDATE\")")
     public ResponseEntity<ModuleDTO> updateModule(@Valid @RequestBody ModuleDTO moduleDTO) throws URISyntaxException {
         log.debug("REST request to update Module : {}", moduleDTO);
         if (moduleDTO.getId() == null) {
@@ -90,6 +93,7 @@ public class ModuleResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of modules in body.
      */
     @PostMapping("/doSearch")
+    @PreAuthorize("hasAuthority(\"MODULE#SEARCH\")")
     public ResponseEntity<List<ModuleDTO>> doSearch(@RequestBody ModuleDTO moduleDTO) {
         log.debug("REST request to find Modules");
         List<ModuleDTO> lst = moduleService.doSearch(moduleDTO);
@@ -103,6 +107,7 @@ public class ModuleResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority(\"MODULE#DELETE\")")
     public ResponseEntity<Void> deleteModule(@PathVariable Long id) {
         log.debug("REST request to delete Module : {}", id);
         moduleService.delete(id);

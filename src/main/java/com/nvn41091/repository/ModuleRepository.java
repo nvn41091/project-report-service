@@ -42,16 +42,16 @@ public interface ModuleRepository extends JpaRepository<Module, Long> {
     @Query(value = " SELECT DISTINCT  " +
             " m.id, m.code, m.name, m.parent_id, m.status, m.path_url, m.icon,  m.update_time, m.description " +
             " FROM (select * from user_role WHERE user_id = :id) ur   " +
-            "             INNER JOIN role r on ur.role_id = r.id and r.status = true     " +
-            "             LEFT JOIN role_module rm on r.id = rm.role_id     " +
-            "             LEFT JOIN module m on rm.module_id = m.id and m.status = true  " +
+            "             INNER JOIN (SELECT * FROM role WHERE status = true ) r on ur.role_id = r.id " +
+            "             INNER JOIN role_module rm on r.id = rm.role_id     " +
+            "             INNER JOIN (SELECT * FROM module WHERE status = true ) m on rm.module_id = m.id " +
             "UNION ALL " +
             " SELECT DISTINCT  " +
             "m.id, m.code, m.name, m.parent_id, m.status, m.path_url, m.icon,  m.update_time, m.description  " +
             " FROM module m where id in ( " +
             "  SELECT DISTINCT m.parent_id FROM (select * from user_role WHERE user_id = :id) ur   " +
-            "             INNER JOIN role r on ur.role_id = r.id and r.status = true     " +
-            "             LEFT JOIN role_module rm on r.id = rm.role_id     " +
-            "             LEFT JOIN module m on rm.module_id = m.id and m.status = true  )", nativeQuery = true)
+            "             INNER JOIN (SELECT * FROM role WHERE status = true ) r on ur.role_id = r.id     " +
+            "             INNER JOIN role_module rm on r.id = rm.role_id     " +
+            "             INNER JOIN (SELECT * FROM module WHERE status = true ) m on rm.module_id = m.id )", nativeQuery = true)
     List<Module> findAllMenuByUserId(@Param("id") Long id);
 }

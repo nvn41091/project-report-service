@@ -5,6 +5,7 @@ import com.nvn41091.service.dto.UserRoleDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -43,4 +44,6 @@ public interface UserRoleService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    List<UserRoleDTO> getAllByUserId(Long id);
 }

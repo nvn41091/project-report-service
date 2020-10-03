@@ -13,7 +13,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link UserRole}.
@@ -62,5 +64,10 @@ public class UserRoleServiceImpl implements UserRoleService {
     public void delete(Long id) {
         log.debug("Request to delete UserRole : {}", id);
         userRoleRepository.deleteById(id);
+    }
+
+    @Override
+    public List<UserRoleDTO> getAllByUserId(Long id) {
+        return userRoleRepository.getAllByUserId(id).stream().map(userRoleMapper::toDto).collect(Collectors.toList());
     }
 }

@@ -1,6 +1,7 @@
 package com.nvn41091.web.rest;
 
 import com.nvn41091.domain.User;
+import com.nvn41091.service.dto.UserDTO;
 import com.nvn41091.web.rest.errors.BadRequestAlertException;
 import com.nvn41091.service.UserService;
 import io.github.jhipster.web.util.HeaderUtil;
@@ -50,7 +51,7 @@ public class UserResource {
     }
 
     @PostMapping("/delete")
-    @PreAuthorize("hasAuthority(\"USER#DELETE\")")
+//    @PreAuthorize("hasAuthority(\"USER#DELETE\")")
     public ResponseEntity<Void> delete(@RequestBody User user) {
         log.debug("REST request to delete user : {}", user);
         userService.delete(user);
@@ -58,8 +59,8 @@ public class UserResource {
     }
 
     @PostMapping("/insert")
-    @PreAuthorize("hasAuthority(\"USER#INSERT\")")
-    public ResponseEntity<User> createUser(@RequestBody User user) throws URISyntaxException {
+//    @PreAuthorize("hasAuthority(\"USER#INSERT\")")
+    public ResponseEntity<User> createUser(@RequestBody UserDTO user) throws URISyntaxException {
         log.debug("REST request to insert user : {}", user);
         if (user.getId() != null) {
             throw new BadRequestAlertException("A new user cannot already have an ID", ENTITY_NAME, "id_exists");
@@ -71,15 +72,15 @@ public class UserResource {
     }
 
     @PostMapping("/update")
-    @PreAuthorize("hasAuthority(\"USER#UPDATE\")")
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
-        log.debug("REST request to update user : {}", user);
-        if (user.getId() == null) {
+//    @PreAuthorize("hasAuthority(\"USER#UPDATE\")")
+    public ResponseEntity<User> updateUser(@RequestBody UserDTO userDTO) {
+        log.debug("REST request to update user : {}", userDTO);
+        if (userDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "id_null");
         }
-        User result = userService.saveToLogin(user);
+        User result = userService.saveToLogin(userDTO);
         return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, user.getId().toString()))
+                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, userDTO.getId().toString()))
                 .body(result);
     }
 }

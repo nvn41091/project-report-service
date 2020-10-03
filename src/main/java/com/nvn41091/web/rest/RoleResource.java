@@ -110,4 +110,10 @@ public class RoleResource {
         roleService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<RoleDTO>> getAll() {
+        List<RoleDTO> lst = roleService.getAll();
+        return ResponseEntity.ok().body(lst);
+    }
 }

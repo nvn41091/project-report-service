@@ -1,6 +1,7 @@
 package com.nvn41091.service;
 
 import com.nvn41091.domain.User;
+import com.nvn41091.service.dto.UserDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -8,9 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface UserService {
 
-    User saveNoLogin(User user, HttpServletRequest request);
+    User saveNoLogin(UserDTO user, HttpServletRequest request);
 
-    User saveToLogin(User user);
+    User saveToLogin(UserDTO user);
 
     void delete(User user);
 

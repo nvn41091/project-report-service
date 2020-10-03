@@ -1,7 +1,11 @@
 package com.nvn41091.service.impl;
 
 import com.nvn41091.domain.User;
+import com.nvn41091.domain.UserRole;
 import com.nvn41091.repository.UserRepository;
+import com.nvn41091.repository.UserRoleRepository;
+import com.nvn41091.service.dto.UserDTO;
+import com.nvn41091.service.mapper.UserMapper;
 import com.nvn41091.web.rest.errors.BadRequestAlertException;
 import com.nvn41091.security.SecurityUtils;
 import com.nvn41091.service.UserService;
@@ -11,7 +15,6 @@ import io.github.jhipster.security.RandomUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +25,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -30,53 +35,96 @@ public class UserServiceImpl implements UserService {
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    @Autowired
-    private PasswordEncoder encoder;
+    private final PasswordEncoder encoder;
 
-    @Autowired
-    private UserRepository repository;
+    private final UserMapper userMapper;
+
+    private final UserRepository repository;
+
+    private final UserRoleRepository userRoleRepository;
+
+    public UserServiceImpl(PasswordEncoder encoder, UserMapper userMapper, UserRepository repository, UserRoleRepository userRoleRepository) {
+        this.encoder = encoder;
+        this.userMapper = userMapper;
+        this.repository = repository;
+        this.userRoleRepository = userRoleRepository;
+    }
 
     @Override
-    public User saveNoLogin(User user, HttpServletRequest request) {
-        user.setPasswordHash(encoder.encode(user.getPasswordHash()));
-        user.setCreateDate(new Timestamp(System.currentTimeMillis()));
+    public User saveNoLogin(UserDTO userDTO, HttpServletRequest request) {
+        userDTO.setPasswordHash(encoder.encode(userDTO.getPasswordHash()));
+        userDTO.setCreateDate(new Timestamp(System.currentTimeMillis()));
         String lang = request.getHeader("Accept-Language").split(",")[0];
-        user.setLangKey(lang);
-        user.setStatus(true);
-        user.setResetKey(RandomUtil.generateResetKey());
-        validateEmailAndUsername(user);
+        userDTO.setLangKey(lang);
+        userDTO.setStatus(true);
+        userDTO.setResetKey(RandomUtil.generateResetKey());
+        validateEmailAndUsername(userDTO);
+        User user = userMapper.toEntity(userDTO);
         return repository.save(user);
     }
 
-    public void validateEmailAndUsername(User user) {
-        if (repository.findAllByUserNameAndIdNotEqual(user.getUserName(), user.getId()).size() > 0) {
+    public void validateEmailAndUsername(UserDTO userDTO) {
+        if (repository.findAllByUserNameAndIdNotEqual(userDTO.getUserName(), userDTO.getId()).size() > 0) {
             throw new BadRequestAlertException(Translator.toLocale("register.existUsername"), "user", "existUsername");
         }
-        if (StringUtils.isNoneEmpty(user.getEmail())) {
-            if (repository.findAllByEmailAndIdNotEqual(user.getEmail(), user.getId()).size() > 0) {
+        if (StringUtils.isNoneEmpty(userDTO.getEmail())) {
+            if (repository.findAllByEmailAndIdNotEqual(userDTO.getEmail(), userDTO.getId()).size() > 0) {
                 throw new BadRequestAlertException(Translator.toLocale("register.existEmail"), "user", "existEmail");
             }
         }
     }
 
     @Override
-    public User saveToLogin(User user) {
-        log.debug("Request to save user : {}", user);
-        if (user.getId() == null) {
+    public User saveToLogin(UserDTO userDTO) {
+        log.debug("Request to save user : {}", userDTO);
+        if (userDTO.getId() == null) {
             // Validate truong hop them moi
-            user.setCreatedBy(SecurityUtils.getCurrentUserLogin().get());
-            user.setCreateDate(Timestamp.from(Instant.now()));
+            userDTO.setCreatedBy(SecurityUtils.getCurrentUserLogin().get());
+            userDTO.setCreateDate(Timestamp.from(Instant.now()));
         } else {
             // Validate truong hop cap nhat
-            List<User> searchExist = repository.findAllById(user.getId());
+            List<User> searchExist = repository.findAllById(userDTO.getId());
             if (searchExist.size() == 0) {
                 throw new BadRequestAlertException(Translator.toLocale("error.user.notExist"), "user", "user.notExist");
             }
-            user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
-            user.setLastModifiedDate(Timestamp.from(Instant.now()));
+            userDTO.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
+            userDTO.setLastModifiedDate(Timestamp.from(Instant.now()));
         }
-        validateEmailAndUsername(user);
-        return repository.save(user);
+        validateEmailAndUsername(userDTO);
+        User res = repository.save(userMapper.toEntity(userDTO));
+        List<UserRole> selected = new ArrayList<>();
+        if (StringUtils.isNoneEmpty(userDTO.getLstRole())) {
+            String[] lst = userDTO.getLstRole().split(",");
+            for (String s : lst) {
+                UserRole userRole = new UserRole();
+                userRole.setUserId(res.getId());
+                userRole.setRoleId(DataUtil.safeToLong(s));
+                userRole.setUpdateTime(Instant.now());
+                selected.add(userRole);
+            }
+        }
+        List<UserRole> origin = userRoleRepository.getAllByUserId(res.getId());
+        Iterator<UserRole> i = origin.listIterator();
+        while (i.hasNext()) {
+            UserRole nextOrigin = i.next();
+            boolean isUncheck = true;
+            Iterator<UserRole> j = selected.listIterator();
+            while (j.hasNext()) {
+                UserRole nextSelected = j.next();
+                if (nextOrigin.getRoleId().equals(nextSelected.getRoleId()) &&
+                        nextOrigin.getUserId().equals(nextSelected.getUserId())) {
+                    j.remove();
+                    isUncheck = false;
+                    break;
+                }
+            }
+            if (!isUncheck) {
+                i.remove();
+            }
+        }
+        userRoleRepository.deleteInBatch(origin);
+        userRoleRepository.saveAll(selected);
+        return res;
     }
 
     @Override

@@ -18,7 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link Role}.
@@ -76,6 +78,11 @@ public class RoleServiceImpl implements RoleService {
                 DataUtil.makeLikeParam(roleDTO.getName()),
                 roleDTO.isStatus(), pageable)
                 .map(roleMapper::toDto);
+    }
+
+    @Override
+    public List<RoleDTO> getAll() {
+        return roleRepository.findAll().stream().map(roleMapper::toDto).collect(Collectors.toList());
     }
 
     @Override

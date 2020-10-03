@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +53,7 @@ public class RoleResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/insert")
+    @PreAuthorize("hasAuthority(\"ROLE#INSERT\")")
     public ResponseEntity<RoleDTO> createRole(@Valid @RequestBody RoleDTO roleDTO) throws URISyntaxException {
         log.debug("REST request to save Role : {}", roleDTO);
         if (roleDTO.getId() != null) {
@@ -73,6 +75,7 @@ public class RoleResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/update")
+    @PreAuthorize("hasAuthority(\"ROLE#UPDATE\")")
     public ResponseEntity<RoleDTO> updateRole(@Valid @RequestBody RoleDTO roleDTO) throws URISyntaxException {
         log.debug("REST request to update Role : {}", roleDTO);
         if (roleDTO.getId() == null) {
@@ -91,6 +94,7 @@ public class RoleResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of roles in body.
      */
     @PostMapping("/doSearch")
+    @PreAuthorize("hasAuthority(\"ROLE#SEARCH\")")
     public ResponseEntity<List<RoleDTO>> doSearch(@RequestBody RoleDTO roleDTO, Pageable pageable) {
         log.debug("REST request to get a page of Roles");
         Page<RoleDTO> page = roleService.doSearch(roleDTO, pageable);
@@ -105,6 +109,7 @@ public class RoleResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority(\"ROLE#DELETE\")")
     public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
         log.debug("REST request to delete Role : {}", id);
         roleService.delete(id);
@@ -112,6 +117,7 @@ public class RoleResource {
     }
 
     @GetMapping("/getAll")
+    @PreAuthorize("hasAuthority(\"USER#INSERT\") || hasAuthority(\"USER#UPDATE\")")
     public ResponseEntity<List<RoleDTO>> getAll() {
         List<RoleDTO> lst = roleService.getAll();
         return ResponseEntity.ok().body(lst);

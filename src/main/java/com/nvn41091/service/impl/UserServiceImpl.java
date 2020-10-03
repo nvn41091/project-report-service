@@ -2,8 +2,10 @@ package com.nvn41091.service.impl;
 
 import com.nvn41091.domain.User;
 import com.nvn41091.domain.UserRole;
+import com.nvn41091.repository.ModuleRepository;
 import com.nvn41091.repository.UserRepository;
 import com.nvn41091.repository.UserRoleRepository;
+import com.nvn41091.service.UserRoleService;
 import com.nvn41091.service.dto.UserDTO;
 import com.nvn41091.service.mapper.UserMapper;
 import com.nvn41091.web.rest.errors.BadRequestAlertException;
@@ -28,6 +30,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -43,11 +46,14 @@ public class UserServiceImpl implements UserService {
 
     private final UserRoleRepository userRoleRepository;
 
-    public UserServiceImpl(PasswordEncoder encoder, UserMapper userMapper, UserRepository repository, UserRoleRepository userRoleRepository) {
+    private final ModuleRepository moduleRepository;
+
+    public UserServiceImpl(PasswordEncoder encoder, UserMapper userMapper, UserRepository repository, UserRoleRepository userRoleRepository, ModuleRepository moduleRepository) {
         this.encoder = encoder;
         this.userMapper = userMapper;
         this.repository = repository;
         this.userRoleRepository = userRoleRepository;
+        this.moduleRepository = moduleRepository;
     }
 
     @Override
@@ -143,5 +149,17 @@ public class UserServiceImpl implements UserService {
                 user.getStatus(),
                 pageable);
         return new PageImpl<>(rs.getContent(), pageable, rs.getTotalElements());
+    }
+
+    @Override
+    public UserDTO getUserInfo() {
+        User get = SecurityUtils.getCurrentUser().get();
+        UserDTO userDTO = userMapper.toDto(get);
+        userDTO.setRoles(userRoleRepository.getUserRole(userDTO.getId())
+                .stream()
+                .map(objects -> DataUtil.safeToString(objects[0]) + "#" + DataUtil.safeToString(objects[1]))
+                .collect(Collectors.toList()));
+        userDTO.setMenus(moduleRepository.findAllMenuByUserId(userDTO.getId()));
+        return userDTO;
     }
 }

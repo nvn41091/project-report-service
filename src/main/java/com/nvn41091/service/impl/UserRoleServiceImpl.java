@@ -5,11 +5,13 @@ import com.nvn41091.domain.UserRole;
 import com.nvn41091.repository.UserRoleRepository;
 import com.nvn41091.service.dto.UserRoleDTO;
 import com.nvn41091.service.mapper.UserRoleMapper;
+import com.nvn41091.utils.DataUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,5 +71,13 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Override
     public List<UserRoleDTO> getAllByUserId(Long id) {
         return userRoleRepository.getAllByUserId(id).stream().map(userRoleMapper::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SimpleGrantedAuthority> getRoleByUserId(Long id) {
+        return userRoleRepository.getUserRole(id)
+                .stream()
+                .map(objects -> new SimpleGrantedAuthority(DataUtil.safeToString(objects[0]) + "#" + DataUtil.safeToString(objects[1])))
+                .collect(Collectors.toList());
     }
 }

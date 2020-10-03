@@ -15,7 +15,6 @@ public class UserRoleDTO implements Serializable {
     private Long roleId;
 
     private Instant updateTime;
-
     
     public Long getId() {
         return id;

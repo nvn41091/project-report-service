@@ -2,6 +2,7 @@ package com.nvn41091.security;
 
 import com.nvn41091.domain.User;
 import com.nvn41091.repository.UserRepository;
+import com.nvn41091.service.UserRoleService;
 import com.nvn41091.service.UserService;
 import com.nvn41091.service.dto.UserDTO;
 import com.nvn41091.utils.JwtTokenUtils;
@@ -60,11 +61,18 @@ public class JwtAuthenticationController {
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity<?> register(@RequestBody UserDTO userDTO, HttpServletRequest request) {
+    public ResponseEntity<Void> register(@RequestBody UserDTO userDTO, HttpServletRequest request) {
         User userCreated = userService.saveNoLogin(userDTO, request);
         logger.info(">>>>>>>>> CREATE USER SUCCESS - USER ID: " + userCreated.getId());
         return ResponseEntity.ok().build(); 
     }
+
+    @GetMapping("/getUserInfo")
+    public ResponseEntity<UserDTO> getUserInfo() {
+        UserDTO result = userService.getUserInfo();
+        return ResponseEntity.ok().body(result);
+    }
+
 
     private void authenticate(String username, String password) throws Exception {
         try {

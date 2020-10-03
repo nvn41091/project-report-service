@@ -7,7 +7,15 @@ import java.io.Serializable;
  * A DTO for the {@link com.nvn41091.domain.RoleModule} entity.
  */
 public class RoleModuleDTO implements Serializable {
-    
+
+    public RoleModuleDTO() {
+    }
+
+    public RoleModuleDTO(String moduleCode, String actionCode) {
+        this.moduleCode = moduleCode;
+        this.actionCode = actionCode;
+    }
+
     private Long id;
 
     private Long roleId;
@@ -18,6 +26,9 @@ public class RoleModuleDTO implements Serializable {
 
     private Instant updateTime;
 
+    private String moduleCode;
+
+    private String actionCode;
     
     public Long getId() {
         return id;
@@ -57,6 +68,22 @@ public class RoleModuleDTO implements Serializable {
 
     public void setUpdateTime(Instant updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getModuleCode() {
+        return moduleCode;
+    }
+
+    public void setModuleCode(String moduleCode) {
+        this.moduleCode = moduleCode;
+    }
+
+    public String getActionCode() {
+        return actionCode;
+    }
+
+    public void setActionCode(String actionCode) {
+        this.actionCode = actionCode;
     }
 
     @Override

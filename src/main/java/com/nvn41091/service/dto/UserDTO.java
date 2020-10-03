@@ -1,8 +1,10 @@
 package com.nvn41091.service.dto;
 
-import javax.persistence.*;
+import com.nvn41091.domain.Module;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Objects;
 
 public class UserDTO implements Serializable {
@@ -23,8 +25,26 @@ public class UserDTO implements Serializable {
     private Timestamp lastModifiedDate;
     private String fingerprint;
     private String lstRole;
+    private List<String> roles;
+    private List<Module> menus;
 
     public UserDTO() {
+    }
+
+    public List<Module> getMenus() {
+        return menus;
+    }
+
+    public void setMenus(List<Module> menus) {
+        this.menus = menus;
+    }
+
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
     }
 
     public Long getId() {

@@ -38,4 +38,20 @@ public interface ModuleRepository extends JpaRepository<Module, Long> {
 
     @Query("SELECT u from Module u WHERE u.parentId is null and u.pathUrl is null")
     List<Module> findAllParent();
+
+    @Query(value = " SELECT DISTINCT  " +
+            " m.id, m.code, m.name, m.parent_id, m.status, m.path_url, m.icon,  m.update_time, m.description " +
+            " FROM (select * from user_role WHERE user_id = :id) ur   " +
+            "             INNER JOIN role r on ur.role_id = r.id and r.status = true     " +
+            "             LEFT JOIN role_module rm on r.id = rm.role_id     " +
+            "             LEFT JOIN module m on rm.module_id = m.id and m.status = true  " +
+            "UNION ALL " +
+            " SELECT DISTINCT  " +
+            "m.id, m.code, m.name, m.parent_id, m.status, m.path_url, m.icon,  m.update_time, m.description  " +
+            " FROM module m where id in ( " +
+            "  SELECT DISTINCT m.parent_id FROM (select * from user_role WHERE user_id = :id) ur   " +
+            "             INNER JOIN role r on ur.role_id = r.id and r.status = true     " +
+            "             LEFT JOIN role_module rm on r.id = rm.role_id     " +
+            "             LEFT JOIN module m on rm.module_id = m.id and m.status = true  )", nativeQuery = true)
+    List<Module> findAllMenuByUserId(@Param("id") Long id);
 }

@@ -39,7 +39,7 @@ public class UserResource {
     private UserService userService;
 
     @PostMapping("/doSearch")
-//    @PreAuthorize("hasAuthority(\"USER#SEARCH\")")
+    @PreAuthorize("hasAuthority(\"USER#SEARCH\")")
     public ResponseEntity<List<User>> doSearch(@RequestBody User user, Pageable pageable) {
         log.debug("REST request to search user : {}", user);
         if (pageable == null) {
@@ -51,7 +51,7 @@ public class UserResource {
     }
 
     @PostMapping("/delete")
-//    @PreAuthorize("hasAuthority(\"USER#DELETE\")")
+    @PreAuthorize("hasAuthority(\"USER#DELETE\")")
     public ResponseEntity<Void> delete(@RequestBody User user) {
         log.debug("REST request to delete user : {}", user);
         userService.delete(user);
@@ -59,7 +59,7 @@ public class UserResource {
     }
 
     @PostMapping("/insert")
-//    @PreAuthorize("hasAuthority(\"USER#INSERT\")")
+    @PreAuthorize("hasAuthority(\"USER#INSERT\")")
     public ResponseEntity<User> createUser(@RequestBody UserDTO user) throws URISyntaxException {
         log.debug("REST request to insert user : {}", user);
         if (user.getId() != null) {
@@ -72,7 +72,7 @@ public class UserResource {
     }
 
     @PostMapping("/update")
-//    @PreAuthorize("hasAuthority(\"USER#UPDATE\")")
+    @PreAuthorize("hasAuthority(\"USER#UPDATE\")")
     public ResponseEntity<User> updateUser(@RequestBody UserDTO userDTO) {
         log.debug("REST request to update user : {}", userDTO);
         if (userDTO.getId() == null) {

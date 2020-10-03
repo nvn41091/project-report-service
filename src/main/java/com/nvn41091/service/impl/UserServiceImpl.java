@@ -139,6 +139,7 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestAlertException(Translator.toLocale("error.user.notExist"), "user", "user.notExist");
         }
         this.repository.delete(user);
+        this.userRoleRepository.deleteAllByUserId(user.getId());
     }
 
     @Override

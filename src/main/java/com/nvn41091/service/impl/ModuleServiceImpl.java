@@ -106,6 +106,7 @@ public class ModuleServiceImpl implements ModuleService {
             throw new BadRequestAlertException(Translator.toLocale("error.module.parentExist"), "module", "module.parentExist");
         }
         moduleRepository.deleteById(id);
+        moduleActionService.deleteByModuleId(id);
     }
 
     @Override

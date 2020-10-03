@@ -25,4 +25,6 @@ public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
             " left join ( select * from module WHERE status = 1 ) m on rm.module_id = m.id " +
             " left join ( select * from action WHERE status = 1 ) a on rm.action_id = a.id", nativeQuery = true)
     List<Object[]> getUserRole(@Param("id") Long id);
+
+    void deleteAllByUserId(Long id);
 }

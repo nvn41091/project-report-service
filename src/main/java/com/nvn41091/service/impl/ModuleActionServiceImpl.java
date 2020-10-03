@@ -108,4 +108,9 @@ public class ModuleActionServiceImpl implements ModuleActionService {
         moduleActionRepository.deleteInBatch(origin);
         moduleActionRepository.saveAll(selected);
     }
+
+    @Override
+    public void deleteByModuleId(Long id) {
+        moduleActionRepository.deleteAllByModuleId(id);
+    }
 }

@@ -48,4 +48,6 @@ public interface ModuleActionService {
     List<ModuleActionDTO> getAllByModuleId(Long id);
 
     void updateByModule(String actionId, Long moduleId);
+
+    void deleteByModuleId(Long id);
 }

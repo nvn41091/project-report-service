@@ -15,4 +15,6 @@ import java.util.List;
 public interface ModuleActionRepository extends JpaRepository<ModuleAction, Long> {
 
     List<ModuleAction> getAllByModuleId(Long id);
+
+    void deleteAllByModuleId(Long id);
 }

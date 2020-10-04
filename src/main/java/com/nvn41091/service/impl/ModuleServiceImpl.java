@@ -1,5 +1,6 @@
 package com.nvn41091.service.impl;
 
+import com.nvn41091.repository.RoleModuleRepository;
 import com.nvn41091.service.ModuleActionService;
 import com.nvn41091.service.ModuleService;
 import com.nvn41091.domain.Module;
@@ -36,12 +37,15 @@ public class ModuleServiceImpl implements ModuleService {
 
     private final ModuleActionService moduleActionService;
 
+    private final RoleModuleRepository roleModuleRepository;
+
     private final ModuleMapper moduleMapper;
 
-    public ModuleServiceImpl(ModuleRepository moduleRepository, ModuleMapper moduleMapper, ModuleActionService moduleActionService) {
+    public ModuleServiceImpl(ModuleRepository moduleRepository, ModuleMapper moduleMapper, ModuleActionService moduleActionService, RoleModuleRepository roleModuleRepository) {
         this.moduleRepository = moduleRepository;
         this.moduleMapper = moduleMapper;
         this.moduleActionService = moduleActionService;
+        this.roleModuleRepository = roleModuleRepository;
     }
 
     @Override
@@ -99,6 +103,7 @@ public class ModuleServiceImpl implements ModuleService {
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Module : {}", id);
+        Module module = moduleRepository.findAllById(id).stream().findFirst().orElse(null);
         if (moduleRepository.findAllById(id).size() == 0) {
             throw new BadRequestAlertException(Translator.toLocale("error.module.notExist"), "module", "module.notExist");
         }
@@ -107,6 +112,8 @@ public class ModuleServiceImpl implements ModuleService {
         }
         moduleRepository.deleteById(id);
         moduleActionService.deleteByModuleId(id);
+        assert module != null;
+        roleModuleRepository.deleteALlByModuleId(module.getId());
     }
 
     @Override

@@ -31,7 +31,7 @@ public interface RoleModuleRepository extends JpaRepository<RoleModule, Long> {
             " end as checked " +
             "FROM ( SELECT * FROM module_action m  " +
             " WHERE " +
-            "  m.module_id IN ( SELECT id FROM module WHERE parent_id IS NOT NULL AND STATUS = 1 )  " +
+            "  m.module_id IN ( SELECT id FROM module WHERE path_url IS NOT NULL AND STATUS = 1 )  " +
             " AND m.action_id IN ( SELECT id FROM action WHERE STATUS = 1 )  " +
             " ) m INNER JOIN action a on m.action_id = a.id " +
             "LEFT JOIN (SELECT * FROM role_module where role_id = :id) rm " +
@@ -41,4 +41,6 @@ public interface RoleModuleRepository extends JpaRepository<RoleModule, Long> {
     List<RoleModule> getAllByRoleId(Long id);
 
     void deleteAllByRoleId(Long roleId);
+
+    void deleteALlByModuleId(Long moduleId);
 }

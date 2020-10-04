@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,11 +46,13 @@ public class RoleModuleResource {
     }
 
     @GetMapping("/getAll/{id}")
+    @PreAuthorize("hasAuthority(\"ROLE#ROLE\")")
     public ResponseEntity<List<TreeViewDTO>> getAll(@PathVariable Long id) {
         return ResponseEntity.ok().body(roleModuleService.getALl(id));
     }
 
     @PostMapping("/save/{id}")
+    @PreAuthorize("hasAuthority(\"ROLE#ROLE\")")
     public ResponseEntity<List<RoleModuleDTO>> createRoleModule(@RequestBody List<RoleModuleDTO> lst,
                                                                 @PathVariable("id") Long roleId) throws URISyntaxException {
         log.debug("REST request to save RoleModule : {}", lst);

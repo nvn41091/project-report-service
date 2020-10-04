@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +46,7 @@ public class ModuleActionResource {
 
 
     @GetMapping("/getByModuleId/{id}")
+    @PreAuthorize("hasAuthority(\"MODULE#INSERT\") or hasAuthority(\"MODULE#UPDATE\")")
     public ResponseEntity<List<ModuleActionDTO>> getByModuleId(@PathVariable Long id) {
         List<ModuleActionDTO> lst = moduleActionService.getAllByModuleId(id);
         return ResponseEntity.ok().body(lst);

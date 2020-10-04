@@ -1,6 +1,7 @@
 package com.nvn41091.service.impl;
 
 import com.nvn41091.repository.RoleModuleRepository;
+import com.nvn41091.repository.UserRoleRepository;
 import com.nvn41091.service.RoleService;
 import com.nvn41091.domain.Role;
 import com.nvn41091.repository.RoleRepository;
@@ -37,10 +38,13 @@ public class RoleServiceImpl implements RoleService {
 
     private final RoleModuleRepository roleModuleRepository;
 
-    public RoleServiceImpl(RoleRepository roleRepository, RoleMapper roleMapper, RoleModuleRepository roleModuleRepository) {
+    private final UserRoleRepository userRoleRepository;
+
+    public RoleServiceImpl(RoleRepository roleRepository, RoleMapper roleMapper, RoleModuleRepository roleModuleRepository, UserRoleRepository userRoleRepository) {
         this.roleRepository = roleRepository;
         this.roleMapper = roleMapper;
         this.roleModuleRepository = roleModuleRepository;
+        this.userRoleRepository = userRoleRepository;
     }
 
     @Override
@@ -101,5 +105,6 @@ public class RoleServiceImpl implements RoleService {
         }
         roleRepository.deleteById(id);
         roleModuleRepository.deleteAllByRoleId(id);
+        userRoleRepository.deleteAllByRoleId(id);
     }
 }

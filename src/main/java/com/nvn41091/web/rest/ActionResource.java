@@ -103,6 +103,7 @@ public class ActionResource {
     }
 
     @GetMapping("/getAll")
+    @PreAuthorize("hasAuthority(\"MODULE#INSERT\") or hasAuthority(\"MODULE#UPDATE\")")
     public ResponseEntity<List<ActionDTO>> getAll() {
         List<ActionDTO> lst = actionService.getAll();
         return ResponseEntity.ok().body(lst);

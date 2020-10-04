@@ -120,6 +120,7 @@ public class ModuleResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of parent modules in body.
      */
     @GetMapping("/getAllParent")
+    @PreAuthorize("hasAuthority(\"MODULE#SEARCH\")")
     public ResponseEntity<List<ModuleDTO>> findAllParent() {
         log.debug("REST request to get all parent Modules");
         List<ModuleDTO> parent = moduleService.findAllParent();

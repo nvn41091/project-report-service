@@ -1,18 +1,19 @@
 package com.nvn41091.service.impl;
 
+import com.nvn41091.domain.CompanyUser;
 import com.nvn41091.domain.User;
 import com.nvn41091.domain.UserRole;
+import com.nvn41091.repository.CompanyUserRepository;
 import com.nvn41091.repository.ModuleRepository;
 import com.nvn41091.repository.UserRepository;
 import com.nvn41091.repository.UserRoleRepository;
-import com.nvn41091.service.UserRoleService;
-import com.nvn41091.service.dto.UserDTO;
-import com.nvn41091.service.mapper.UserMapper;
-import com.nvn41091.web.rest.errors.BadRequestAlertException;
 import com.nvn41091.security.SecurityUtils;
 import com.nvn41091.service.UserService;
+import com.nvn41091.service.dto.UserDTO;
+import com.nvn41091.service.mapper.UserMapper;
 import com.nvn41091.utils.DataUtil;
 import com.nvn41091.utils.Translator;
+import com.nvn41091.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.security.RandomUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -48,12 +49,15 @@ public class UserServiceImpl implements UserService {
 
     private final ModuleRepository moduleRepository;
 
-    public UserServiceImpl(PasswordEncoder encoder, UserMapper userMapper, UserRepository repository, UserRoleRepository userRoleRepository, ModuleRepository moduleRepository) {
+    private final CompanyUserRepository companyUserRepository;
+
+    public UserServiceImpl(PasswordEncoder encoder, UserMapper userMapper, UserRepository repository, UserRoleRepository userRoleRepository, ModuleRepository moduleRepository, CompanyUserRepository companyUserRepository) {
         this.encoder = encoder;
         this.userMapper = userMapper;
         this.repository = repository;
         this.userRoleRepository = userRoleRepository;
         this.moduleRepository = moduleRepository;
+        this.companyUserRepository = companyUserRepository;
     }
 
     @Override
@@ -130,6 +134,13 @@ public class UserServiceImpl implements UserService {
         }
         userRoleRepository.deleteInBatch(origin);
         userRoleRepository.saveAll(selected);
+        User currentLogin = SecurityUtils.getCurrentUser().get();
+        CompanyUser companyUser = new CompanyUser();
+        companyUser.setUserId(res.getId());
+        CompanyUser currentCompany = companyUserRepository.getCompanyUserByUserId(currentLogin.getId());
+        companyUser.setCompanyId(currentCompany.getCompanyId());
+        companyUser.setUpdateTime(Instant.now());
+        companyUserRepository.save(companyUser);
         return res;
     }
 
@@ -140,6 +151,7 @@ public class UserServiceImpl implements UserService {
         }
         this.repository.delete(user);
         this.userRoleRepository.deleteAllByUserId(user.getId());
+        companyUserRepository.deleteByUserId(user.getId());
     }
 
     @Override

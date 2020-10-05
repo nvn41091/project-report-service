@@ -35,4 +35,9 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
     @Query(value = "SELECT r FROM Role r WHERE r.status = true " +
             "AND (:name is null or lower(r.name) like %:name% ESCAPE '&' or lower(r.code) like %:name% ESCAPE '&' ) ")
     List<Role> searchByCodeOrName(@Param("name") String name);
+
+    @Query(value = "SELECT r FROM Role r " +
+            "INNER JOIN CompanyRole cr on r.id = cr.roleId and r.status = true " +
+            "INNER JOIN CompanyUser cu on cr.companyId = cu.companyId and cu.userId = :userId ")
+    List<Role> getAllRoleByCurrentUser(@Param("userId") Long userId);
 }

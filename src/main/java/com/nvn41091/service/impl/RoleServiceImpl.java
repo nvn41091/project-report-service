@@ -1,8 +1,10 @@
 package com.nvn41091.service.impl;
 
 import com.nvn41091.domain.CompanyRole;
+import com.nvn41091.domain.User;
 import com.nvn41091.repository.RoleModuleRepository;
 import com.nvn41091.repository.UserRoleRepository;
+import com.nvn41091.security.SecurityUtils;
 import com.nvn41091.service.RoleService;
 import com.nvn41091.domain.Role;
 import com.nvn41091.repository.RoleRepository;
@@ -88,7 +90,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<RoleDTO> getAll() {
-        return roleRepository.findAll().stream().map(roleMapper::toDto).collect(Collectors.toList());
+        User currentUser = SecurityUtils.getCurrentUser().get();
+        return roleRepository.getAllRoleByCurrentUser(currentUser.getId())
+                .stream().map(roleMapper::toDto).collect(Collectors.toList());
     }
 
     @Override

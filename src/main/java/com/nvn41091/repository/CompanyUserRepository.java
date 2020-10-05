@@ -11,4 +11,8 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface CompanyUserRepository extends JpaRepository<CompanyUser, Long> {
+
+    CompanyUser getCompanyUserByUserId(Long userId);
+
+    void deleteByUserId(Long userId);
 }

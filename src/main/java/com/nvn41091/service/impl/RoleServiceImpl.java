@@ -1,10 +1,12 @@
 package com.nvn41091.service.impl;
 
+import com.nvn41091.domain.CompanyRole;
 import com.nvn41091.repository.RoleModuleRepository;
 import com.nvn41091.repository.UserRoleRepository;
 import com.nvn41091.service.RoleService;
 import com.nvn41091.domain.Role;
 import com.nvn41091.repository.RoleRepository;
+import com.nvn41091.service.dto.CompanyRoleDTO;
 import com.nvn41091.service.dto.RoleDTO;
 import com.nvn41091.service.mapper.RoleMapper;
 import com.nvn41091.utils.DataUtil;
@@ -106,5 +108,11 @@ public class RoleServiceImpl implements RoleService {
         roleRepository.deleteById(id);
         roleModuleRepository.deleteAllByRoleId(id);
         userRoleRepository.deleteAllByRoleId(id);
+    }
+
+    @Override
+    public List<RoleDTO> searchByCodeOrName(RoleDTO roleDTO) {
+        return roleRepository.searchByCodeOrName(roleDTO.getName())
+                .stream().map(roleMapper::toDto).collect(Collectors.toList());
     }
 }

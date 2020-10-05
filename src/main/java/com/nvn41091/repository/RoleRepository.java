@@ -31,4 +31,8 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
 
     @Query("SELECT u from Role u WHERE upper(u.code) = upper(:code) AND ( :id is null or u.id <> :id) ")
     List<Role> findAllByCodeAndIdNotEqual(@Param("code") String code, @Param("id") Long id );
+
+    @Query(value = "SELECT r FROM Role r WHERE r.status = true " +
+            "AND (:name is null or lower(r.name) like %:name% ESCAPE '&' or lower(r.code) like %:name% ESCAPE '&' ) ")
+    List<Role> searchByCodeOrName(@Param("name") String name);
 }

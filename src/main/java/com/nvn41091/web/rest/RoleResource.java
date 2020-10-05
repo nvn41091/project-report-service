@@ -122,4 +122,12 @@ public class RoleResource {
         List<RoleDTO> lst = roleService.getAll();
         return ResponseEntity.ok().body(lst);
     }
+
+    @PostMapping("/searchByCodeOrName")
+    @PreAuthorize("hasAuthority(\"COMPANY#ROLE\")")
+    public ResponseEntity<List<RoleDTO>> searchByCodeOrName(@RequestBody RoleDTO roleDTO) {
+        log.debug("REST request to get a page of Roles");
+        List<RoleDTO> lst = roleService.searchByCodeOrName(roleDTO);
+        return ResponseEntity.ok().body(lst);
+    }
 }

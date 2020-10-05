@@ -1,7 +1,8 @@
 package com.nvn41091.service;
 
+import com.nvn41091.domain.CompanyRole;
+import com.nvn41091.domain.Role;
 import com.nvn41091.service.dto.RoleDTO;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -47,4 +48,6 @@ public interface RoleService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    List<RoleDTO> searchByCodeOrName(RoleDTO roleDTO);
 }

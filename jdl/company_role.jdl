@@ -1,0 +1,10 @@
+entity CompanyRole {
+	id Long
+	companyId Long
+    roleId Long
+    updateTime Instant
+}
+dto CompanyRole with mapstruct
+paginate CompanyRole with pagination
+service CompanyRole with serviceClass
+service CompanyRole with serviceImpl

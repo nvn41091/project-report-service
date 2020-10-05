@@ -1,0 +1,29 @@
+{
+  "name": "CompanyRole",
+  "fields": [
+    {
+      "fieldName": "companyId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "roleId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "updateTime",
+      "fieldType": "Instant"
+    }
+  ],
+  "relationships": [],
+  "changelogDate": "20201005030224",
+  "entityTableName": "company_role",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

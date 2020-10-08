@@ -21,6 +21,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -51,13 +53,18 @@ public class UserServiceImpl implements UserService {
 
     private final CompanyUserRepository companyUserRepository;
 
-    public UserServiceImpl(PasswordEncoder encoder, UserMapper userMapper, UserRepository repository, UserRoleRepository userRoleRepository, ModuleRepository moduleRepository, CompanyUserRepository companyUserRepository) {
+    private final JavaMailSender emailSender;
+
+    public UserServiceImpl(PasswordEncoder encoder, UserMapper userMapper, UserRepository repository,
+                           UserRoleRepository userRoleRepository, ModuleRepository moduleRepository,
+                           CompanyUserRepository companyUserRepository, JavaMailSender javaMailSender) {
         this.encoder = encoder;
         this.userMapper = userMapper;
         this.repository = repository;
         this.userRoleRepository = userRoleRepository;
         this.moduleRepository = moduleRepository;
         this.companyUserRepository = companyUserRepository;
+        this.emailSender = javaMailSender;
     }
 
     @Override
@@ -174,5 +181,30 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList()));
         userDTO.setMenus(moduleRepository.findAllMenuByUserId(userDTO.getId()));
         return userDTO;
+    }
+
+    @Override
+    public void requestEmail(UserDTO userDTO) {
+        if (repository.findAllByEmail(userDTO.getEmail()).size() == 0) {
+            throw new BadRequestAlertException(Translator.toLocale("error.requestPassword.emailNotFound"), "requestPassword", "requestPassword.emailNotFound");
+        }
+        String resetKey = RandomUtil.generateResetKey();
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setFrom("nvn41091@gmail.com");
+        mailMessage.setTo(userDTO.getEmail());
+        mailMessage.setSubject("Ahihi đồ ngốc");
+        mailMessage.setText(resetKey);
+        emailSender.send(mailMessage);
+        repository.updateResetKeyByEmail(resetKey, userDTO.getEmail(), Timestamp.from(Instant.now()));
+        log.info(">>>>>>>> Send message success");
+    }
+
+    @Override
+    public User requestPassword(UserDTO userDTO) {
+        User result = repository.findAllByEmailAndResetKeyAndResetDate(userDTO.getEmail(), userDTO.getResetKey());
+        if (result == null) {
+            throw new BadRequestAlertException(Translator.toLocale("error.requestPassword.resetKeyNotCompare"), "requestPassword", "requestPassword.resetKeyNotCompare");
+        }
+        return result;
     }
 }

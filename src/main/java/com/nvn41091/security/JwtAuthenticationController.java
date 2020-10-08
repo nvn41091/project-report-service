@@ -5,6 +5,7 @@ import com.nvn41091.repository.UserRepository;
 import com.nvn41091.service.UserRoleService;
 import com.nvn41091.service.UserService;
 import com.nvn41091.service.dto.UserDTO;
+import com.nvn41091.service.dto.UserDetailImpl;
 import com.nvn41091.utils.JwtTokenUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,6 +74,11 @@ public class JwtAuthenticationController {
         return ResponseEntity.ok().body(result);
     }
 
+    @PostMapping("/request-email")
+    public ResponseEntity<Void> requestEmail(@RequestBody UserDTO userDTO) {
+        userService.requestEmail(userDTO);
+        return ResponseEntity.noContent().build();
+    }
 
     private void authenticate(String username, String password) throws Exception {
         try {
@@ -82,5 +88,17 @@ public class JwtAuthenticationController {
         } catch (BadCredentialsException e) {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
+    }
+
+    @PostMapping("/request-password")
+    public ResponseEntity<?> requestPassword(@RequestBody UserDTO userDTO, HttpServletRequest request) {
+        User result = userService.requestPassword(userDTO);
+        UserDetails userDetails = new UserDetailImpl(result);
+        final String token = jwtTokenUtils.generateToken(userDetails);
+        final String fingerprint = request.getHeader("fingerprint");
+        repository.updateUserByFingerPrint(fingerprint, result.getUserName());
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", token);
+        return ResponseEntity.ok().headers(headers).body(Collections.singletonMap("username", result.getUserName()));
     }
 }

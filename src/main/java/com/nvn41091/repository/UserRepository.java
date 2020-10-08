@@ -10,6 +10,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 
 @Repository
@@ -55,4 +57,12 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Modifying
     @Query("UPDATE User SET fingerprint = :fingerprint WHERE userName = :username")
     void updateUserByFingerPrint(@Param("fingerprint") String fingerPrint, @Param("username") String username);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE User SET resetKey = :resetKey, resetDate = :resetDate WHERE email = :email ")
+    void updateResetKeyByEmail(@Param("resetKey") String resetKey, @Param("email") String email, @Param("resetDate") Timestamp resetDate);
+
+    @Query("SELECT u FROM User u WHERE u.email = :email AND u.resetKey = :resetKey AND timestampdiff(minute, DATE_FORMAT(u.resetDate, '%y-%d-%m %T'), DATE_FORMAT(NOW(), '%y-%d-%m %T')) < 15")
+    User findAllByEmailAndResetKeyAndResetDate(@Param("email") String email, @Param("resetKey") String resetKey);
 }

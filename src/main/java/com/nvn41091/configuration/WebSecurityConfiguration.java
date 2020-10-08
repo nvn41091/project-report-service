@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -81,8 +82,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .cors().and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers( "/api/authenticate").permitAll()
-                .antMatchers("/api/register").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/authenticate").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/register").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/request-email").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/request-password").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()

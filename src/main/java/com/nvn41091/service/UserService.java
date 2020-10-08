@@ -18,4 +18,8 @@ public interface UserService {
     Page<User> doSearch(User user, Pageable pageable);
 
     UserDTO getUserInfo();
+
+    void requestEmail(UserDTO userDTO);
+
+    User requestPassword(UserDTO userDTO);
 }

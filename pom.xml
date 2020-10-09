@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.nvn41091</groupId>
-    <artifactId>security-jwt</artifactId>
+    <artifactId>service</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
-    <name>security-jwt</name>
+    <name>service</name>
     <description>Demo Spring Security</description>
 
     <properties>

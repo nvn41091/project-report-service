@@ -2,7 +2,7 @@ package com.nvn41091.web.rest;
 
 import com.nvn41091.domain.CompanyUser;
 import com.nvn41091.repository.CompanyUserRepository;
-import com.nvn41091.run.SecurityJwtApplication;
+import com.nvn41091.run.ReportApp;
 import com.nvn41091.service.CompanyUserService;
 import com.nvn41091.service.dto.CompanyUserDTO;
 import com.nvn41091.service.mapper.CompanyUserMapper;
@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests for the {@link CompanyUserResource} REST controller.
  */
-@SpringBootTest(classes = SecurityJwtApplication.class)
+@SpringBootTest(classes = ReportApp.class)
 @AutoConfigureMockMvc
 @WithMockUser
 public class CompanyUserResourceIT {

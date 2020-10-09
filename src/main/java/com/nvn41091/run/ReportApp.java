@@ -12,10 +12,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories("com.nvn41091.repository")
 @EntityScan(basePackages = "com.nvn41091.domain")
 @EnableTransactionManagement
-public class SecurityJwtApplication {
+public class ReportApp {
 
     public static void main(String[] args) {
-        SpringApplication.run(SecurityJwtApplication.class, args);
+        SpringApplication.run(ReportApp.class, args);
     }
 
 }

@@ -6,7 +6,7 @@
     },
     "jhipsterVersion": "6.10.1",
     "applicationType": "monolith",
-    "baseName": "SecurityJwtApplication",
+    "baseName": "Report",
     "packageName": "com.nvn41091",
     "packageFolder": "com/nvn41091",
     "serverPort": "8080",

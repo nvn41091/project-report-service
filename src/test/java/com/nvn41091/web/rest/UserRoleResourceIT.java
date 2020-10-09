@@ -2,7 +2,7 @@ package com.nvn41091.web.rest;
 
 import com.nvn41091.domain.UserRole;
 import com.nvn41091.repository.UserRoleRepository;
-import com.nvn41091.run.SecurityJwtApplication;
+import com.nvn41091.run.ReportApp;
 import com.nvn41091.service.UserRoleService;
 import com.nvn41091.service.dto.UserRoleDTO;
 import com.nvn41091.service.mapper.UserRoleMapper;
@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests for the {@link UserRoleResource} REST controller.
  */
-@SpringBootTest(classes = SecurityJwtApplication.class)
+@SpringBootTest(classes = ReportApp.class)
 @AutoConfigureMockMvc
 @WithMockUser
 public class UserRoleResourceIT {

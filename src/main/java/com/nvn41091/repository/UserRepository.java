@@ -63,6 +63,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("UPDATE User SET resetKey = :resetKey, resetDate = :resetDate WHERE email = :email ")
     void updateResetKeyByEmail(@Param("resetKey") String resetKey, @Param("email") String email, @Param("resetDate") Timestamp resetDate);
 
-    @Query("SELECT u FROM User u WHERE u.email = :email AND u.resetKey = :resetKey AND timestampdiff(minute, DATE_FORMAT(u.resetDate, '%y-%d-%m %T'), DATE_FORMAT(NOW(), '%y-%d-%m %T')) < 15")
+    @Query("SELECT u FROM User u WHERE u.email = :email AND u.resetKey = :resetKey AND timestampdiff(minute, u.resetDate, NOW()) < 15")
     User findAllByEmailAndResetKeyAndResetDate(@Param("email") String email, @Param("resetKey") String resetKey);
 }

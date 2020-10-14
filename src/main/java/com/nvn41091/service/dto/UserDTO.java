@@ -27,8 +27,17 @@ public class UserDTO implements Serializable {
     private String lstRole;
     private List<String> roles;
     private List<Module> menus;
+    private String oldPassword;
 
     public UserDTO() {
+    }
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
     }
 
     public List<Module> getMenus() {
@@ -209,6 +218,8 @@ public class UserDTO implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userName, passwordHash, fullName, email, imageUrl, status, langKey, activationKey, resetKey, createdBy, createDate, resetDate, lastModifiedBy, lastModifiedDate, fingerprint, lstRole);
+        return Objects.hash(id, userName, passwordHash, fullName, email, imageUrl, status,
+                langKey, activationKey, resetKey, createdBy, createDate, resetDate, lastModifiedBy,
+                lastModifiedDate, fingerprint, lstRole, menus, oldPassword, roles);
     }
 }

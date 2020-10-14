@@ -7,9 +7,11 @@ import com.nvn41091.service.UserService;
 import com.nvn41091.service.dto.UserDTO;
 import com.nvn41091.service.dto.UserDetailImpl;
 import com.nvn41091.utils.JwtTokenUtils;
+import io.github.jhipster.web.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -25,12 +27,14 @@ import javax.transaction.Transactional;
 import java.util.Collections;
 
 @RestController
-@CrossOrigin
 @Transactional
 @RequestMapping("/api")
 public class JwtAuthenticationController {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationController.class);
+
+    @Value("${jhipster.clientApp.name}")
+    private String applicationName;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -46,6 +50,9 @@ public class JwtAuthenticationController {
 
     @Autowired
     private JwtUserDetailsService userDetailsService;
+
+
+    private static final String ENTITY_NAME = "user";
 
     @PostMapping(value = "/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody User user,
@@ -72,6 +79,14 @@ public class JwtAuthenticationController {
     public ResponseEntity<UserDTO> getUserInfo() {
         UserDTO result = userService.getUserInfo();
         return ResponseEntity.ok().body(result);
+    }
+
+    @PostMapping("/resetPassword")
+    public ResponseEntity<UserDTO> resetPassword(@RequestBody UserDTO userDTO) {
+        UserDTO result = userService.resetPassword(userDTO);
+        return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                .body(result);
     }
 
     @PostMapping("/request-email")

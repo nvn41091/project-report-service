@@ -22,4 +22,6 @@ public interface UserService {
     void requestEmail(UserDTO userDTO);
 
     User requestPassword(UserDTO userDTO);
+
+    UserDTO resetPassword(UserDTO userDTO);
 }

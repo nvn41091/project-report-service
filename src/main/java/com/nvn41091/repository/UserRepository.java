@@ -65,4 +65,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("SELECT u FROM User u WHERE u.email = :email AND u.resetKey = :resetKey AND timestampdiff(minute, u.resetDate, NOW()) < 15")
     User findAllByEmailAndResetKeyAndResetDate(@Param("email") String email, @Param("resetKey") String resetKey);
+
+    List<User> findAllByIdAndResetKey(Long id, String resetKey);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE User SET passwordHash = :passwordHash WHERE id = :id ")
+    void updatePasswordById(@Param("passwordHash") String passwordHash, @Param("id") Long id);
 }

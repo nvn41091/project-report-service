@@ -207,4 +207,22 @@ public class UserServiceImpl implements UserService {
         }
         return result;
     }
+
+    @Override
+    public UserDTO resetPassword(UserDTO userDTO) {
+        User user = SecurityUtils.getCurrentUser().get();
+        if (userDTO.getResetKey() != null) {
+            List<User> findLst = repository.findAllByIdAndResetKey(user.getId(), userDTO.getResetKey());
+            if (findLst.size() == 0) {
+                throw new BadRequestAlertException(Translator.toLocale("error.requestPassword.resetKeyNotCompare"), "resetPassword", "requestPassword.resetKeyNotCompare");
+            }
+        } else {
+            if (!encoder.matches(userDTO.getOldPassword(), user.getPasswordHash())) {
+                throw new BadRequestAlertException(Translator.toLocale("error.resetPassword.notCompareOldPassword"), "resetPassword", "resetPassword.notCompareOldPassword");
+            }
+        }
+        user.setPasswordHash(encoder.encode(userDTO.getPasswordHash()));
+        repository.updatePasswordById(user.getPasswordHash(), user.getId());
+        return userMapper.toDto(user);
+    }
 }

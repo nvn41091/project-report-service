@@ -1,0 +1,17 @@
+entity ProjectInformation {
+	id Long
+    code String maxlength(200)
+    name String maxlength(500)
+    startDate Instant
+    endDate Instant
+    money Long
+    companyContracting Long
+    companyId Long
+    description String maxlength(2000)
+    updateTime Instant
+    status Long
+}
+dto ProjectInformation with mapstruct
+paginate ProjectInformation with pagination
+service ProjectInformation with serviceClass
+service ProjectInformation with serviceImpl

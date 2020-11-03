@@ -5,6 +5,7 @@ import com.nvn41091.service.dto.AppParamDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -28,6 +29,9 @@ public interface AppParamService {
      */
     Page<AppParamDTO> findAll(Pageable pageable);
 
+    Page<AppParamDTO> doSearch(AppParamDTO appParamDTO, Pageable pageable);
+
+    List<String> autoCompleteType(String type);
 
     /**
      * Get the "id" appParam.

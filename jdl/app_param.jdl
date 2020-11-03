@@ -1,6 +1,5 @@
 entity AppParam {
 	id Long
-    code String maxlength(200)
     name String maxlength(500)
     type String maxlength(200)
     value String maxlength(500)

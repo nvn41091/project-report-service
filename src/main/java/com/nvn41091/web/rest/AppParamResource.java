@@ -28,7 +28,7 @@ import java.util.Optional;
  * REST controller for managing {@link com.nvn41091.domain.AppParam}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/app-param")
 public class AppParamResource {
 
     private final Logger log = LoggerFactory.getLogger(AppParamResource.class);
@@ -51,7 +51,7 @@ public class AppParamResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new appParamDTO, or with status {@code 400 (Bad Request)} if the appParam has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/app-params")
+    @PostMapping("/insert")
     public ResponseEntity<AppParamDTO> createAppParam(@Valid @RequestBody AppParamDTO appParamDTO) throws URISyntaxException {
         log.debug("REST request to save AppParam : {}", appParamDTO);
         if (appParamDTO.getId() != null) {
@@ -72,7 +72,7 @@ public class AppParamResource {
      * or with status {@code 500 (Internal Server Error)} if the appParamDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/app-params")
+    @PutMapping("/update")
     public ResponseEntity<AppParamDTO> updateAppParam(@Valid @RequestBody AppParamDTO appParamDTO) throws URISyntaxException {
         log.debug("REST request to update AppParam : {}", appParamDTO);
         if (appParamDTO.getId() == null) {
@@ -90,25 +90,12 @@ public class AppParamResource {
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of appParams in body.
      */
-    @GetMapping("/app-params")
-    public ResponseEntity<List<AppParamDTO>> getAllAppParams(Pageable pageable) {
+    @PostMapping("/doSearch")
+    public ResponseEntity<List<AppParamDTO>> getAllAppParams(@RequestBody AppParamDTO appParamDTO, Pageable pageable) {
         log.debug("REST request to get a page of AppParams");
-        Page<AppParamDTO> page = appParamService.findAll(pageable);
+        Page<AppParamDTO> page = appParamService.doSearch(appParamDTO, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
-    }
-
-    /**
-     * {@code GET  /app-params/:id} : get the "id" appParam.
-     *
-     * @param id the id of the appParamDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the appParamDTO, or with status {@code 404 (Not Found)}.
-     */
-    @GetMapping("/app-params/{id}")
-    public ResponseEntity<AppParamDTO> getAppParam(@PathVariable Long id) {
-        log.debug("REST request to get AppParam : {}", id);
-        Optional<AppParamDTO> appParamDTO = appParamService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(appParamDTO);
     }
 
     /**
@@ -117,10 +104,15 @@ public class AppParamResource {
      * @param id the id of the appParamDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/app-params/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteAppParam(@PathVariable Long id) {
         log.debug("REST request to delete AppParam : {}", id);
         appParamService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+    @PostMapping("/autoCompleteType")
+    public ResponseEntity<List<String>> autoCompleteType(@RequestBody AppParamDTO appParamDTO) {
+        return ResponseEntity.ok().body(appParamService.autoCompleteType(appParamDTO.getType()));
     }
 }

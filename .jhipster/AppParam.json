@@ -2,14 +2,6 @@
   "name": "AppParam",
   "fields": [
     {
-      "fieldName": "code",
-      "fieldType": "String",
-      "fieldValidateRules": [
-        "maxlength"
-      ],
-      "fieldValidateRulesMaxlength": "200"
-    },
-    {
       "fieldName": "name",
       "fieldType": "String",
       "fieldValidateRules": [

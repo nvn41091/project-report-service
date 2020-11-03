@@ -5,14 +5,20 @@ import com.nvn41091.domain.AppParam;
 import com.nvn41091.repository.AppParamRepository;
 import com.nvn41091.service.dto.AppParamDTO;
 import com.nvn41091.service.mapper.AppParamMapper;
+import com.nvn41091.utils.DataUtil;
+import com.nvn41091.utils.Translator;
+import com.nvn41091.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -36,6 +42,12 @@ public class AppParamServiceImpl implements AppParamService {
     @Override
     public AppParamDTO save(AppParamDTO appParamDTO) {
         log.debug("Request to save AppParam : {}", appParamDTO);
+        if (appParamDTO.getId() != null) {
+            if (appParamRepository.findAllById(appParamDTO.getId()).size() == 0) {
+                throw new BadRequestAlertException(Translator.toLocale("error.appParam.notExist"), "appParam", "appParam.notExist");
+            }
+        }
+        appParamDTO.setUpdateTime(Instant.now());
         AppParam appParam = appParamMapper.toEntity(appParamDTO);
         appParam = appParamRepository.save(appParam);
         return appParamMapper.toDto(appParam);
@@ -47,6 +59,22 @@ public class AppParamServiceImpl implements AppParamService {
         log.debug("Request to get all AppParams");
         return appParamRepository.findAll(pageable)
             .map(appParamMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<AppParamDTO> doSearch(AppParamDTO appParamDTO, Pageable pageable) {
+        log.debug("Request to search all AppParams");
+        return appParamRepository.doSearch(DataUtil.makeLikeParam(appParamDTO.getName()),
+                DataUtil.makeLikeParam(appParamDTO.getType()),
+                appParamDTO.isStatus(), pageable)
+                .map(appParamMapper::toDto);
+    }
+
+    @Override
+    public List<String> autoCompleteType(String type) {
+        Pageable req = PageRequest.of(0, 10);
+        return appParamRepository.autoCompleteType(DataUtil.makeLikeParam(type), req);
     }
 
 

@@ -11,9 +11,6 @@ public class AppParamDTO implements Serializable {
     
     private Long id;
 
-    @Size(max = 200)
-    private String code;
-
     @Size(max = 500)
     private String name;
 
@@ -37,14 +34,6 @@ public class AppParamDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public String getName() {
@@ -117,7 +106,6 @@ public class AppParamDTO implements Serializable {
     public String toString() {
         return "AppParamDTO{" +
             "id=" + getId() +
-            ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
             ", type='" + getType() + "'" +
             ", value='" + getValue() + "'" +

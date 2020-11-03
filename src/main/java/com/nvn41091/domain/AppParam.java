@@ -23,10 +23,6 @@ public class AppParam implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(max = 200)
-    @Column(name = "code", length = 200)
-    private String code;
-
     @Size(max = 500)
     @Column(name = "name", length = 500)
     private String name;
@@ -56,19 +52,6 @@ public class AppParam implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public AppParam code(String code) {
-        this.code = code;
-        return this;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public String getName() {
@@ -171,7 +154,6 @@ public class AppParam implements Serializable {
     public String toString() {
         return "AppParam{" +
             "id=" + getId() +
-            ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
             ", type='" + getType() + "'" +
             ", value='" + getValue() + "'" +

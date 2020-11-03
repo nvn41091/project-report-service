@@ -34,9 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class AppParamResourceIT {
 
-    private static final String DEFAULT_CODE = "AAAAAAAAAA";
-    private static final String UPDATED_CODE = "BBBBBBBBBB";
-
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
@@ -80,7 +77,6 @@ public class AppParamResourceIT {
      */
     public static AppParam createEntity(EntityManager em) {
         AppParam appParam = new AppParam()
-            .code(DEFAULT_CODE)
             .name(DEFAULT_NAME)
             .type(DEFAULT_TYPE)
             .value(DEFAULT_VALUE)
@@ -97,7 +93,6 @@ public class AppParamResourceIT {
      */
     public static AppParam createUpdatedEntity(EntityManager em) {
         AppParam appParam = new AppParam()
-            .code(UPDATED_CODE)
             .name(UPDATED_NAME)
             .type(UPDATED_TYPE)
             .value(UPDATED_VALUE)
@@ -127,7 +122,6 @@ public class AppParamResourceIT {
         List<AppParam> appParamList = appParamRepository.findAll();
         assertThat(appParamList).hasSize(databaseSizeBeforeCreate + 1);
         AppParam testAppParam = appParamList.get(appParamList.size() - 1);
-        assertThat(testAppParam.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testAppParam.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testAppParam.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testAppParam.getValue()).isEqualTo(DEFAULT_VALUE);
@@ -168,7 +162,6 @@ public class AppParamResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(appParam.getId().intValue())))
-            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
             .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)))
@@ -188,7 +181,6 @@ public class AppParamResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(appParam.getId().intValue()))
-            .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE))
             .andExpect(jsonPath("$.value").value(DEFAULT_VALUE))
@@ -217,7 +209,6 @@ public class AppParamResourceIT {
         // Disconnect from session so that the updates on updatedAppParam are not directly saved in db
         em.detach(updatedAppParam);
         updatedAppParam
-            .code(UPDATED_CODE)
             .name(UPDATED_NAME)
             .type(UPDATED_TYPE)
             .value(UPDATED_VALUE)
@@ -235,7 +226,6 @@ public class AppParamResourceIT {
         List<AppParam> appParamList = appParamRepository.findAll();
         assertThat(appParamList).hasSize(databaseSizeBeforeUpdate);
         AppParam testAppParam = appParamList.get(appParamList.size() - 1);
-        assertThat(testAppParam.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testAppParam.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testAppParam.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testAppParam.getValue()).isEqualTo(UPDATED_VALUE);

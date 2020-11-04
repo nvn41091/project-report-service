@@ -47,4 +47,6 @@ public interface AppParamService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    List<AppParamDTO> getValueByType(AppParamDTO appParamDTO);
 }

@@ -28,6 +28,8 @@ public interface ProjectInformationService {
      */
     Page<ProjectInformationDTO> findAll(Pageable pageable);
 
+    Page<ProjectInformationDTO> doSearch(ProjectInformationDTO projectInformationDTO, Pageable pageable);
+
 
     /**
      * Get the "id" projectInformation.

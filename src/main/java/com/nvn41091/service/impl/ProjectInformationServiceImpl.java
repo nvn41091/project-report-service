@@ -5,6 +5,7 @@ import com.nvn41091.domain.ProjectInformation;
 import com.nvn41091.repository.ProjectInformationRepository;
 import com.nvn41091.service.dto.ProjectInformationDTO;
 import com.nvn41091.service.mapper.ProjectInformationMapper;
+import com.nvn41091.utils.DataUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,6 +48,13 @@ public class ProjectInformationServiceImpl implements ProjectInformationService 
         log.debug("Request to get all ProjectInformations");
         return projectInformationRepository.findAll(pageable)
             .map(projectInformationMapper::toDto);
+    }
+
+    @Override
+    public Page<ProjectInformationDTO> doSearch(ProjectInformationDTO projectInformationDTO, Pageable pageable) {
+        return projectInformationRepository.doSearch(DataUtil.makeLikeParam(projectInformationDTO.getName()),
+                DataUtil.makeLikeParam(projectInformationDTO.getCode()),
+                projectInformationDTO.getStatus(), pageable);
     }
 
 

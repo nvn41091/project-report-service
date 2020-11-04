@@ -25,6 +25,8 @@ public class ProjectInformationDTO implements Serializable {
 
     private Long companyContracting;
 
+    private String companyContractingValue;
+
     private Long companyId;
 
     @Size(max = 2000)
@@ -34,7 +36,25 @@ public class ProjectInformationDTO implements Serializable {
 
     private Long status;
 
-    
+    private String statusValue;
+
+    public ProjectInformationDTO() {
+    }
+
+    public ProjectInformationDTO(Long id, @Size(max = 200) String code, @Size(max = 500) String name, Instant startDate, Instant endDate, Long money, String companyContractingValue, Long companyId, @Size(max = 2000) String description, Instant updateTime, String statusValue) {
+        this.id = id;
+        this.code = code;
+        this.name = name;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.money = money;
+        this.companyContractingValue = companyContractingValue;
+        this.companyId = companyId;
+        this.description = description;
+        this.updateTime = updateTime;
+        this.statusValue = statusValue;
+    }
+
     public Long getId() {
         return id;
     }
@@ -121,6 +141,22 @@ public class ProjectInformationDTO implements Serializable {
 
     public void setStatus(Long status) {
         this.status = status;
+    }
+
+    public String getStatusValue() {
+        return statusValue;
+    }
+
+    public void setStatusValue(String statusValue) {
+        this.statusValue = statusValue;
+    }
+
+    public String getCompanyContractingValue() {
+        return companyContractingValue;
+    }
+
+    public void setCompanyContractingValue(String companyContractingValue) {
+        this.companyContractingValue = companyContractingValue;
     }
 
     @Override

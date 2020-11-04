@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link AppParam}.
@@ -90,5 +91,11 @@ public class AppParamServiceImpl implements AppParamService {
     public void delete(Long id) {
         log.debug("Request to delete AppParam : {}", id);
         appParamRepository.deleteById(id);
+    }
+
+    @Override
+    public List<AppParamDTO> getValueByType(AppParamDTO appParamDTO) {
+        return appParamRepository.getAllByTypeAndStatus(appParamDTO.getType(), Boolean.TRUE)
+                .stream().map(appParamMapper::toDto).collect(Collectors.toList());
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +53,7 @@ public class AppParamResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/insert")
+    @PreAuthorize("hasAuthority(\"PARAM#INSERT\")")
     public ResponseEntity<AppParamDTO> createAppParam(@Valid @RequestBody AppParamDTO appParamDTO) throws URISyntaxException {
         log.debug("REST request to save AppParam : {}", appParamDTO);
         if (appParamDTO.getId() != null) {
@@ -73,6 +75,7 @@ public class AppParamResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/update")
+    @PreAuthorize("hasAuthority(\"PARAM#UPDATE\")")
     public ResponseEntity<AppParamDTO> updateAppParam(@Valid @RequestBody AppParamDTO appParamDTO) throws URISyntaxException {
         log.debug("REST request to update AppParam : {}", appParamDTO);
         if (appParamDTO.getId() == null) {
@@ -91,6 +94,7 @@ public class AppParamResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of appParams in body.
      */
     @PostMapping("/doSearch")
+    @PreAuthorize("hasAuthority(\"PARAM#SEARCH\")")
     public ResponseEntity<List<AppParamDTO>> getAllAppParams(@RequestBody AppParamDTO appParamDTO, Pageable pageable) {
         log.debug("REST request to get a page of AppParams");
         Page<AppParamDTO> page = appParamService.doSearch(appParamDTO, pageable);
@@ -105,6 +109,7 @@ public class AppParamResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority(\"PARAM#DELETE\")")
     public ResponseEntity<Void> deleteAppParam(@PathVariable Long id) {
         log.debug("REST request to delete AppParam : {}", id);
         appParamService.delete(id);
@@ -112,7 +117,15 @@ public class AppParamResource {
     }
 
     @PostMapping("/autoCompleteType")
+    @PreAuthorize("hasAuthority(\"PARAM#SEARCH\") or hasAuthority(\"PARAM#INSERT\") or hasAuthority(\"PARAM#UPDATE\")")
     public ResponseEntity<List<String>> autoCompleteType(@RequestBody AppParamDTO appParamDTO) {
-        return ResponseEntity.ok().body(appParamService.autoCompleteType(appParamDTO.getType()));
+        List<String> result = appParamService.autoCompleteType(appParamDTO.getType());
+        return ResponseEntity.ok().body(result);
+    }
+
+    @PostMapping("/getValueByType")
+    public ResponseEntity<List<AppParamDTO>> getValueByType(@RequestBody AppParamDTO appParamDTO) {
+        List<AppParamDTO> result = appParamService.getValueByType(appParamDTO);
+        return ResponseEntity.ok().body(result);
     }
 }

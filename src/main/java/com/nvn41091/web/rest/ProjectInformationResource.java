@@ -28,7 +28,7 @@ import java.util.Optional;
  * REST controller for managing {@link com.nvn41091.domain.ProjectInformation}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/project-information")
 public class ProjectInformationResource {
 
     private final Logger log = LoggerFactory.getLogger(ProjectInformationResource.class);
@@ -51,7 +51,7 @@ public class ProjectInformationResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new projectInformationDTO, or with status {@code 400 (Bad Request)} if the projectInformation has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/project-informations")
+    @PostMapping("/insert")
     public ResponseEntity<ProjectInformationDTO> createProjectInformation(@Valid @RequestBody ProjectInformationDTO projectInformationDTO) throws URISyntaxException {
         log.debug("REST request to save ProjectInformation : {}", projectInformationDTO);
         if (projectInformationDTO.getId() != null) {
@@ -72,7 +72,7 @@ public class ProjectInformationResource {
      * or with status {@code 500 (Internal Server Error)} if the projectInformationDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/project-informations")
+    @PutMapping("/update")
     public ResponseEntity<ProjectInformationDTO> updateProjectInformation(@Valid @RequestBody ProjectInformationDTO projectInformationDTO) throws URISyntaxException {
         log.debug("REST request to update ProjectInformation : {}", projectInformationDTO);
         if (projectInformationDTO.getId() == null) {
@@ -90,25 +90,12 @@ public class ProjectInformationResource {
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of projectInformations in body.
      */
-    @GetMapping("/project-informations")
-    public ResponseEntity<List<ProjectInformationDTO>> getAllProjectInformations(Pageable pageable) {
-        log.debug("REST request to get a page of ProjectInformations");
-        Page<ProjectInformationDTO> page = projectInformationService.findAll(pageable);
+    @PostMapping("/doSearch")
+    public ResponseEntity<List<ProjectInformationDTO>> doSearch(@RequestBody ProjectInformationDTO projectInformationDTO, Pageable pageable) {
+        log.debug("REST request to search a page of ProjectInformations");
+        Page<ProjectInformationDTO> page = projectInformationService.doSearch(projectInformationDTO, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
-    }
-
-    /**
-     * {@code GET  /project-informations/:id} : get the "id" projectInformation.
-     *
-     * @param id the id of the projectInformationDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the projectInformationDTO, or with status {@code 404 (Not Found)}.
-     */
-    @GetMapping("/project-informations/{id}")
-    public ResponseEntity<ProjectInformationDTO> getProjectInformation(@PathVariable Long id) {
-        log.debug("REST request to get ProjectInformation : {}", id);
-        Optional<ProjectInformationDTO> projectInformationDTO = projectInformationService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(projectInformationDTO);
     }
 
     /**
@@ -117,7 +104,7 @@ public class ProjectInformationResource {
      * @param id the id of the projectInformationDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/project-informations/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteProjectInformation(@PathVariable Long id) {
         log.debug("REST request to delete ProjectInformation : {}", id);
         projectInformationService.delete(id);

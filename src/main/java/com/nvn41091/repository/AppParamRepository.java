@@ -31,4 +31,6 @@ public interface AppParamRepository extends JpaRepository<AppParam, Long> {
 
     @Query(value = "SELECT DISTINCT ap.type from AppParam ap WHERE (:type is null or lower(ap.type) like %:type% ESCAPE '&') ")
     List<String> autoCompleteType(@Param("type") String type, Pageable pageable);
+
+    List<AppParam> getAllByTypeAndStatus(String type, Boolean status);
 }

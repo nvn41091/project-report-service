@@ -57,13 +57,11 @@ public class JwtAuthenticationController {
     @PostMapping(value = "/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody User user,
                                                        HttpServletRequest request) throws Exception {
-        authenticate(user.getUserName(), user.getPasswordHash());
-        final UserDetails userDetails = userDetailsService
-                .loadUserByUsername(user.getUserName());
-        final String token = jwtTokenUtils.generateToken(userDetails);
+        authenticate(user.getUserName(), user.getPasswordHash());;
         final String fingerprint = request.getHeader("fingerprint");
         repository.updateUserByFingerPrint(fingerprint, user.getUserName());
         HttpHeaders headers = new HttpHeaders();
+        final String token = jwtTokenUtils.generateToken(SecurityUtils.getCurrentUser().get());
         headers.add("Authorization", token);
         return ResponseEntity.ok().headers(headers).body(Collections.singletonMap("username", user.getUserName()));
     }
@@ -108,8 +106,7 @@ public class JwtAuthenticationController {
     @PostMapping("/request-password")
     public ResponseEntity<?> requestPassword(@RequestBody UserDTO userDTO, HttpServletRequest request) {
         User result = userService.requestPassword(userDTO);
-        UserDetails userDetails = new UserDetailImpl(result);
-        final String token = jwtTokenUtils.generateToken(userDetails);
+        final String token = jwtTokenUtils.generateToken(result);
         final String fingerprint = request.getHeader("fingerprint");
         repository.updateUserByFingerPrint(fingerprint, result.getUserName());
         HttpHeaders headers = new HttpHeaders();

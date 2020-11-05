@@ -38,6 +38,6 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
 
     @Query(value = "SELECT r FROM Role r " +
             "INNER JOIN CompanyRole cr on r.id = cr.roleId and r.status = true " +
-            "INNER JOIN CompanyUser cu on cr.companyId = cu.companyId and cu.userId = :userId ")
-    List<Role> getAllRoleByCurrentUser(@Param("userId") Long userId);
+            "INNER JOIN CompanyUser cu on cr.companyId = cu.companyId and cu.userId = :userId and cu.companyId = :companyId ")
+    List<Role> getAllRoleByCurrentUser(@Param("userId") Long userId, @Param("companyId") Long companyId);
 }

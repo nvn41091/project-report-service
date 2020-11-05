@@ -92,7 +92,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<RoleDTO> getAll() {
         UserDTO currentUser = SecurityUtils.getCurrentUser().get();
-        return roleRepository.getAllRoleByCurrentUser(currentUser.getId())
+        return roleRepository.getAllRoleByCurrentUser(currentUser.getId(), currentUser.getCompanyId())
                 .stream().map(roleMapper::toDto).collect(Collectors.toList());
     }
 

@@ -40,6 +40,9 @@ public class UserRoleResourceIT {
     private static final Long DEFAULT_ROLE_ID = 1L;
     private static final Long UPDATED_ROLE_ID = 2L;
 
+    private static final Long DEFAULT_COMPANY_ID = 1L;
+    private static final Long UPDATED_COMPANY_ID = 2L;
+
     private static final Instant DEFAULT_UPDATE_TIME = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_UPDATE_TIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -70,6 +73,7 @@ public class UserRoleResourceIT {
         UserRole userRole = new UserRole()
             .userId(DEFAULT_USER_ID)
             .roleId(DEFAULT_ROLE_ID)
+            .companyId(DEFAULT_COMPANY_ID)
             .updateTime(DEFAULT_UPDATE_TIME);
         return userRole;
     }
@@ -83,6 +87,7 @@ public class UserRoleResourceIT {
         UserRole userRole = new UserRole()
             .userId(UPDATED_USER_ID)
             .roleId(UPDATED_ROLE_ID)
+            .companyId(UPDATED_COMPANY_ID)
             .updateTime(UPDATED_UPDATE_TIME);
         return userRole;
     }
@@ -109,6 +114,7 @@ public class UserRoleResourceIT {
         UserRole testUserRole = userRoleList.get(userRoleList.size() - 1);
         assertThat(testUserRole.getUserId()).isEqualTo(DEFAULT_USER_ID);
         assertThat(testUserRole.getRoleId()).isEqualTo(DEFAULT_ROLE_ID);
+        assertThat(testUserRole.getCompanyId()).isEqualTo(DEFAULT_COMPANY_ID);
         assertThat(testUserRole.getUpdateTime()).isEqualTo(DEFAULT_UPDATE_TIME);
     }
 
@@ -146,6 +152,7 @@ public class UserRoleResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(userRole.getId().intValue())))
             .andExpect(jsonPath("$.[*].userId").value(hasItem(DEFAULT_USER_ID.intValue())))
             .andExpect(jsonPath("$.[*].roleId").value(hasItem(DEFAULT_ROLE_ID.intValue())))
+            .andExpect(jsonPath("$.[*].companyId").value(hasItem(DEFAULT_COMPANY_ID.intValue())))
             .andExpect(jsonPath("$.[*].updateTime").value(hasItem(DEFAULT_UPDATE_TIME.toString())));
     }
     
@@ -162,6 +169,7 @@ public class UserRoleResourceIT {
             .andExpect(jsonPath("$.id").value(userRole.getId().intValue()))
             .andExpect(jsonPath("$.userId").value(DEFAULT_USER_ID.intValue()))
             .andExpect(jsonPath("$.roleId").value(DEFAULT_ROLE_ID.intValue()))
+            .andExpect(jsonPath("$.companyId").value(DEFAULT_COMPANY_ID.intValue()))
             .andExpect(jsonPath("$.updateTime").value(DEFAULT_UPDATE_TIME.toString()));
     }
     @Test
@@ -187,6 +195,7 @@ public class UserRoleResourceIT {
         updatedUserRole
             .userId(UPDATED_USER_ID)
             .roleId(UPDATED_ROLE_ID)
+            .companyId(UPDATED_COMPANY_ID)
             .updateTime(UPDATED_UPDATE_TIME);
         UserRoleDTO userRoleDTO = userRoleMapper.toDto(updatedUserRole);
 
@@ -201,6 +210,7 @@ public class UserRoleResourceIT {
         UserRole testUserRole = userRoleList.get(userRoleList.size() - 1);
         assertThat(testUserRole.getUserId()).isEqualTo(UPDATED_USER_ID);
         assertThat(testUserRole.getRoleId()).isEqualTo(UPDATED_ROLE_ID);
+        assertThat(testUserRole.getCompanyId()).isEqualTo(UPDATED_COMPANY_ID);
         assertThat(testUserRole.getUpdateTime()).isEqualTo(UPDATED_UPDATE_TIME);
     }
 

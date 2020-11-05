@@ -1,36 +1,36 @@
 package com.nvn41091.service.dto;
 
-import com.nvn41091.domain.User;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class UserDetailImpl implements Serializable, UserDetails {
     private static final long serialVersionUID = 5926468583005150707L;
-    private User user;
+    private UserDTO userDTO;
 
     public UserDetailImpl() {
     }
 
-    public UserDetailImpl(User user) {
-        this.user = user;
+    public UserDetailImpl(UserDTO userDTO) {
+        this.userDTO = userDTO;
     }
 
-    public User getUser() {
-        return user;
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public UserDTO getUserDTO() {
+        return userDTO;
+    }
+
+    public void setUserDTO(UserDTO userDTO) {
+        this.userDTO = userDTO;
     }
 
     public String getUsername() {
-        return this.user.getUserName();
+        return this.userDTO.getUserName();
     }
 
     @Override
@@ -50,7 +50,7 @@ public class UserDetailImpl implements Serializable, UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return user.getStatus();
+        return userDTO.getStatus();
     }
 
     @Override
@@ -59,6 +59,6 @@ public class UserDetailImpl implements Serializable, UserDetails {
     }
 
     public String getPassword() {
-        return this.user.getPasswordHash();
+        return this.userDTO.getPasswordHash();
     }
 }

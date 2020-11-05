@@ -1,8 +1,10 @@
 package com.nvn41091.service.impl;
 
+import com.nvn41091.security.SecurityUtils;
 import com.nvn41091.service.UserRoleService;
 import com.nvn41091.domain.UserRole;
 import com.nvn41091.repository.UserRoleRepository;
+import com.nvn41091.service.dto.UserDTO;
 import com.nvn41091.service.dto.UserRoleDTO;
 import com.nvn41091.service.mapper.UserRoleMapper;
 import com.nvn41091.utils.DataUtil;
@@ -69,13 +71,14 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
-    public List<UserRoleDTO> getAllByUserId(Long id) {
-        return userRoleRepository.getAllByUserId(id).stream().map(userRoleMapper::toDto).collect(Collectors.toList());
+    public List<UserRoleDTO> getAllByUserIdAndCompanyId(Long id) {
+        UserDTO currentUser = SecurityUtils.getCurrentUser().get();
+        return userRoleRepository.getAllByUserIdAndCompanyId(id, currentUser.getCompanyId()).stream().map(userRoleMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<SimpleGrantedAuthority> getRoleByUserId(Long id) {
-        return userRoleRepository.getUserRole(id)
+    public List<SimpleGrantedAuthority> getRoleByUserId(Long id, Long companyId) {
+        return userRoleRepository.getUserRole(id, companyId)
                 .stream()
                 .map(objects -> new SimpleGrantedAuthority(DataUtil.safeToString(objects[0]) + "#" + DataUtil.safeToString(objects[1])))
                 .collect(Collectors.toList());

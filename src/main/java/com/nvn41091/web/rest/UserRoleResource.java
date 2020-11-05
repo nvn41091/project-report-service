@@ -47,7 +47,7 @@ public class UserRoleResource {
     @GetMapping("/getByUserId/{id}")
     @PreAuthorize("hasAuthority(\"USER#INSERT\") or hasAuthority(\"USER#UPDATE\")")
     public ResponseEntity<List<UserRoleDTO>> getAllUserRoles(@PathVariable Long id) {
-        List<UserRoleDTO> lst = userRoleService.getAllByUserId(id);
+        List<UserRoleDTO> lst = userRoleService.getAllByUserIdAndCompanyId(id);
         return ResponseEntity.ok().body(lst);
     }
 

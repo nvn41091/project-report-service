@@ -45,9 +45,9 @@ public class JwtTokenUtils implements Serializable {
         return expiration.before(new Date());
     }
     //generate token for user
-    public String generateToken(User user) {
+    public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, user.getUserName());
+        return doGenerateToken(claims, username);
     }
     //while creating the token -
 //1. Define  claims of the token, like Issuer, Expiration, Subject, and the ID
@@ -61,7 +61,7 @@ public class JwtTokenUtils implements Serializable {
     }
     //validate token
     public boolean validateToken(String token, UserDetails userDetails) {
-        final String username = getUsernameFromToken(token);
+        final String username = getUsernameFromToken(token).split("\\|")[0];
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 }

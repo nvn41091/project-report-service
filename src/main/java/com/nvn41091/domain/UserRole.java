@@ -28,6 +28,9 @@ public class UserRole implements Serializable {
     @Column(name = "role_id")
     private Long roleId;
 
+    @Column(name = "company_id")
+    private Long companyId;
+
     @Column(name = "update_time")
     private Instant updateTime;
 
@@ -64,6 +67,19 @@ public class UserRole implements Serializable {
 
     public void setRoleId(Long roleId) {
         this.roleId = roleId;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public UserRole companyId(Long companyId) {
+        this.companyId = companyId;
+        return this;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     public Instant getUpdateTime() {
@@ -103,6 +119,7 @@ public class UserRole implements Serializable {
             "id=" + getId() +
             ", userId=" + getUserId() +
             ", roleId=" + getRoleId() +
+            ", companyId=" + getCompanyId() +
             ", updateTime='" + getUpdateTime() + "'" +
             "}";
     }

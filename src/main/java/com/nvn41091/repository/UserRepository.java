@@ -1,6 +1,8 @@
 package com.nvn41091.repository;
 
 import com.nvn41091.domain.User;
+import com.nvn41091.service.dto.ResponseJwtDTO;
+import com.nvn41091.service.dto.UserDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -72,4 +74,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Modifying
     @Query("UPDATE User SET passwordHash = :passwordHash WHERE id = :id ")
     void updatePasswordById(@Param("passwordHash") String passwordHash, @Param("id") Long id);
+
+    @Query("SELECT new com.nvn41091.service.dto.ResponseJwtDTO(c.id, u.userName, c.name) from User u " +
+            "INNER JOIN CompanyUser cu on u.id = cu.userId " +
+            "INNER JOIN Company c on cu.companyId = c.id WHERE u.userName = :username")
+    List<ResponseJwtDTO> getAllCompanyByUserName(@Param("username") String username);
 }

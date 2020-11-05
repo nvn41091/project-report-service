@@ -4,6 +4,7 @@ import com.nvn41091.domain.User;
 import com.nvn41091.repository.UserRepository;
 import com.nvn41091.service.UserRoleService;
 import com.nvn41091.service.UserService;
+import com.nvn41091.service.dto.ResponseJwtDTO;
 import com.nvn41091.service.dto.UserDTO;
 import com.nvn41091.service.dto.UserDetailImpl;
 import com.nvn41091.utils.JwtTokenUtils;
@@ -25,6 +26,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @Transactional
@@ -48,10 +51,6 @@ public class JwtAuthenticationController {
     @Autowired
     private JwtTokenUtils jwtTokenUtils;
 
-    @Autowired
-    private JwtUserDetailsService userDetailsService;
-
-
     private static final String ENTITY_NAME = "user";
 
     @PostMapping(value = "/authenticate")
@@ -60,10 +59,16 @@ public class JwtAuthenticationController {
         authenticate(user.getUserName(), user.getPasswordHash());;
         final String fingerprint = request.getHeader("fingerprint");
         repository.updateUserByFingerPrint(fingerprint, user.getUserName());
-        HttpHeaders headers = new HttpHeaders();
-        final String token = jwtTokenUtils.generateToken(SecurityUtils.getCurrentUser().get());
-        headers.add("Authorization", token);
-        return ResponseEntity.ok().headers(headers).body(Collections.singletonMap("username", user.getUserName()));
+        List<ResponseJwtDTO> lstCompany = repository.getAllCompanyByUserName(user.getUserName());
+        List<ResponseJwtDTO> result = lstCompany.stream().map(res -> {
+            final String token = jwtTokenUtils.generateToken(res.getUsername() + "|" + res.getCompanyId());
+            res.setToken(token);
+            return res;
+        }).collect(Collectors.toList());
+        ResponseJwtDTO selfToken = new ResponseJwtDTO();
+        selfToken.setToken(jwtTokenUtils.generateToken(user.getUserName()));
+        result.add(0, selfToken);
+        return ResponseEntity.ok().body(result);
     }
 
     @PostMapping(value = "/register")
@@ -106,7 +111,7 @@ public class JwtAuthenticationController {
     @PostMapping("/request-password")
     public ResponseEntity<?> requestPassword(@RequestBody UserDTO userDTO, HttpServletRequest request) {
         User result = userService.requestPassword(userDTO);
-        final String token = jwtTokenUtils.generateToken(result);
+        final String token = jwtTokenUtils.generateToken(result.getUserName());
         final String fingerprint = request.getHeader("fingerprint");
         repository.updateUserByFingerPrint(fingerprint, result.getUserName());
         HttpHeaders headers = new HttpHeaders();

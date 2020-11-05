@@ -1,6 +1,7 @@
 package com.nvn41091.security;
 
 import com.nvn41091.domain.User;
+import com.nvn41091.service.dto.UserDTO;
 import com.nvn41091.service.dto.UserDetailImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,11 +30,11 @@ public final class SecurityUtils {
         return Optional.ofNullable(extractPrincipal(securityContext.getAuthentication()));
     }
 
-    public static Optional<User> getCurrentUser() {
+    public static Optional<UserDTO> getCurrentUser() {
 
         UserDetailImpl principal = (UserDetailImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (principal != null) return Optional.of(principal.getUser());
+        if (principal != null) return Optional.of(principal.getUserDTO());
         return Optional.empty();
     }
 

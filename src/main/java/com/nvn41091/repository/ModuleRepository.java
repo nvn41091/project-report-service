@@ -41,7 +41,7 @@ public interface ModuleRepository extends JpaRepository<Module, Long> {
 
     @Query(value = " SELECT DISTINCT  " +
             " m.id, m.code, m.name, m.parent_id, m.status, m.path_url, m.icon,  m.update_time, m.description " +
-            " FROM (select * from user_role WHERE user_id = :id) ur   " +
+            " FROM (select * from user_role WHERE user_id = :id and company_id = :companyId) ur   " +
             "             INNER JOIN (SELECT * FROM role WHERE status = true ) r on ur.role_id = r.id " +
             "             INNER JOIN role_module rm on r.id = rm.role_id     " +
             "             INNER JOIN (SELECT * FROM module WHERE status = true ) m on rm.module_id = m.id " +
@@ -49,9 +49,9 @@ public interface ModuleRepository extends JpaRepository<Module, Long> {
             " SELECT DISTINCT  " +
             "m.id, m.code, m.name, m.parent_id, m.status, m.path_url, m.icon,  m.update_time, m.description  " +
             " FROM module m where id in ( " +
-            "  SELECT DISTINCT m.parent_id FROM (select * from user_role WHERE user_id = :id) ur   " +
+            "  SELECT DISTINCT m.parent_id FROM (select * from user_role WHERE user_id = :id and company_id = :companyId) ur   " +
             "             INNER JOIN (SELECT * FROM role WHERE status = true ) r on ur.role_id = r.id     " +
             "             INNER JOIN role_module rm on r.id = rm.role_id     " +
             "             INNER JOIN (SELECT * FROM module WHERE status = true ) m on rm.module_id = m.id )", nativeQuery = true)
-    List<Module> findAllMenuByUserId(@Param("id") Long id);
+    List<Module> findAllMenuByUserId(@Param("id") Long id, @Param("companyId") Long companyId);
 }

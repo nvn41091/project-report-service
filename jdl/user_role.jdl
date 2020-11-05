@@ -2,6 +2,7 @@ entity UserRole {
 	id Long
 	userId Long
     roleId Long
+    companyId Long
     updateTime Instant
 }
 dto UserRole with mapstruct

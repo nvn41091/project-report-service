@@ -120,7 +120,8 @@ public class UserServiceImpl implements UserService {
                 selected.add(userRole);
             }
         }
-        List<UserRole> origin = userRoleRepository.getAllByUserId(res.getId());
+        UserDTO currentUser = SecurityUtils.getCurrentUser().get();
+        List<UserRole> origin = userRoleRepository.getAllByUserIdAndCompanyId(res.getId(), currentUser.getCompanyId());
         Iterator<UserRole> i = origin.listIterator();
         while (i.hasNext()) {
             UserRole nextOrigin = i.next();
@@ -141,7 +142,7 @@ public class UserServiceImpl implements UserService {
         }
         userRoleRepository.deleteInBatch(origin);
         userRoleRepository.saveAll(selected);
-        User currentLogin = SecurityUtils.getCurrentUser().get();
+        UserDTO currentLogin = SecurityUtils.getCurrentUser().get();
         CompanyUser companyUser = new CompanyUser();
         companyUser.setUserId(res.getId());
         CompanyUser currentCompany = companyUserRepository.getCompanyUserByUserId(currentLogin.getId());
@@ -173,13 +174,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getUserInfo() {
-        User get = SecurityUtils.getCurrentUser().get();
-        UserDTO userDTO = userMapper.toDto(get);
-        userDTO.setRoles(userRoleRepository.getUserRole(userDTO.getId())
+        UserDTO userDTO = SecurityUtils.getCurrentUser().get();
+        userDTO.setRoles(userRoleRepository.getUserRole(userDTO.getId(), userDTO.getCompanyId())
                 .stream()
                 .map(objects -> DataUtil.safeToString(objects[0]) + "#" + DataUtil.safeToString(objects[1]))
                 .collect(Collectors.toList()));
-        userDTO.setMenus(moduleRepository.findAllMenuByUserId(userDTO.getId()));
+        userDTO.setMenus(moduleRepository.findAllMenuByUserId(userDTO.getId(), userDTO.getCompanyId()));
         return userDTO;
     }
 
@@ -210,7 +210,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO resetPassword(UserDTO userDTO) {
-        User user = SecurityUtils.getCurrentUser().get();
+        UserDTO user = SecurityUtils.getCurrentUser().get();
         if (userDTO.getResetKey() != null) {
             List<User> findLst = repository.findAllByIdAndResetKey(user.getId(), userDTO.getResetKey());
             if (findLst.size() == 0) {
@@ -223,6 +223,6 @@ public class UserServiceImpl implements UserService {
         }
         user.setPasswordHash(encoder.encode(userDTO.getPasswordHash()));
         repository.updatePasswordById(user.getPasswordHash(), user.getId());
-        return userMapper.toDto(user);
+        return user;
     }
 }

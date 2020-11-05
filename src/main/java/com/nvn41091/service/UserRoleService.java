@@ -46,7 +46,7 @@ public interface UserRoleService {
      */
     void delete(Long id);
 
-    List<UserRoleDTO> getAllByUserId(Long id);
+    List<UserRoleDTO> getAllByUserIdAndCompanyId(Long id);
 
-    List<SimpleGrantedAuthority> getRoleByUserId(Long id);
+    List<SimpleGrantedAuthority> getRoleByUserId(Long id, Long companyId);
 }

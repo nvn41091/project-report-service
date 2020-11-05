@@ -14,7 +14,10 @@ public class UserRoleDTO implements Serializable {
 
     private Long roleId;
 
+    private Long companyId;
+
     private Instant updateTime;
+
     
     public Long getId() {
         return id;
@@ -38,6 +41,14 @@ public class UserRoleDTO implements Serializable {
 
     public void setRoleId(Long roleId) {
         this.roleId = roleId;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     public Instant getUpdateTime() {
@@ -72,6 +83,7 @@ public class UserRoleDTO implements Serializable {
             "id=" + getId() +
             ", userId=" + getUserId() +
             ", roleId=" + getRoleId() +
+            ", companyId=" + getCompanyId() +
             ", updateTime='" + getUpdateTime() + "'" +
             "}";
     }

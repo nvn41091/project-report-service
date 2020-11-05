@@ -28,6 +28,7 @@ public class UserDTO implements Serializable {
     private List<String> roles;
     private List<Module> menus;
     private String oldPassword;
+    private Long companyId;
 
     public UserDTO() {
     }
@@ -192,6 +193,14 @@ public class UserDTO implements Serializable {
         this.lstRole = lstRole;
     }
 
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -213,7 +222,8 @@ public class UserDTO implements Serializable {
                 Objects.equals(lastModifiedBy, user.lastModifiedBy) &&
                 Objects.equals(lastModifiedDate, user.lastModifiedDate) &&
                 Objects.equals(fingerprint, user.fingerprint) &&
-                Objects.equals(lstRole, user.lstRole);
+                Objects.equals(lstRole, user.lstRole) &&
+                Objects.equals(companyId, user.getCompanyId());
     }
 
     @Override

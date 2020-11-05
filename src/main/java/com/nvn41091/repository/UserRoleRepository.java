@@ -17,14 +17,14 @@ import java.util.List;
 @Repository
 public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
 
-    List<UserRole> getAllByUserId(Long id);
+    List<UserRole> getAllByUserIdAndCompanyId(Long id, Long companyId);
 
     @Query(value = "select m.code moduleCode, a.code actionCode from  " +
-            " (select * from role WHERE id in (select role_id from user_role where user_id = :id) and status = 1 ) ur " +
+            " (select * from role WHERE id in (select role_id from user_role where user_id = :id and company_id = :companyId) and status = 1 ) ur " +
             " inner join role_module rm on ur.id = rm.role_id  " +
-            " left join ( select * from module WHERE status = 1 ) m on rm.module_id = m.id " +
-            " left join ( select * from action WHERE status = 1 ) a on rm.action_id = a.id", nativeQuery = true)
-    List<Object[]> getUserRole(@Param("id") Long id);
+            " inner join ( select * from module WHERE status = 1 ) m on rm.module_id = m.id " +
+            " inner join ( select * from action WHERE status = 1 ) a on rm.action_id = a.id", nativeQuery = true)
+    List<Object[]> getUserRole(@Param("id") Long id,@Param("companyId")  Long companyId);
 
     void deleteAllByUserId(Long id);
 

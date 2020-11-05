@@ -65,9 +65,11 @@ public class JwtAuthenticationController {
             res.setToken(token);
             return res;
         }).collect(Collectors.toList());
-        ResponseJwtDTO selfToken = new ResponseJwtDTO();
-        selfToken.setToken(jwtTokenUtils.generateToken(user.getUserName()));
-        result.add(0, selfToken);
+        if (result.size() == 0) {
+            ResponseJwtDTO selfToken = new ResponseJwtDTO();
+            selfToken.setToken(jwtTokenUtils.generateToken(user.getUserName()));
+            result.add(0, selfToken);
+        }
         return ResponseEntity.ok().body(result);
     }
 

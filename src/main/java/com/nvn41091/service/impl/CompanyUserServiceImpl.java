@@ -63,4 +63,9 @@ public class CompanyUserServiceImpl implements CompanyUserService {
         log.debug("Request to delete CompanyUser : {}", id);
         companyUserRepository.deleteById(id);
     }
+
+    @Override
+    public void deleteByCompanyId(Long companyId) {
+        companyUserRepository.deleteByUserId(companyId);
+    }
 }

@@ -83,4 +83,9 @@ public class UserRoleServiceImpl implements UserRoleService {
                 .map(objects -> new SimpleGrantedAuthority(DataUtil.safeToString(objects[0]) + "#" + DataUtil.safeToString(objects[1])))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void deleteByCompanyId(Long companyId) {
+        userRoleRepository.deleteByCompanyId(companyId);
+    }
 }

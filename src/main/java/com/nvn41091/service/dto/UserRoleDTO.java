@@ -18,7 +18,17 @@ public class UserRoleDTO implements Serializable {
 
     private Instant updateTime;
 
-    
+    public UserRoleDTO() {
+    }
+
+    public UserRoleDTO(Long id, Long userId, Long roleId, Long companyId, Instant updateTime) {
+        this.id = id;
+        this.userId = userId;
+        this.roleId = roleId;
+        this.companyId = companyId;
+        this.updateTime = updateTime;
+    }
+
     public Long getId() {
         return id;
     }

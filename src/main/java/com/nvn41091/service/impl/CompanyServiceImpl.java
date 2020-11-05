@@ -1,9 +1,15 @@
 package com.nvn41091.service.impl;
 
+import com.nvn41091.security.SecurityUtils;
 import com.nvn41091.service.CompanyService;
 import com.nvn41091.domain.Company;
 import com.nvn41091.repository.CompanyRepository;
+import com.nvn41091.service.CompanyUserService;
+import com.nvn41091.service.UserRoleService;
 import com.nvn41091.service.dto.CompanyDTO;
+import com.nvn41091.service.dto.CompanyUserDTO;
+import com.nvn41091.service.dto.UserDTO;
+import com.nvn41091.service.dto.UserRoleDTO;
 import com.nvn41091.service.mapper.CompanyMapper;
 import com.nvn41091.utils.DataUtil;
 import com.nvn41091.utils.Translator;
@@ -33,9 +39,15 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyMapper companyMapper;
 
-    public CompanyServiceImpl(CompanyRepository companyRepository, CompanyMapper companyMapper) {
+    private final CompanyUserService companyUserService;
+
+    private final UserRoleService userRoleService;
+
+    public CompanyServiceImpl(CompanyRepository companyRepository, CompanyMapper companyMapper, CompanyUserService companyUserService, UserRoleService userRoleService) {
         this.companyRepository = companyRepository;
         this.companyMapper = companyMapper;
+        this.companyUserService = companyUserService;
+        this.userRoleService = userRoleService;
     }
 
     @Override
@@ -59,6 +71,13 @@ public class CompanyServiceImpl implements CompanyService {
         companyDTO.setUpdateTime(Instant.now());
         Company company = companyMapper.toEntity(companyDTO);
         company = companyRepository.save(company);
+        if (companyDTO.getId() == null) {
+            UserDTO userDTO = SecurityUtils.getCurrentUser().get();
+            CompanyUserDTO companyUserDTO = new CompanyUserDTO(null, userDTO.getId(), company.getId(), Instant.now());
+            UserRoleDTO userRoleDTO = new UserRoleDTO(null, userDTO.getId(), 3L, company.getId(), Instant.now());
+            userRoleService.save(userRoleDTO);
+            companyUserService.save(companyUserDTO);
+        }
         return companyMapper.toDto(company);
     }
 
@@ -98,5 +117,7 @@ public class CompanyServiceImpl implements CompanyService {
             throw new BadRequestAlertException(Translator.toLocale("error.company.notExist"), "company", "company.notExist");
         }
         companyRepository.deleteById(id);
+        companyUserService.deleteByCompanyId(id);
+        userRoleService.deleteByCompanyId(id);
     }
 }

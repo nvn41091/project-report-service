@@ -28,6 +28,10 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     User findUserByUserNameAndFingerprint(String username, String fingerprint);
 
+    @Query("SELECT u FROM User u INNER JOIN CompanyUser cu on u.id = cu.userId " +
+            "WHERE u.userName = :username AND u.fingerprint = :fingerprint AND cu.companyId = :companyId")
+    User findUserByUserNameAndFingerprintAndCompanyId(@Param("username") String username, @Param("fingerprint") String fingerprint, @Param("companyId") Long companyId);
+
     @Query("SELECT u from User u WHERE upper(u.userName) = upper(:userName) ")
     List<User> findAllByUserName(@Param("userName") String userName);
 

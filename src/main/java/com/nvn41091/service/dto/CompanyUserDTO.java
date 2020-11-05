@@ -16,7 +16,16 @@ public class CompanyUserDTO implements Serializable {
 
     private Instant updateTime;
 
-    
+    public CompanyUserDTO() {
+    }
+
+    public CompanyUserDTO(Long id, Long userId, Long companyId, Instant updateTime) {
+        this.id = id;
+        this.userId = userId;
+        this.companyId = companyId;
+        this.updateTime = updateTime;
+    }
+
     public Long getId() {
         return id;
     }

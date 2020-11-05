@@ -49,4 +49,6 @@ public interface UserRoleService {
     List<UserRoleDTO> getAllByUserIdAndCompanyId(Long id);
 
     List<SimpleGrantedAuthority> getRoleByUserId(Long id, Long companyId);
+
+    void deleteByCompanyId(Long companyId);
 }

@@ -15,4 +15,6 @@ public interface CompanyUserRepository extends JpaRepository<CompanyUser, Long> 
     CompanyUser getCompanyUserByUserId(Long userId);
 
     void deleteByUserId(Long userId);
+
+    void deleteByCompanyId(Long companyId);
 }

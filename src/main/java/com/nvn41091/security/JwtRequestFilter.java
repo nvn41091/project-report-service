@@ -81,7 +81,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         // Once we get the token validate it.
         if (StringUtils.isNoneEmpty(usernameAndCompanyId) && StringUtils.isNoneEmpty(fingerprint)) {
-            User user = this.repository.findUserByUserNameAndFingerprint(username, fingerprint);
+            User user;
+            if (companyId != null) {
+                user = this.repository.findUserByUserNameAndFingerprintAndCompanyId(username, fingerprint, companyId);
+            } else {
+                user = this.repository.findUserByUserNameAndFingerprint(username, fingerprint);
+            }
             if (user != null) {
                 UserDTO userDTO = userMapper.toDto(user);
                 userDTO.setCompanyId(companyId);

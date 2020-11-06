@@ -9,9 +9,11 @@ import com.nvn41091.repository.UserRepository;
 import com.nvn41091.repository.UserRoleRepository;
 import com.nvn41091.security.SecurityUtils;
 import com.nvn41091.service.UserService;
+import com.nvn41091.service.dto.ResponseJwtDTO;
 import com.nvn41091.service.dto.UserDTO;
 import com.nvn41091.service.mapper.UserMapper;
 import com.nvn41091.utils.DataUtil;
+import com.nvn41091.utils.JwtTokenUtils;
 import com.nvn41091.utils.Translator;
 import com.nvn41091.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.security.RandomUtil;
@@ -55,9 +57,11 @@ public class UserServiceImpl implements UserService {
 
     private final JavaMailSender emailSender;
 
+    private final JwtTokenUtils jwtTokenUtils;
+
     public UserServiceImpl(PasswordEncoder encoder, UserMapper userMapper, UserRepository repository,
                            UserRoleRepository userRoleRepository, ModuleRepository moduleRepository,
-                           CompanyUserRepository companyUserRepository, JavaMailSender javaMailSender) {
+                           CompanyUserRepository companyUserRepository, JavaMailSender javaMailSender, JwtTokenUtils jwtTokenUtils) {
         this.encoder = encoder;
         this.userMapper = userMapper;
         this.repository = repository;
@@ -65,6 +69,7 @@ public class UserServiceImpl implements UserService {
         this.moduleRepository = moduleRepository;
         this.companyUserRepository = companyUserRepository;
         this.emailSender = javaMailSender;
+        this.jwtTokenUtils = jwtTokenUtils;
     }
 
     @Override
@@ -164,10 +169,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<User> doSearch(User user, Pageable pageable) {
+        UserDTO currentUser = SecurityUtils.getCurrentUser().get();
         Page<User> rs = repository.querySearchUser(DataUtil.makeLikeParam(user.getUserName()),
                 DataUtil.makeLikeParam(user.getFullName()),
                 DataUtil.makeLikeParam(user.getEmail()),
                 user.getStatus(),
+                currentUser.getCompanyId(),
                 pageable);
         return new PageImpl<>(rs.getContent(), pageable, rs.getTotalElements());
     }
@@ -224,5 +231,21 @@ public class UserServiceImpl implements UserService {
         user.setPasswordHash(encoder.encode(userDTO.getPasswordHash()));
         repository.updatePasswordById(user.getPasswordHash(), user.getId());
         return user;
+    }
+
+    @Override
+    public List<ResponseJwtDTO> createToken(UserDTO user) {
+        List<ResponseJwtDTO> lstCompany = repository.getAllCompanyByUserName(user.getUserName());
+        List<ResponseJwtDTO> result = lstCompany.stream().map(res -> {
+            final String token = jwtTokenUtils.generateToken(res.getUsername() + "|" + res.getCompanyId());
+            res.setToken(token);
+            return res;
+        }).collect(Collectors.toList());
+        if (result.size() == 0) {
+            ResponseJwtDTO selfToken = new ResponseJwtDTO();
+            selfToken.setToken(jwtTokenUtils.generateToken(user.getUserName()));
+            result.add(selfToken);
+        }
+        return result;
     }
 }

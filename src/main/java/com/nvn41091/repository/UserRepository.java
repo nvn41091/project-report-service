@@ -43,12 +43,13 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     List<User> findAllByEmail(String email);
 
-    @Query(value = "SELECT u from User u " +
+    @Query(value = "SELECT u from User u INNER JOIN CompanyUser cu ON u.id = cu.userId " +
             "where 1=1 and (:userName is null or lower(u.userName) like %:userName% ESCAPE '&') " +
             "and (:fullName is null or lower(u.fullName) like %:fullName% ESCAPE '&') " +
             "and (:email is null or lower(u.email) like %:email% escape '&') " +
-            "and (:status is null or u.status = :status )",
-            countQuery = "SELECT count(u) from User u " +
+            "and (:status is null or u.status = :status )" +
+            "and cu.companyId = :companyId",
+            countQuery = "SELECT count(u) from User u INNER JOIN CompanyUser cu ON u.id = cu.userId " +
                     "where 1=1 and (:userName is null or lower(u.userName) like %:userName% ESCAPE '&') " +
                     "and (:fullName is null or lower(u.fullName) like %:fullName% ESCAPE '&') " +
                     "and (:email is null or lower(u.email) like %:email% escape '&') " +
@@ -57,6 +58,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
                                @Param("fullName") String fullName,
                                @Param("email") String email,
                                @Param("status") Boolean status,
+                               @Param("companyId") Long companyId,
                                Pageable pageable);
 
     @Transactional

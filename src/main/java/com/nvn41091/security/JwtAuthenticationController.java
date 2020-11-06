@@ -2,32 +2,25 @@ package com.nvn41091.security;
 
 import com.nvn41091.domain.User;
 import com.nvn41091.repository.UserRepository;
-import com.nvn41091.service.UserRoleService;
 import com.nvn41091.service.UserService;
 import com.nvn41091.service.dto.ResponseJwtDTO;
 import com.nvn41091.service.dto.UserDTO;
-import com.nvn41091.service.dto.UserDetailImpl;
-import com.nvn41091.utils.JwtTokenUtils;
+import com.nvn41091.service.mapper.UserMapper;
 import io.github.jhipster.web.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @Transactional
@@ -49,27 +42,17 @@ public class JwtAuthenticationController {
     private UserService userService;
 
     @Autowired
-    private JwtTokenUtils jwtTokenUtils;
+    private UserMapper userMapper;
 
     private static final String ENTITY_NAME = "user";
 
     @PostMapping(value = "/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody User user,
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody UserDTO user,
                                                        HttpServletRequest request) throws Exception {
         authenticate(user.getUserName(), user.getPasswordHash());;
         final String fingerprint = request.getHeader("fingerprint");
         repository.updateUserByFingerPrint(fingerprint, user.getUserName());
-        List<ResponseJwtDTO> lstCompany = repository.getAllCompanyByUserName(user.getUserName());
-        List<ResponseJwtDTO> result = lstCompany.stream().map(res -> {
-            final String token = jwtTokenUtils.generateToken(res.getUsername() + "|" + res.getCompanyId());
-            res.setToken(token);
-            return res;
-        }).collect(Collectors.toList());
-        if (result.size() == 0) {
-            ResponseJwtDTO selfToken = new ResponseJwtDTO();
-            selfToken.setToken(jwtTokenUtils.generateToken(user.getUserName()));
-            result.add(0, selfToken);
-        }
+        List<ResponseJwtDTO> result = userService.createToken(user);
         return ResponseEntity.ok().body(result);
     }
 
@@ -113,11 +96,16 @@ public class JwtAuthenticationController {
     @PostMapping("/request-password")
     public ResponseEntity<?> requestPassword(@RequestBody UserDTO userDTO, HttpServletRequest request) {
         User result = userService.requestPassword(userDTO);
-        final String token = jwtTokenUtils.generateToken(result.getUserName());
         final String fingerprint = request.getHeader("fingerprint");
         repository.updateUserByFingerPrint(fingerprint, result.getUserName());
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", token);
-        return ResponseEntity.ok().headers(headers).body(Collections.singletonMap("username", result.getUserName()));
+        List<ResponseJwtDTO> res = userService.createToken(userMapper.toDto(result));
+        return ResponseEntity.ok().body(res);
+    }
+
+    @GetMapping("/reload-token")
+    public ResponseEntity<List<ResponseJwtDTO>> reloadToken() {
+        UserDTO currentUser = SecurityUtils.getCurrentUser().get();
+        List<ResponseJwtDTO> result = userService.createToken(currentUser);
+        return ResponseEntity.ok().body(result);
     }
 }

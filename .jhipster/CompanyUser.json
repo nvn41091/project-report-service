@@ -10,6 +10,10 @@
       "fieldType": "Long"
     },
     {
+      "fieldName": "status",
+      "fieldType": "Boolean"
+    },
+    {
       "fieldName": "updateTime",
       "fieldType": "Instant"
     }

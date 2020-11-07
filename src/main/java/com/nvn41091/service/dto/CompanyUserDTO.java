@@ -14,15 +14,18 @@ public class CompanyUserDTO implements Serializable {
 
     private Long companyId;
 
+    private Boolean status;
+
     private Instant updateTime;
 
     public CompanyUserDTO() {
     }
 
-    public CompanyUserDTO(Long id, Long userId, Long companyId, Instant updateTime) {
+    public CompanyUserDTO(Long id, Long userId, Long companyId, Boolean status, Instant updateTime) {
         this.id = id;
         this.userId = userId;
         this.companyId = companyId;
+        this.status = status;
         this.updateTime = updateTime;
     }
 
@@ -48,6 +51,14 @@ public class CompanyUserDTO implements Serializable {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public Boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 
     public Instant getUpdateTime() {
@@ -82,6 +93,7 @@ public class CompanyUserDTO implements Serializable {
             "id=" + getId() +
             ", userId=" + getUserId() +
             ", companyId=" + getCompanyId() +
+            ", status='" + isStatus() + "'" +
             ", updateTime='" + getUpdateTime() + "'" +
             "}";
     }

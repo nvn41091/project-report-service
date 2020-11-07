@@ -1,8 +1,8 @@
 package com.nvn41091.web.rest;
 
+import com.nvn41091.run.ReportApp;
 import com.nvn41091.domain.CompanyUser;
 import com.nvn41091.repository.CompanyUserRepository;
-import com.nvn41091.run.ReportApp;
 import com.nvn41091.service.CompanyUserService;
 import com.nvn41091.service.dto.CompanyUserDTO;
 import com.nvn41091.service.mapper.CompanyUserMapper;
@@ -40,6 +40,9 @@ public class CompanyUserResourceIT {
     private static final Long DEFAULT_COMPANY_ID = 1L;
     private static final Long UPDATED_COMPANY_ID = 2L;
 
+    private static final Boolean DEFAULT_STATUS = false;
+    private static final Boolean UPDATED_STATUS = true;
+
     private static final Instant DEFAULT_UPDATE_TIME = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_UPDATE_TIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -70,6 +73,7 @@ public class CompanyUserResourceIT {
         CompanyUser companyUser = new CompanyUser()
             .userId(DEFAULT_USER_ID)
             .companyId(DEFAULT_COMPANY_ID)
+            .status(DEFAULT_STATUS)
             .updateTime(DEFAULT_UPDATE_TIME);
         return companyUser;
     }
@@ -83,6 +87,7 @@ public class CompanyUserResourceIT {
         CompanyUser companyUser = new CompanyUser()
             .userId(UPDATED_USER_ID)
             .companyId(UPDATED_COMPANY_ID)
+            .status(UPDATED_STATUS)
             .updateTime(UPDATED_UPDATE_TIME);
         return companyUser;
     }
@@ -109,6 +114,7 @@ public class CompanyUserResourceIT {
         CompanyUser testCompanyUser = companyUserList.get(companyUserList.size() - 1);
         assertThat(testCompanyUser.getUserId()).isEqualTo(DEFAULT_USER_ID);
         assertThat(testCompanyUser.getCompanyId()).isEqualTo(DEFAULT_COMPANY_ID);
+        assertThat(testCompanyUser.isStatus()).isEqualTo(DEFAULT_STATUS);
         assertThat(testCompanyUser.getUpdateTime()).isEqualTo(DEFAULT_UPDATE_TIME);
     }
 
@@ -146,6 +152,7 @@ public class CompanyUserResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(companyUser.getId().intValue())))
             .andExpect(jsonPath("$.[*].userId").value(hasItem(DEFAULT_USER_ID.intValue())))
             .andExpect(jsonPath("$.[*].companyId").value(hasItem(DEFAULT_COMPANY_ID.intValue())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())))
             .andExpect(jsonPath("$.[*].updateTime").value(hasItem(DEFAULT_UPDATE_TIME.toString())));
     }
     
@@ -162,6 +169,7 @@ public class CompanyUserResourceIT {
             .andExpect(jsonPath("$.id").value(companyUser.getId().intValue()))
             .andExpect(jsonPath("$.userId").value(DEFAULT_USER_ID.intValue()))
             .andExpect(jsonPath("$.companyId").value(DEFAULT_COMPANY_ID.intValue()))
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.booleanValue()))
             .andExpect(jsonPath("$.updateTime").value(DEFAULT_UPDATE_TIME.toString()));
     }
     @Test
@@ -187,6 +195,7 @@ public class CompanyUserResourceIT {
         updatedCompanyUser
             .userId(UPDATED_USER_ID)
             .companyId(UPDATED_COMPANY_ID)
+            .status(UPDATED_STATUS)
             .updateTime(UPDATED_UPDATE_TIME);
         CompanyUserDTO companyUserDTO = companyUserMapper.toDto(updatedCompanyUser);
 
@@ -201,6 +210,7 @@ public class CompanyUserResourceIT {
         CompanyUser testCompanyUser = companyUserList.get(companyUserList.size() - 1);
         assertThat(testCompanyUser.getUserId()).isEqualTo(UPDATED_USER_ID);
         assertThat(testCompanyUser.getCompanyId()).isEqualTo(UPDATED_COMPANY_ID);
+        assertThat(testCompanyUser.isStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testCompanyUser.getUpdateTime()).isEqualTo(UPDATED_UPDATE_TIME);
     }
 

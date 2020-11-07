@@ -2,6 +2,7 @@ entity CompanyUser {
 	id Long
     userId Long
     companyId Long
+    status Boolean
     updateTime Instant
 }
 dto CompanyUser with mapstruct

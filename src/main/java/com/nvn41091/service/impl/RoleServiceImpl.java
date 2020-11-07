@@ -5,6 +5,7 @@ import com.nvn41091.domain.User;
 import com.nvn41091.repository.RoleModuleRepository;
 import com.nvn41091.repository.UserRoleRepository;
 import com.nvn41091.security.SecurityUtils;
+import com.nvn41091.service.CompanyRoleService;
 import com.nvn41091.service.RoleService;
 import com.nvn41091.domain.Role;
 import com.nvn41091.repository.RoleRepository;
@@ -15,6 +16,7 @@ import com.nvn41091.service.mapper.RoleMapper;
 import com.nvn41091.utils.DataUtil;
 import com.nvn41091.utils.Translator;
 import com.nvn41091.web.rest.errors.BadRequestAlertException;
+import org.checkerframework.checker.units.qual.C;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,11 +47,14 @@ public class RoleServiceImpl implements RoleService {
 
     private final UserRoleRepository userRoleRepository;
 
-    public RoleServiceImpl(RoleRepository roleRepository, RoleMapper roleMapper, RoleModuleRepository roleModuleRepository, UserRoleRepository userRoleRepository) {
+    private final CompanyRoleService companyRoleService;
+
+    public RoleServiceImpl(RoleRepository roleRepository, RoleMapper roleMapper, RoleModuleRepository roleModuleRepository, UserRoleRepository userRoleRepository, CompanyRoleService companyRoleService) {
         this.roleRepository = roleRepository;
         this.roleMapper = roleMapper;
         this.roleModuleRepository = roleModuleRepository;
         this.userRoleRepository = userRoleRepository;
+        this.companyRoleService = companyRoleService;
     }
 
     @Override
@@ -69,6 +74,14 @@ public class RoleServiceImpl implements RoleService {
         roleDTO.setUpdateTime(Instant.now());
         Role role = roleMapper.toEntity(roleDTO);
         role = roleRepository.save(role);
+        if (roleDTO.getId() == null) {
+            UserDTO current = SecurityUtils.getCurrentUser().get();
+            CompanyRoleDTO companyRoleDTO = new CompanyRoleDTO();
+            companyRoleDTO.setRoleId(role.getId());
+            companyRoleDTO.setCompanyId(current.getCompanyId());
+            companyRoleDTO.setUpdateTime(Instant.now());
+            this.companyRoleService.save(companyRoleDTO);
+        }
         return roleMapper.toDto(role);
     }
 
@@ -83,9 +96,12 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional(readOnly = true)
     public Page<RoleDTO> doSearch(RoleDTO roleDTO, Pageable pageable) {
+        UserDTO current = SecurityUtils.getCurrentUser().get();
         return roleRepository.doSearch(DataUtil.makeLikeParam(roleDTO.getCode()),
                 DataUtil.makeLikeParam(roleDTO.getName()),
-                roleDTO.isStatus(), pageable)
+                roleDTO.isStatus(),
+                current.getCompanyId(),
+                pageable)
                 .map(roleMapper::toDto);
     }
 

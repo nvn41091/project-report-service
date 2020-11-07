@@ -28,6 +28,9 @@ public class CompanyUser implements Serializable {
     @Column(name = "company_id")
     private Long companyId;
 
+    @Column(name = "status")
+    private Boolean status;
+
     @Column(name = "update_time")
     private Instant updateTime;
 
@@ -64,6 +67,19 @@ public class CompanyUser implements Serializable {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public Boolean isStatus() {
+        return status;
+    }
+
+    public CompanyUser status(Boolean status) {
+        this.status = status;
+        return this;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 
     public Instant getUpdateTime() {
@@ -103,6 +119,7 @@ public class CompanyUser implements Serializable {
             "id=" + getId() +
             ", userId=" + getUserId() +
             ", companyId=" + getCompanyId() +
+            ", status='" + isStatus() + "'" +
             ", updateTime='" + getUpdateTime() + "'" +
             "}";
     }

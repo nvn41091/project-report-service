@@ -73,7 +73,7 @@ public class CompanyServiceImpl implements CompanyService {
         company = companyRepository.save(company);
         if (companyDTO.getId() == null) {
             UserDTO userDTO = SecurityUtils.getCurrentUser().get();
-            CompanyUserDTO companyUserDTO = new CompanyUserDTO(null, userDTO.getId(), company.getId(), Instant.now());
+            CompanyUserDTO companyUserDTO = new CompanyUserDTO(null, userDTO.getId(), company.getId(), Boolean.TRUE, Instant.now());
             UserRoleDTO userRoleDTO = new UserRoleDTO(null, userDTO.getId(), 3L, company.getId(), Instant.now());
             userRoleService.save(userRoleDTO);
             companyUserService.save(companyUserDTO);

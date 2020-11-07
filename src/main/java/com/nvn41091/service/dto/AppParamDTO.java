@@ -23,6 +23,8 @@ public class AppParamDTO implements Serializable {
     @Size(max = 500)
     private String description;
 
+    private Long ord;
+
     private Instant updateTime;
 
     private Boolean status;
@@ -68,6 +70,14 @@ public class AppParamDTO implements Serializable {
         this.description = description;
     }
 
+    public Long getOrd() {
+        return ord;
+    }
+
+    public void setOrd(Long ord) {
+        this.ord = ord;
+    }
+
     public Instant getUpdateTime() {
         return updateTime;
     }
@@ -110,6 +120,7 @@ public class AppParamDTO implements Serializable {
             ", type='" + getType() + "'" +
             ", value='" + getValue() + "'" +
             ", description='" + getDescription() + "'" +
+            ", ord=" + getOrd() +
             ", updateTime='" + getUpdateTime() + "'" +
             ", status='" + isStatus() + "'" +
             "}";

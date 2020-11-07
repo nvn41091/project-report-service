@@ -46,6 +46,9 @@ public class AppParamResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
+    private static final Long DEFAULT_ORD = 1L;
+    private static final Long UPDATED_ORD = 2L;
+
     private static final Instant DEFAULT_UPDATE_TIME = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_UPDATE_TIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -81,6 +84,7 @@ public class AppParamResourceIT {
             .type(DEFAULT_TYPE)
             .value(DEFAULT_VALUE)
             .description(DEFAULT_DESCRIPTION)
+            .ord(DEFAULT_ORD)
             .updateTime(DEFAULT_UPDATE_TIME)
             .status(DEFAULT_STATUS);
         return appParam;
@@ -97,6 +101,7 @@ public class AppParamResourceIT {
             .type(UPDATED_TYPE)
             .value(UPDATED_VALUE)
             .description(UPDATED_DESCRIPTION)
+            .ord(UPDATED_ORD)
             .updateTime(UPDATED_UPDATE_TIME)
             .status(UPDATED_STATUS);
         return appParam;
@@ -126,6 +131,7 @@ public class AppParamResourceIT {
         assertThat(testAppParam.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testAppParam.getValue()).isEqualTo(DEFAULT_VALUE);
         assertThat(testAppParam.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testAppParam.getOrd()).isEqualTo(DEFAULT_ORD);
         assertThat(testAppParam.getUpdateTime()).isEqualTo(DEFAULT_UPDATE_TIME);
         assertThat(testAppParam.isStatus()).isEqualTo(DEFAULT_STATUS);
     }
@@ -166,6 +172,7 @@ public class AppParamResourceIT {
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
             .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].ord").value(hasItem(DEFAULT_ORD.intValue())))
             .andExpect(jsonPath("$.[*].updateTime").value(hasItem(DEFAULT_UPDATE_TIME.toString())))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())));
     }
@@ -185,6 +192,7 @@ public class AppParamResourceIT {
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE))
             .andExpect(jsonPath("$.value").value(DEFAULT_VALUE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.ord").value(DEFAULT_ORD.intValue()))
             .andExpect(jsonPath("$.updateTime").value(DEFAULT_UPDATE_TIME.toString()))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.booleanValue()));
     }
@@ -213,6 +221,7 @@ public class AppParamResourceIT {
             .type(UPDATED_TYPE)
             .value(UPDATED_VALUE)
             .description(UPDATED_DESCRIPTION)
+            .ord(UPDATED_ORD)
             .updateTime(UPDATED_UPDATE_TIME)
             .status(UPDATED_STATUS);
         AppParamDTO appParamDTO = appParamMapper.toDto(updatedAppParam);
@@ -230,6 +239,7 @@ public class AppParamResourceIT {
         assertThat(testAppParam.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testAppParam.getValue()).isEqualTo(UPDATED_VALUE);
         assertThat(testAppParam.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testAppParam.getOrd()).isEqualTo(UPDATED_ORD);
         assertThat(testAppParam.getUpdateTime()).isEqualTo(UPDATED_UPDATE_TIME);
         assertThat(testAppParam.isStatus()).isEqualTo(UPDATED_STATUS);
     }

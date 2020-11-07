@@ -39,6 +39,9 @@ public class AppParam implements Serializable {
     @Column(name = "description", length = 500)
     private String description;
 
+    @Column(name = "ord")
+    private Long ord;
+
     @Column(name = "update_time")
     private Instant updateTime;
 
@@ -106,6 +109,19 @@ public class AppParam implements Serializable {
         this.description = description;
     }
 
+    public Long getOrd() {
+        return ord;
+    }
+
+    public AppParam ord(Long ord) {
+        this.ord = ord;
+        return this;
+    }
+
+    public void setOrd(Long ord) {
+        this.ord = ord;
+    }
+
     public Instant getUpdateTime() {
         return updateTime;
     }
@@ -158,6 +174,7 @@ public class AppParam implements Serializable {
             ", type='" + getType() + "'" +
             ", value='" + getValue() + "'" +
             ", description='" + getDescription() + "'" +
+            ", ord=" + getOrd() +
             ", updateTime='" + getUpdateTime() + "'" +
             ", status='" + isStatus() + "'" +
             "}";

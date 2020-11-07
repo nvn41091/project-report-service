@@ -95,7 +95,7 @@ public class AppParamServiceImpl implements AppParamService {
 
     @Override
     public List<AppParamDTO> getValueByType(AppParamDTO appParamDTO) {
-        return appParamRepository.getAllByTypeAndStatus(appParamDTO.getType(), Boolean.TRUE)
+        return appParamRepository.getAllByTypeAndStatusOrderByTypeAscOrdAsc(appParamDTO.getType(), Boolean.TRUE)
                 .stream().map(appParamMapper::toDto).collect(Collectors.toList());
     }
 }

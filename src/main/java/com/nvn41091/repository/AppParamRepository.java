@@ -20,7 +20,8 @@ public interface AppParamRepository extends JpaRepository<AppParam, Long> {
     @Query(value = "SELECT c from AppParam c where 1=1 " +
             "AND (:name is null or lower(c.name) like %:name% ESCAPE '&') " +
             "AND (:type is null or lower(c.type) like %:type% ESCAPE '&') " +
-            "AND (:status is null or c.status = :status)",
+            "AND (:status is null or c.status = :status) " +
+            "order by c.type, c.ord",
             countQuery = "SELECT count(c) from AppParam c where 1=1 " +
                     "AND (:name is null or lower(c.name) like %:name% ESCAPE '&') " +
                     "AND (:type is null or lower(c.type) like %:type% ESCAPE '&') " +
@@ -32,5 +33,5 @@ public interface AppParamRepository extends JpaRepository<AppParam, Long> {
     @Query(value = "SELECT DISTINCT ap.type from AppParam ap WHERE (:type is null or lower(ap.type) like %:type% ESCAPE '&') ")
     List<String> autoCompleteType(@Param("type") String type, Pageable pageable);
 
-    List<AppParam> getAllByTypeAndStatus(String type, Boolean status);
+    List<AppParam> getAllByTypeAndStatusOrderByTypeAscOrdAsc(String type, Boolean status);
 }

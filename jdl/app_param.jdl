@@ -4,6 +4,7 @@ entity AppParam {
     type String maxlength(200)
     value String maxlength(500)
     description String maxlength(500)
+    ord Long
     updateTime Instant
     status Boolean
 }

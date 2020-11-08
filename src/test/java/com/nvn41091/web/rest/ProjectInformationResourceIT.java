@@ -1,8 +1,8 @@
 package com.nvn41091.web.rest;
 
+import com.nvn41091.run.ReportApp;
 import com.nvn41091.domain.ProjectInformation;
 import com.nvn41091.repository.ProjectInformationRepository;
-import com.nvn41091.run.ReportApp;
 import com.nvn41091.service.ProjectInformationService;
 import com.nvn41091.service.dto.ProjectInformationDTO;
 import com.nvn41091.service.mapper.ProjectInformationMapper;
@@ -43,14 +43,17 @@ public class ProjectInformationResourceIT {
     private static final Instant DEFAULT_START_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_START_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-    private static final Instant DEFAULT_END_DATE = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_END_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private static final Instant DEFAULT_END_DATE_PLAN = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_END_DATE_PLAN = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
+    private static final Instant DEFAULT_ACTUAL_END_TIME = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_ACTUAL_END_TIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     private static final Long DEFAULT_MONEY = 1L;
     private static final Long UPDATED_MONEY = 2L;
 
-    private static final Long DEFAULT_COMPANY_CONTRACTING = 1L;
-    private static final Long UPDATED_COMPANY_CONTRACTING = 2L;
+    private static final Long DEFAULT_CUSTOMER_ID = 1L;
+    private static final Long UPDATED_CUSTOMER_ID = 2L;
 
     private static final Long DEFAULT_COMPANY_ID = 1L;
     private static final Long UPDATED_COMPANY_ID = 2L;
@@ -58,11 +61,11 @@ public class ProjectInformationResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
-    private static final Instant DEFAULT_UPDATE_TIME = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_UPDATE_TIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
-
     private static final Long DEFAULT_STATUS = 1L;
     private static final Long UPDATED_STATUS = 2L;
+
+    private static final Instant DEFAULT_UPDATE_TIME = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_UPDATE_TIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     @Autowired
     private ProjectInformationRepository projectInformationRepository;
@@ -92,13 +95,14 @@ public class ProjectInformationResourceIT {
             .code(DEFAULT_CODE)
             .name(DEFAULT_NAME)
             .startDate(DEFAULT_START_DATE)
-            .endDate(DEFAULT_END_DATE)
+            .endDatePlan(DEFAULT_END_DATE_PLAN)
+            .actualEndTime(DEFAULT_ACTUAL_END_TIME)
             .money(DEFAULT_MONEY)
-            .companyContracting(DEFAULT_COMPANY_CONTRACTING)
+            .customerId(DEFAULT_CUSTOMER_ID)
             .companyId(DEFAULT_COMPANY_ID)
             .description(DEFAULT_DESCRIPTION)
-            .updateTime(DEFAULT_UPDATE_TIME)
-            .status(DEFAULT_STATUS);
+            .status(DEFAULT_STATUS)
+            .updateTime(DEFAULT_UPDATE_TIME);
         return projectInformation;
     }
     /**
@@ -112,13 +116,14 @@ public class ProjectInformationResourceIT {
             .code(UPDATED_CODE)
             .name(UPDATED_NAME)
             .startDate(UPDATED_START_DATE)
-            .endDate(UPDATED_END_DATE)
+            .endDatePlan(UPDATED_END_DATE_PLAN)
+            .actualEndTime(UPDATED_ACTUAL_END_TIME)
             .money(UPDATED_MONEY)
-            .companyContracting(UPDATED_COMPANY_CONTRACTING)
+            .customerId(UPDATED_CUSTOMER_ID)
             .companyId(UPDATED_COMPANY_ID)
             .description(UPDATED_DESCRIPTION)
-            .updateTime(UPDATED_UPDATE_TIME)
-            .status(UPDATED_STATUS);
+            .status(UPDATED_STATUS)
+            .updateTime(UPDATED_UPDATE_TIME);
         return projectInformation;
     }
 
@@ -145,13 +150,14 @@ public class ProjectInformationResourceIT {
         assertThat(testProjectInformation.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testProjectInformation.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testProjectInformation.getStartDate()).isEqualTo(DEFAULT_START_DATE);
-        assertThat(testProjectInformation.getEndDate()).isEqualTo(DEFAULT_END_DATE);
+        assertThat(testProjectInformation.getEndDatePlan()).isEqualTo(DEFAULT_END_DATE_PLAN);
+        assertThat(testProjectInformation.getActualEndTime()).isEqualTo(DEFAULT_ACTUAL_END_TIME);
         assertThat(testProjectInformation.getMoney()).isEqualTo(DEFAULT_MONEY);
-        assertThat(testProjectInformation.getCompanyContracting()).isEqualTo(DEFAULT_COMPANY_CONTRACTING);
+        assertThat(testProjectInformation.getCustomerId()).isEqualTo(DEFAULT_CUSTOMER_ID);
         assertThat(testProjectInformation.getCompanyId()).isEqualTo(DEFAULT_COMPANY_ID);
         assertThat(testProjectInformation.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testProjectInformation.getUpdateTime()).isEqualTo(DEFAULT_UPDATE_TIME);
         assertThat(testProjectInformation.getStatus()).isEqualTo(DEFAULT_STATUS);
+        assertThat(testProjectInformation.getUpdateTime()).isEqualTo(DEFAULT_UPDATE_TIME);
     }
 
     @Test
@@ -189,13 +195,14 @@ public class ProjectInformationResourceIT {
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
+            .andExpect(jsonPath("$.[*].endDatePlan").value(hasItem(DEFAULT_END_DATE_PLAN.toString())))
+            .andExpect(jsonPath("$.[*].actualEndTime").value(hasItem(DEFAULT_ACTUAL_END_TIME.toString())))
             .andExpect(jsonPath("$.[*].money").value(hasItem(DEFAULT_MONEY.intValue())))
-            .andExpect(jsonPath("$.[*].companyContracting").value(hasItem(DEFAULT_COMPANY_CONTRACTING.intValue())))
+            .andExpect(jsonPath("$.[*].customerId").value(hasItem(DEFAULT_CUSTOMER_ID.intValue())))
             .andExpect(jsonPath("$.[*].companyId").value(hasItem(DEFAULT_COMPANY_ID.intValue())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].updateTime").value(hasItem(DEFAULT_UPDATE_TIME.toString())))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.intValue())));
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.intValue())))
+            .andExpect(jsonPath("$.[*].updateTime").value(hasItem(DEFAULT_UPDATE_TIME.toString())));
     }
     
     @Test
@@ -212,13 +219,14 @@ public class ProjectInformationResourceIT {
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
-            .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()))
+            .andExpect(jsonPath("$.endDatePlan").value(DEFAULT_END_DATE_PLAN.toString()))
+            .andExpect(jsonPath("$.actualEndTime").value(DEFAULT_ACTUAL_END_TIME.toString()))
             .andExpect(jsonPath("$.money").value(DEFAULT_MONEY.intValue()))
-            .andExpect(jsonPath("$.companyContracting").value(DEFAULT_COMPANY_CONTRACTING.intValue()))
+            .andExpect(jsonPath("$.customerId").value(DEFAULT_CUSTOMER_ID.intValue()))
             .andExpect(jsonPath("$.companyId").value(DEFAULT_COMPANY_ID.intValue()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.updateTime").value(DEFAULT_UPDATE_TIME.toString()))
-            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.intValue()));
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.intValue()))
+            .andExpect(jsonPath("$.updateTime").value(DEFAULT_UPDATE_TIME.toString()));
     }
     @Test
     @Transactional
@@ -244,13 +252,14 @@ public class ProjectInformationResourceIT {
             .code(UPDATED_CODE)
             .name(UPDATED_NAME)
             .startDate(UPDATED_START_DATE)
-            .endDate(UPDATED_END_DATE)
+            .endDatePlan(UPDATED_END_DATE_PLAN)
+            .actualEndTime(UPDATED_ACTUAL_END_TIME)
             .money(UPDATED_MONEY)
-            .companyContracting(UPDATED_COMPANY_CONTRACTING)
+            .customerId(UPDATED_CUSTOMER_ID)
             .companyId(UPDATED_COMPANY_ID)
             .description(UPDATED_DESCRIPTION)
-            .updateTime(UPDATED_UPDATE_TIME)
-            .status(UPDATED_STATUS);
+            .status(UPDATED_STATUS)
+            .updateTime(UPDATED_UPDATE_TIME);
         ProjectInformationDTO projectInformationDTO = projectInformationMapper.toDto(updatedProjectInformation);
 
         restProjectInformationMockMvc.perform(put("/api/project-informations")
@@ -265,13 +274,14 @@ public class ProjectInformationResourceIT {
         assertThat(testProjectInformation.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testProjectInformation.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testProjectInformation.getStartDate()).isEqualTo(UPDATED_START_DATE);
-        assertThat(testProjectInformation.getEndDate()).isEqualTo(UPDATED_END_DATE);
+        assertThat(testProjectInformation.getEndDatePlan()).isEqualTo(UPDATED_END_DATE_PLAN);
+        assertThat(testProjectInformation.getActualEndTime()).isEqualTo(UPDATED_ACTUAL_END_TIME);
         assertThat(testProjectInformation.getMoney()).isEqualTo(UPDATED_MONEY);
-        assertThat(testProjectInformation.getCompanyContracting()).isEqualTo(UPDATED_COMPANY_CONTRACTING);
+        assertThat(testProjectInformation.getCustomerId()).isEqualTo(UPDATED_CUSTOMER_ID);
         assertThat(testProjectInformation.getCompanyId()).isEqualTo(UPDATED_COMPANY_ID);
         assertThat(testProjectInformation.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testProjectInformation.getUpdateTime()).isEqualTo(UPDATED_UPDATE_TIME);
         assertThat(testProjectInformation.getStatus()).isEqualTo(UPDATED_STATUS);
+        assertThat(testProjectInformation.getUpdateTime()).isEqualTo(UPDATED_UPDATE_TIME);
     }
 
     @Test

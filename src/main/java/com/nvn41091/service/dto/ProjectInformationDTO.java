@@ -1,5 +1,7 @@
 package com.nvn41091.service.dto;
 
+import com.nvn41091.domain.ProjectInformation;
+
 import java.time.Instant;
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -19,39 +21,44 @@ public class ProjectInformationDTO implements Serializable {
 
     private Instant startDate;
 
-    private Instant endDate;
+    private Instant endDatePlan;
+
+    private Instant actualEndTime;
 
     private Long money;
 
-    private Long companyContracting;
-
-    private String companyContractingValue;
+    private Long customerId;
 
     private Long companyId;
 
     @Size(max = 2000)
     private String description;
 
+    private Long status;
+
     private Instant updateTime;
 
-    private Long status;
+    private String customerName;
 
     private String statusValue;
 
     public ProjectInformationDTO() {
     }
 
-    public ProjectInformationDTO(Long id, @Size(max = 200) String code, @Size(max = 500) String name, Instant startDate, Instant endDate, Long money, String companyContractingValue, Long companyId, @Size(max = 2000) String description, Instant updateTime, String statusValue) {
-        this.id = id;
-        this.code = code;
-        this.name = name;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.money = money;
-        this.companyContractingValue = companyContractingValue;
-        this.companyId = companyId;
-        this.description = description;
-        this.updateTime = updateTime;
+    public ProjectInformationDTO(ProjectInformation projectInformation, String customerName, String statusValue) {
+        this.id = projectInformation.getId();
+        this.code = projectInformation.getCode();
+        this.name = projectInformation.getName();
+        this.startDate = projectInformation.getStartDate();
+        this.endDatePlan = projectInformation.getEndDatePlan();
+        this.actualEndTime = projectInformation.getActualEndTime();
+        this.money = projectInformation.getMoney();
+        this.customerId = projectInformation.getCustomerId();
+        this.companyId = projectInformation.getCompanyId();
+        this.description = projectInformation.getDescription();
+        this.status = projectInformation.getStatus();
+        this.updateTime = projectInformation.getUpdateTime();
+        this.customerName = customerName;
         this.statusValue = statusValue;
     }
 
@@ -87,12 +94,20 @@ public class ProjectInformationDTO implements Serializable {
         this.startDate = startDate;
     }
 
-    public Instant getEndDate() {
-        return endDate;
+    public Instant getEndDatePlan() {
+        return endDatePlan;
     }
 
-    public void setEndDate(Instant endDate) {
-        this.endDate = endDate;
+    public void setEndDatePlan(Instant endDatePlan) {
+        this.endDatePlan = endDatePlan;
+    }
+
+    public Instant getActualEndTime() {
+        return actualEndTime;
+    }
+
+    public void setActualEndTime(Instant actualEndTime) {
+        this.actualEndTime = actualEndTime;
     }
 
     public Long getMoney() {
@@ -103,12 +118,12 @@ public class ProjectInformationDTO implements Serializable {
         this.money = money;
     }
 
-    public Long getCompanyContracting() {
-        return companyContracting;
+    public Long getCustomerId() {
+        return customerId;
     }
 
-    public void setCompanyContracting(Long companyContracting) {
-        this.companyContracting = companyContracting;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     public Long getCompanyId() {
@@ -127,14 +142,6 @@ public class ProjectInformationDTO implements Serializable {
         this.description = description;
     }
 
-    public Instant getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Instant updateTime) {
-        this.updateTime = updateTime;
-    }
-
     public Long getStatus() {
         return status;
     }
@@ -143,20 +150,28 @@ public class ProjectInformationDTO implements Serializable {
         this.status = status;
     }
 
+    public Instant getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Instant updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
     public String getStatusValue() {
         return statusValue;
     }
 
     public void setStatusValue(String statusValue) {
         this.statusValue = statusValue;
-    }
-
-    public String getCompanyContractingValue() {
-        return companyContractingValue;
-    }
-
-    public void setCompanyContractingValue(String companyContractingValue) {
-        this.companyContractingValue = companyContractingValue;
     }
 
     @Override
@@ -184,13 +199,14 @@ public class ProjectInformationDTO implements Serializable {
             ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
             ", startDate='" + getStartDate() + "'" +
-            ", endDate='" + getEndDate() + "'" +
+            ", endDatePlan='" + getEndDatePlan() + "'" +
+            ", actualEndTime='" + getActualEndTime() + "'" +
             ", money=" + getMoney() +
-            ", companyContracting=" + getCompanyContracting() +
+            ", customerId=" + getCustomerId() +
             ", companyId=" + getCompanyId() +
             ", description='" + getDescription() + "'" +
-            ", updateTime='" + getUpdateTime() + "'" +
             ", status=" + getStatus() +
+            ", updateTime='" + getUpdateTime() + "'" +
             "}";
     }
 }

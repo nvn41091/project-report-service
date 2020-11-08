@@ -22,7 +22,11 @@
       "fieldType": "Instant"
     },
     {
-      "fieldName": "endDate",
+      "fieldName": "endDatePlan",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "actualEndTime",
       "fieldType": "Instant"
     },
     {
@@ -30,7 +34,7 @@
       "fieldType": "Long"
     },
     {
-      "fieldName": "companyContracting",
+      "fieldName": "customerId",
       "fieldType": "Long"
     },
     {
@@ -46,12 +50,12 @@
       "fieldValidateRulesMaxlength": "2000"
     },
     {
-      "fieldName": "updateTime",
-      "fieldType": "Instant"
-    },
-    {
       "fieldName": "status",
       "fieldType": "Long"
+    },
+    {
+      "fieldName": "updateTime",
+      "fieldType": "Instant"
     }
   ],
   "relationships": [],

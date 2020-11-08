@@ -1,11 +1,11 @@
-id;code;name;start_date;end_date;money;company_contracting;company_id;description;update_time;status
-1;Berkshire Soap Hryvnia;JSON Handcrafted Personal Loan Account;2020-10-31T17:49:53;2020-11-01T11:44:16;64339;82387;91264;blue zero tolerance Plastic;2020-10-31T20:55:57;5667
-2;Metal;pink;2020-11-01T03:53:33;2020-11-01T09:49:12;91474;45955;54854;Strategist Togo Generic;2020-10-31T22:41:20;62000
-3;deploy;invoice Handcrafted Plastic Bike;2020-11-01T10:27:02;2020-11-01T12:58:04;52938;47030;73565;South Carolina Agent redundant;2020-11-01T15:12:25;84748
-4;payment transmitting;Belize;2020-10-31T16:41:52;2020-10-31T21:27:19;48529;96584;1259;service-desk Metal;2020-10-31T20:52:51;63825
-5;pixel backing up Small;zero defect parse cultivate;2020-11-01T11:56:15;2020-10-31T16:59:05;84105;12975;43611;Soft;2020-11-01T13:34:59;71396
-6;Music deposit Facilitator;Awesome Analyst;2020-10-31T17:19:10;2020-11-01T13:55:23;74403;66062;27359;Cambridgeshire;2020-10-31T16:54:13;82348
-7;Incredible Plastic Hat backing up benchmark;tan Music USB;2020-11-01T02:34:44;2020-11-01T11:15:16;46420;19383;89066;National applications;2020-11-01T15:42:16;92046
-8;projection Village Group;productize;2020-11-01T14:28:09;2020-11-01T05:55:12;68068;65801;39261;Jewelery;2020-10-31T23:13:51;20493
-9;Paradigm;niches;2020-11-01T10:48:15;2020-10-31T17:45:55;4226;16388;62921;hard drive reinvent secured line;2020-10-31T22:55:54;70823
-10;metrics Montana Montana;generating;2020-11-01T15:23:18;2020-11-01T07:21:40;7379;53628;65314;HDD;2020-10-31T22:39:50;57803
+id;code;name;start_date;end_date_plan;actual_end_time;money;customer_id;company_id;description;status;update_time
+1;Berkshire Soap Hryvnia;JSON Handcrafted Personal Loan Account;2020-10-31T17:49:53;2020-11-01T11:44:16;2020-11-01T01:00:38;82387;91264;72715;Gorgeous;99900;2020-11-01T13:02:18
+2;primary;Metal;2020-11-01T13:28:57;2020-11-01T11:27:08;2020-11-01T08:09:48;52330;27632;91474;Palestinian Territory Strategist;52766;2020-10-31T19:04:46
+3;Credit Card Account;fault-tolerant e-markets;2020-11-01T00:32:38;2020-10-31T20:27:37;2020-11-01T14:55:31;67283;32797;23876;Granite;47030;2020-10-31T22:47:46
+4;South Carolina Agent redundant;connecting;2020-11-01T01:11:05;2020-11-01T03:41:56;2020-10-31T20:48:57;85300;17348;53248;Consultant;48529;2020-10-31T17:16:18
+5;withdrawal;Metal quantifying SMS;2020-11-01T02:10:14;2020-10-31T20:46:36;2020-11-01T15:10:16;9884;5346;97385;Consultant;97717;2020-11-01T07:03:48
+6;silver hacking initiatives;back-end;2020-10-31T23:19:01;2020-10-31T23:42:41;2020-11-01T15:37:01;11483;65155;23706;FTP Awesome Analyst;96386;2020-11-01T13:55:23
+7;withdrawal infrastructure Strategist;protocol B2C Buckinghamshire;2020-11-01T15:45:41;2020-11-01T06:46:37;2020-11-01T01:26:45;68167;20749;50727;Fresh;74001;2020-11-01T02:34:44
+8;Extension;Personal Loan Account hardware backing up;2020-10-31T18:21:40;2020-10-31T16:37:28;2020-11-01T09:00:01;80733;45464;94908;channels productize Practical;68068;2020-11-01T00:39:35
+9;24 hour wireless;throughput;2020-11-01T08:59:27;2020-11-01T09:40:44;2020-11-01T06:06:34;38979;23531;94528;Tuna;99240;2020-10-31T22:55:50
+10;reinvent secured line;matrix metrics Montana;2020-11-01T03:01:06;2020-11-01T04:18:30;2020-11-01T15:15:43;83821;61664;4431;Awesome Metal Computer HDD;74116;2020-11-01T02:34:45

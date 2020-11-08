@@ -3,13 +3,14 @@ entity ProjectInformation {
     code String maxlength(200)
     name String maxlength(500)
     startDate Instant
-    endDate Instant
+    endDatePlan Instant
+    actualEndTime Instant
     money Long
-    companyContracting Long
+    customerId Long
     companyId Long
     description String maxlength(2000)
-    updateTime Instant
     status Long
+    updateTime Instant
 }
 dto ProjectInformation with mapstruct
 paginate ProjectInformation with pagination

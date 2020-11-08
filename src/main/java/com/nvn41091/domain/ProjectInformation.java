@@ -34,14 +34,17 @@ public class ProjectInformation implements Serializable {
     @Column(name = "start_date")
     private Instant startDate;
 
-    @Column(name = "end_date")
-    private Instant endDate;
+    @Column(name = "end_date_plan")
+    private Instant endDatePlan;
+
+    @Column(name = "actual_end_time")
+    private Instant actualEndTime;
 
     @Column(name = "money")
     private Long money;
 
-    @Column(name = "company_contracting")
-    private Long companyContracting;
+    @Column(name = "customer_id")
+    private Long customerId;
 
     @Column(name = "company_id")
     private Long companyId;
@@ -50,11 +53,11 @@ public class ProjectInformation implements Serializable {
     @Column(name = "description", length = 2000)
     private String description;
 
-    @Column(name = "update_time")
-    private Instant updateTime;
-
     @Column(name = "status")
     private Long status;
+
+    @Column(name = "update_time")
+    private Instant updateTime;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -104,17 +107,30 @@ public class ProjectInformation implements Serializable {
         this.startDate = startDate;
     }
 
-    public Instant getEndDate() {
-        return endDate;
+    public Instant getEndDatePlan() {
+        return endDatePlan;
     }
 
-    public ProjectInformation endDate(Instant endDate) {
-        this.endDate = endDate;
+    public ProjectInformation endDatePlan(Instant endDatePlan) {
+        this.endDatePlan = endDatePlan;
         return this;
     }
 
-    public void setEndDate(Instant endDate) {
-        this.endDate = endDate;
+    public void setEndDatePlan(Instant endDatePlan) {
+        this.endDatePlan = endDatePlan;
+    }
+
+    public Instant getActualEndTime() {
+        return actualEndTime;
+    }
+
+    public ProjectInformation actualEndTime(Instant actualEndTime) {
+        this.actualEndTime = actualEndTime;
+        return this;
+    }
+
+    public void setActualEndTime(Instant actualEndTime) {
+        this.actualEndTime = actualEndTime;
     }
 
     public Long getMoney() {
@@ -130,17 +146,17 @@ public class ProjectInformation implements Serializable {
         this.money = money;
     }
 
-    public Long getCompanyContracting() {
-        return companyContracting;
+    public Long getCustomerId() {
+        return customerId;
     }
 
-    public ProjectInformation companyContracting(Long companyContracting) {
-        this.companyContracting = companyContracting;
+    public ProjectInformation customerId(Long customerId) {
+        this.customerId = customerId;
         return this;
     }
 
-    public void setCompanyContracting(Long companyContracting) {
-        this.companyContracting = companyContracting;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     public Long getCompanyId() {
@@ -169,19 +185,6 @@ public class ProjectInformation implements Serializable {
         this.description = description;
     }
 
-    public Instant getUpdateTime() {
-        return updateTime;
-    }
-
-    public ProjectInformation updateTime(Instant updateTime) {
-        this.updateTime = updateTime;
-        return this;
-    }
-
-    public void setUpdateTime(Instant updateTime) {
-        this.updateTime = updateTime;
-    }
-
     public Long getStatus() {
         return status;
     }
@@ -193,6 +196,19 @@ public class ProjectInformation implements Serializable {
 
     public void setStatus(Long status) {
         this.status = status;
+    }
+
+    public Instant getUpdateTime() {
+        return updateTime;
+    }
+
+    public ProjectInformation updateTime(Instant updateTime) {
+        this.updateTime = updateTime;
+        return this;
+    }
+
+    public void setUpdateTime(Instant updateTime) {
+        this.updateTime = updateTime;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
@@ -220,13 +236,14 @@ public class ProjectInformation implements Serializable {
             ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
             ", startDate='" + getStartDate() + "'" +
-            ", endDate='" + getEndDate() + "'" +
+            ", endDatePlan='" + getEndDatePlan() + "'" +
+            ", actualEndTime='" + getActualEndTime() + "'" +
             ", money=" + getMoney() +
-            ", companyContracting=" + getCompanyContracting() +
+            ", customerId=" + getCustomerId() +
             ", companyId=" + getCompanyId() +
             ", description='" + getDescription() + "'" +
-            ", updateTime='" + getUpdateTime() + "'" +
             ", status=" + getStatus() +
+            ", updateTime='" + getUpdateTime() + "'" +
             "}";
     }
 }

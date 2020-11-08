@@ -1,9 +1,11 @@
 package com.nvn41091.service.impl;
 
+import com.nvn41091.security.SecurityUtils;
 import com.nvn41091.service.ProjectInformationService;
 import com.nvn41091.domain.ProjectInformation;
 import com.nvn41091.repository.ProjectInformationRepository;
 import com.nvn41091.service.dto.ProjectInformationDTO;
+import com.nvn41091.service.dto.UserDTO;
 import com.nvn41091.service.mapper.ProjectInformationMapper;
 import com.nvn41091.utils.DataUtil;
 import org.slf4j.Logger;
@@ -52,9 +54,11 @@ public class ProjectInformationServiceImpl implements ProjectInformationService 
 
     @Override
     public Page<ProjectInformationDTO> doSearch(ProjectInformationDTO projectInformationDTO, Pageable pageable) {
+        UserDTO current = SecurityUtils.getCurrentUser().get();
         return projectInformationRepository.doSearch(DataUtil.makeLikeParam(projectInformationDTO.getName()),
                 DataUtil.makeLikeParam(projectInformationDTO.getCode()),
-                projectInformationDTO.getStatus(), pageable);
+                projectInformationDTO.getStatus(),
+                current.getCompanyId(), pageable);
     }
 
 

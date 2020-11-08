@@ -21,14 +21,16 @@ public interface ProjectInformationRepository extends JpaRepository<ProjectInfor
             "left join AppParam ap on c.status = ap.id and ap.status = true " +
             "inner join Company co on c.customerId = co.id and co.status = true where 1=1 " +
             "AND (:name is null or lower(c.name) like %:name% ESCAPE '&') " +
-            "AND (:code is null or lower(c.code) like %:code% ESCAPE '&') " +
+            "AND (:code is null or lower(c.code) like %:code% ESCAPE '&')" +
+            "AND c.companyId = :companyId " +
             "AND (:status is null or c.status = :status)",
             countQuery = "SELECT count(c) from ProjectInformation c " +
                     "left join AppParam ap on c.status = ap.id and ap.status = true " +
                     "inner join Company company on c.customerId = company.id and company.status = true where 1=1 " +
                     "AND (:name is null or lower(c.name) like %:name% ESCAPE '&') " +
                     "AND (:code is null or lower(c.code) like %:code% ESCAPE '&') " +
+                    "AND c.companyId = :companyId " +
                     "AND (:status is null or c.status = :status)")
-    Page<ProjectInformationDTO> doSearch(@Param("name") String name, @Param("code") String code, @Param("status") Long status, Pageable pageable);
+    Page<ProjectInformationDTO> doSearch(@Param("name") String name, @Param("code") String code, @Param("status") Long status, @Param("companyId") Long companyId, Pageable pageable);
 
 }

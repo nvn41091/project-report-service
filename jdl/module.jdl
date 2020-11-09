@@ -6,6 +6,7 @@ entity Module {
     status Boolean
     pathUrl String maxlength(200)
     icon String maxlength(150)
+    accessUser Boolean
     updateTime Instant
     parentId Long
 }

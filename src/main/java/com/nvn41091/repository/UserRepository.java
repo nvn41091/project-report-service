@@ -43,17 +43,18 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     List<User> findAllByEmail(String email);
 
-    @Query(value = "SELECT u from User u INNER JOIN CompanyUser cu ON u.id = cu.userId " +
+    @Query(value = "SELECT DISTINCT u from User u INNER JOIN CompanyUser cu ON u.id = cu.userId " +
             "where 1=1 and (:userName is null or lower(u.userName) like %:userName% ESCAPE '&') " +
             "and (:fullName is null or lower(u.fullName) like %:fullName% ESCAPE '&') " +
             "and (:email is null or lower(u.email) like %:email% escape '&') " +
             "and (:status is null or u.status = :status )" +
             "and cu.companyId = :companyId",
-            countQuery = "SELECT count(u) from User u INNER JOIN CompanyUser cu ON u.id = cu.userId " +
+            countQuery = "SELECT count( DISTINCT u) from User u INNER JOIN CompanyUser cu ON u.id = cu.userId " +
                     "where 1=1 and (:userName is null or lower(u.userName) like %:userName% ESCAPE '&') " +
                     "and (:fullName is null or lower(u.fullName) like %:fullName% ESCAPE '&') " +
                     "and (:email is null or lower(u.email) like %:email% escape '&') " +
-                    "and (:status is null or u.status = :status )")
+                    "and (:status is null or u.status = :status ) " +
+                    "and cu.companyId = :companyId")
     Page<User> querySearchUser(@Param("userName") String userName,
                                @Param("fullName") String fullName,
                                @Param("email") String email,
@@ -81,7 +82,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("UPDATE User SET passwordHash = :passwordHash WHERE id = :id ")
     void updatePasswordById(@Param("passwordHash") String passwordHash, @Param("id") Long id);
 
-    @Query("SELECT new com.nvn41091.service.dto.ResponseJwtDTO(c.id, u.userName, c.name) from User u " +
+    @Query("SELECT DISTINCT new com.nvn41091.service.dto.ResponseJwtDTO(c.id, u.userName, c.name) from User u " +
             "INNER JOIN CompanyUser cu on u.id = cu.userId " +
             "INNER JOIN Company c on cu.companyId = c.id WHERE u.userName = :username")
     List<ResponseJwtDTO> getAllCompanyByUserName(@Param("username") String username);

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CompanyUserRepository extends JpaRepository<CompanyUser, Long> {
 
-    CompanyUser getCompanyUserByUserId(Long userId);
+    CompanyUser getCompanyUserByUserIdAndCompanyId(Long userId, Long companyId);
 
     void deleteByUserId(Long userId);
 

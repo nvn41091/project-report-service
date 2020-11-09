@@ -114,6 +114,7 @@ public class UserServiceImpl implements UserService {
         }
         validateEmailAndUsername(userDTO);
         User res = repository.save(userMapper.toEntity(userDTO));
+        UserDTO currentLogin = SecurityUtils.getCurrentUser().get();
         List<UserRole> selected = new ArrayList<>();
         if (StringUtils.isNoneEmpty(userDTO.getLstRole())) {
             String[] lst = userDTO.getLstRole().split(",");
@@ -121,6 +122,7 @@ public class UserServiceImpl implements UserService {
                 UserRole userRole = new UserRole();
                 userRole.setUserId(res.getId());
                 userRole.setRoleId(DataUtil.safeToLong(s));
+                userRole.setCompanyId(currentLogin.getCompanyId());
                 userRole.setUpdateTime(Instant.now());
                 selected.add(userRole);
             }
@@ -147,11 +149,9 @@ public class UserServiceImpl implements UserService {
         }
         userRoleRepository.deleteInBatch(origin);
         userRoleRepository.saveAll(selected);
-        UserDTO currentLogin = SecurityUtils.getCurrentUser().get();
         CompanyUser companyUser = new CompanyUser();
         companyUser.setUserId(res.getId());
-        CompanyUser currentCompany = companyUserRepository.getCompanyUserByUserId(currentLogin.getId());
-        companyUser.setCompanyId(currentCompany.getCompanyId());
+        companyUser.setCompanyId(currentLogin.getCompanyId());
         companyUser.setUpdateTime(Instant.now());
         companyUserRepository.save(companyUser);
         return res;

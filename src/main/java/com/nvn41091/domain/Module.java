@@ -46,6 +46,9 @@ public class Module implements Serializable {
     @Column(name = "icon", length = 150)
     private String icon;
 
+    @Column(name = "access_user")
+    private Boolean accessUser;
+
     @Column(name = "update_time")
     private Instant updateTime;
 
@@ -139,6 +142,19 @@ public class Module implements Serializable {
         this.icon = icon;
     }
 
+    public Boolean isAccessUser() {
+        return accessUser;
+    }
+
+    public Module accessUser(Boolean accessUser) {
+        this.accessUser = accessUser;
+        return this;
+    }
+
+    public void setAccessUser(Boolean accessUser) {
+        this.accessUser = accessUser;
+    }
+
     public Instant getUpdateTime() {
         return updateTime;
     }
@@ -193,6 +209,7 @@ public class Module implements Serializable {
             ", status='" + isStatus() + "'" +
             ", pathUrl='" + getPathUrl() + "'" +
             ", icon='" + getIcon() + "'" +
+            ", accessUser='" + isAccessUser() + "'" +
             ", updateTime='" + getUpdateTime() + "'" +
             ", parentId=" + getParentId() +
             "}";

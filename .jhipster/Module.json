@@ -46,6 +46,10 @@
       "fieldValidateRulesMaxlength": "150"
     },
     {
+      "fieldName": "accessUser",
+      "fieldType": "Boolean"
+    },
+    {
       "fieldName": "updateTime",
       "fieldType": "Instant"
     },

@@ -1,8 +1,8 @@
 package com.nvn41091.web.rest;
 
+import com.nvn41091.run.ReportApp;
 import com.nvn41091.domain.Module;
 import com.nvn41091.repository.ModuleRepository;
-import com.nvn41091.run.ReportApp;
 import com.nvn41091.service.ModuleService;
 import com.nvn41091.service.dto.ModuleDTO;
 import com.nvn41091.service.mapper.ModuleMapper;
@@ -52,6 +52,9 @@ public class ModuleResourceIT {
     private static final String DEFAULT_ICON = "AAAAAAAAAA";
     private static final String UPDATED_ICON = "BBBBBBBBBB";
 
+    private static final Boolean DEFAULT_ACCESS_USER = false;
+    private static final Boolean UPDATED_ACCESS_USER = true;
+
     private static final Instant DEFAULT_UPDATE_TIME = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_UPDATE_TIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -89,6 +92,7 @@ public class ModuleResourceIT {
             .status(DEFAULT_STATUS)
             .pathUrl(DEFAULT_PATH_URL)
             .icon(DEFAULT_ICON)
+            .accessUser(DEFAULT_ACCESS_USER)
             .updateTime(DEFAULT_UPDATE_TIME)
             .parentId(DEFAULT_PARENT_ID);
         return module;
@@ -107,6 +111,7 @@ public class ModuleResourceIT {
             .status(UPDATED_STATUS)
             .pathUrl(UPDATED_PATH_URL)
             .icon(UPDATED_ICON)
+            .accessUser(UPDATED_ACCESS_USER)
             .updateTime(UPDATED_UPDATE_TIME)
             .parentId(UPDATED_PARENT_ID);
         return module;
@@ -138,6 +143,7 @@ public class ModuleResourceIT {
         assertThat(testModule.isStatus()).isEqualTo(DEFAULT_STATUS);
         assertThat(testModule.getPathUrl()).isEqualTo(DEFAULT_PATH_URL);
         assertThat(testModule.getIcon()).isEqualTo(DEFAULT_ICON);
+        assertThat(testModule.isAccessUser()).isEqualTo(DEFAULT_ACCESS_USER);
         assertThat(testModule.getUpdateTime()).isEqualTo(DEFAULT_UPDATE_TIME);
         assertThat(testModule.getParentId()).isEqualTo(DEFAULT_PARENT_ID);
     }
@@ -180,6 +186,7 @@ public class ModuleResourceIT {
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())))
             .andExpect(jsonPath("$.[*].pathUrl").value(hasItem(DEFAULT_PATH_URL)))
             .andExpect(jsonPath("$.[*].icon").value(hasItem(DEFAULT_ICON)))
+            .andExpect(jsonPath("$.[*].accessUser").value(hasItem(DEFAULT_ACCESS_USER.booleanValue())))
             .andExpect(jsonPath("$.[*].updateTime").value(hasItem(DEFAULT_UPDATE_TIME.toString())))
             .andExpect(jsonPath("$.[*].parentId").value(hasItem(DEFAULT_PARENT_ID.intValue())));
     }
@@ -201,6 +208,7 @@ public class ModuleResourceIT {
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.booleanValue()))
             .andExpect(jsonPath("$.pathUrl").value(DEFAULT_PATH_URL))
             .andExpect(jsonPath("$.icon").value(DEFAULT_ICON))
+            .andExpect(jsonPath("$.accessUser").value(DEFAULT_ACCESS_USER.booleanValue()))
             .andExpect(jsonPath("$.updateTime").value(DEFAULT_UPDATE_TIME.toString()))
             .andExpect(jsonPath("$.parentId").value(DEFAULT_PARENT_ID.intValue()));
     }
@@ -231,6 +239,7 @@ public class ModuleResourceIT {
             .status(UPDATED_STATUS)
             .pathUrl(UPDATED_PATH_URL)
             .icon(UPDATED_ICON)
+            .accessUser(UPDATED_ACCESS_USER)
             .updateTime(UPDATED_UPDATE_TIME)
             .parentId(UPDATED_PARENT_ID);
         ModuleDTO moduleDTO = moduleMapper.toDto(updatedModule);
@@ -250,6 +259,7 @@ public class ModuleResourceIT {
         assertThat(testModule.isStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testModule.getPathUrl()).isEqualTo(UPDATED_PATH_URL);
         assertThat(testModule.getIcon()).isEqualTo(UPDATED_ICON);
+        assertThat(testModule.isAccessUser()).isEqualTo(UPDATED_ACCESS_USER);
         assertThat(testModule.getUpdateTime()).isEqualTo(UPDATED_UPDATE_TIME);
         assertThat(testModule.getParentId()).isEqualTo(UPDATED_PARENT_ID);
     }

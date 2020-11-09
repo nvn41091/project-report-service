@@ -28,13 +28,15 @@ public class ModuleDTO implements Serializable {
     @Size(max = 150)
     private String icon;
 
+    private Boolean accessUser;
+
     private Instant updateTime;
 
     private Long parentId;
 
     private String actionId;
 
-    
+
     public Long getId() {
         return id;
     }
@@ -89,6 +91,14 @@ public class ModuleDTO implements Serializable {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public Boolean isAccessUser() {
+        return accessUser;
+    }
+
+    public void setAccessUser(Boolean accessUser) {
+        this.accessUser = accessUser;
     }
 
     public Instant getUpdateTime() {
@@ -147,6 +157,7 @@ public class ModuleDTO implements Serializable {
             ", status='" + isStatus() + "'" +
             ", pathUrl='" + getPathUrl() + "'" +
             ", icon='" + getIcon() + "'" +
+            ", accessUser='" + isAccessUser() + "'" +
             ", updateTime='" + getUpdateTime() + "'" +
             ", parentId=" + getParentId() +
             "}";

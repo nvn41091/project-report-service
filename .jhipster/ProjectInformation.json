@@ -31,7 +31,11 @@
     },
     {
       "fieldName": "money",
-      "fieldType": "Long"
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "maxlength"
+      ],
+      "fieldValidateRulesMaxlength": "500"
     },
     {
       "fieldName": "customerId",

@@ -40,8 +40,9 @@ public class ProjectInformation implements Serializable {
     @Column(name = "actual_end_time")
     private Instant actualEndTime;
 
-    @Column(name = "money")
-    private Long money;
+    @Size(max = 500)
+    @Column(name = "money", length = 500)
+    private String money;
 
     @Column(name = "customer_id")
     private Long customerId;
@@ -133,16 +134,16 @@ public class ProjectInformation implements Serializable {
         this.actualEndTime = actualEndTime;
     }
 
-    public Long getMoney() {
+    public String getMoney() {
         return money;
     }
 
-    public ProjectInformation money(Long money) {
+    public ProjectInformation money(String money) {
         this.money = money;
         return this;
     }
 
-    public void setMoney(Long money) {
+    public void setMoney(String money) {
         this.money = money;
     }
 
@@ -238,7 +239,7 @@ public class ProjectInformation implements Serializable {
             ", startDate='" + getStartDate() + "'" +
             ", endDatePlan='" + getEndDatePlan() + "'" +
             ", actualEndTime='" + getActualEndTime() + "'" +
-            ", money=" + getMoney() +
+            ", money='" + getMoney() + "'" +
             ", customerId=" + getCustomerId() +
             ", companyId=" + getCompanyId() +
             ", description='" + getDescription() + "'" +

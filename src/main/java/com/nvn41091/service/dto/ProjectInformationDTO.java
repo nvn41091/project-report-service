@@ -25,7 +25,8 @@ public class ProjectInformationDTO implements Serializable {
 
     private Instant actualEndTime;
 
-    private Long money;
+    @Size(max = 500)
+    private String money;
 
     private Long customerId;
 
@@ -110,11 +111,11 @@ public class ProjectInformationDTO implements Serializable {
         this.actualEndTime = actualEndTime;
     }
 
-    public Long getMoney() {
+    public String getMoney() {
         return money;
     }
 
-    public void setMoney(Long money) {
+    public void setMoney(String money) {
         this.money = money;
     }
 
@@ -201,7 +202,7 @@ public class ProjectInformationDTO implements Serializable {
             ", startDate='" + getStartDate() + "'" +
             ", endDatePlan='" + getEndDatePlan() + "'" +
             ", actualEndTime='" + getActualEndTime() + "'" +
-            ", money=" + getMoney() +
+            ", money='" + getMoney() + "'" +
             ", customerId=" + getCustomerId() +
             ", companyId=" + getCompanyId() +
             ", description='" + getDescription() + "'" +

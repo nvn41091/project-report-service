@@ -5,7 +5,7 @@ entity ProjectInformation {
     startDate Instant
     endDatePlan Instant
     actualEndTime Instant
-    money Long
+    money String maxlength(500)
     customerId Long
     companyId Long
     description String maxlength(2000)

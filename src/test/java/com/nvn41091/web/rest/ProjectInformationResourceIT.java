@@ -49,8 +49,8 @@ public class ProjectInformationResourceIT {
     private static final Instant DEFAULT_ACTUAL_END_TIME = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_ACTUAL_END_TIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-    private static final Long DEFAULT_MONEY = 1L;
-    private static final Long UPDATED_MONEY = 2L;
+    private static final String DEFAULT_MONEY = "AAAAAAAAAA";
+    private static final String UPDATED_MONEY = "BBBBBBBBBB";
 
     private static final Long DEFAULT_CUSTOMER_ID = 1L;
     private static final Long UPDATED_CUSTOMER_ID = 2L;
@@ -197,7 +197,7 @@ public class ProjectInformationResourceIT {
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
             .andExpect(jsonPath("$.[*].endDatePlan").value(hasItem(DEFAULT_END_DATE_PLAN.toString())))
             .andExpect(jsonPath("$.[*].actualEndTime").value(hasItem(DEFAULT_ACTUAL_END_TIME.toString())))
-            .andExpect(jsonPath("$.[*].money").value(hasItem(DEFAULT_MONEY.intValue())))
+            .andExpect(jsonPath("$.[*].money").value(hasItem(DEFAULT_MONEY)))
             .andExpect(jsonPath("$.[*].customerId").value(hasItem(DEFAULT_CUSTOMER_ID.intValue())))
             .andExpect(jsonPath("$.[*].companyId").value(hasItem(DEFAULT_COMPANY_ID.intValue())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
@@ -221,7 +221,7 @@ public class ProjectInformationResourceIT {
             .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
             .andExpect(jsonPath("$.endDatePlan").value(DEFAULT_END_DATE_PLAN.toString()))
             .andExpect(jsonPath("$.actualEndTime").value(DEFAULT_ACTUAL_END_TIME.toString()))
-            .andExpect(jsonPath("$.money").value(DEFAULT_MONEY.intValue()))
+            .andExpect(jsonPath("$.money").value(DEFAULT_MONEY))
             .andExpect(jsonPath("$.customerId").value(DEFAULT_CUSTOMER_ID.intValue()))
             .andExpect(jsonPath("$.companyId").value(DEFAULT_COMPANY_ID.intValue()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))

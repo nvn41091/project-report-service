@@ -31,7 +31,7 @@
             <column name="actual_end_time" type="datetime">
                 <constraints nullable="true" />
             </column>
-            <column name="money" type="bigint">
+            <column name="money" type="varchar(500)">
                 <constraints nullable="true" />
             </column>
             <column name="customer_id" type="bigint">
@@ -81,7 +81,7 @@
             <column name="start_date" type="datetime"/>
             <column name="end_date_plan" type="datetime"/>
             <column name="actual_end_time" type="datetime"/>
-            <column name="money" type="numeric"/>
+            <column name="money" type="string"/>
             <column name="customer_id" type="numeric"/>
             <column name="company_id" type="numeric"/>
             <column name="description" type="string"/>

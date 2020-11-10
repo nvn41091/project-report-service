@@ -5,7 +5,7 @@ import com.nvn41091.domain.ProjectInformation;
 import java.time.Instant;
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * A DTO for the {@link com.nvn41091.domain.ProjectInformation} entity.

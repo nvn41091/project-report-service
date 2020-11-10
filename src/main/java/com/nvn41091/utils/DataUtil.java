@@ -17,6 +17,9 @@ import java.net.UnknownHostException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.*;
 
 public class DataUtil {
@@ -598,7 +601,10 @@ public class DataUtil {
             return null;
         }
         if (object instanceof java.sql.Date) {
-            return Instant.ofEpochMilli(((java.sql.Date) object).getTime());
+            java.sql.Date obj = (java.sql.Date) object;
+            LocalDate localDate = obj.toLocalDate();
+            Instant i = localDate.atStartOfDay().toInstant(ZoneOffset.UTC);
+            return i;
         } else if (object instanceof java.util.Date) {
             return Instant.ofEpochMilli(((java.util.Date) object).getTime());
         } else if (object instanceof Timestamp) {

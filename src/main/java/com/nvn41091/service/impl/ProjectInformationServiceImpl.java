@@ -16,6 +16,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
+import java.time.temporal.TemporalUnit;
+import java.util.Date;
 import java.util.Optional;
 
 /**
@@ -55,10 +61,22 @@ public class ProjectInformationServiceImpl implements ProjectInformationService 
     @Override
     public Page<ProjectInformationDTO> doSearch(ProjectInformationDTO projectInformationDTO, Pageable pageable) {
         UserDTO current = SecurityUtils.getCurrentUser().get();
+        Instant endDatePlanStart = null;
+        Instant endDatePlanEnd = null;
+        if (projectInformationDTO.getEndPlan() != null) {
+            endDatePlanStart = projectInformationDTO.getEndPlan().toInstant().minus(7, ChronoUnit.DAYS);
+            endDatePlanEnd =projectInformationDTO.getEndPlan().toInstant().plus(7, ChronoUnit.DAYS);
+        }
         return projectInformationRepository.doSearch(DataUtil.makeLikeParam(projectInformationDTO.getName()),
                 DataUtil.makeLikeParam(projectInformationDTO.getCode()),
                 projectInformationDTO.getStatus(),
-                current.getCompanyId(), pageable);
+                current.getCompanyId(),
+                DataUtil.toInstant(projectInformationDTO.getStart()),
+                DataUtil.toInstant(projectInformationDTO.getEndTime()),
+                DataUtil.toInstant(projectInformationDTO.getEndPlan()),
+                endDatePlanStart,
+                endDatePlanEnd,
+                pageable);
     }
 
 

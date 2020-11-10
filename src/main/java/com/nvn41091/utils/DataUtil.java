@@ -599,6 +599,8 @@ public class DataUtil {
         }
         if (object instanceof java.sql.Date) {
             return Instant.ofEpochMilli(((java.sql.Date) object).getTime());
+        } else if (object instanceof java.util.Date) {
+            return Instant.ofEpochMilli(((java.util.Date) object).getTime());
         } else if (object instanceof Timestamp) {
             return Instant.ofEpochMilli(((Timestamp) object).getTime());
         }

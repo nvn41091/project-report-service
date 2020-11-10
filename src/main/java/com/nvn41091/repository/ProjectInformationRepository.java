@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
+
 /**
  * Spring Data  repository for the ProjectInformation entity.
  */
@@ -22,6 +24,9 @@ public interface ProjectInformationRepository extends JpaRepository<ProjectInfor
             "inner join Company co on c.customerId = co.id and co.status = true where 1=1 " +
             "AND (:name is null or lower(c.name) like %:name% ESCAPE '&') " +
             "AND (:code is null or lower(c.code) like %:code% ESCAPE '&')" +
+            "AND (:startDate is null or c.startDate >= :startDate )" +
+            "AND (:actualEndTime is null or c.actualEndTime <= :actualEndTime)" +
+            "AND (:endDatePlan is null or c.endDatePlan between :endDatePlanStart and :endDatePlanEnd )" +
             "AND c.companyId = :companyId " +
             "AND (:status is null or c.status = :status)",
             countQuery = "SELECT count(c) from ProjectInformation c " +
@@ -31,6 +36,11 @@ public interface ProjectInformationRepository extends JpaRepository<ProjectInfor
                     "AND (:code is null or lower(c.code) like %:code% ESCAPE '&') " +
                     "AND c.companyId = :companyId " +
                     "AND (:status is null or c.status = :status)")
-    Page<ProjectInformationDTO> doSearch(@Param("name") String name, @Param("code") String code, @Param("status") Long status, @Param("companyId") Long companyId, Pageable pageable);
+    Page<ProjectInformationDTO> doSearch(@Param("name") String name, @Param("code") String code, @Param("status") Long status,
+                                         @Param("companyId") Long companyId, @Param("startDate") Instant startDate,
+                                         @Param("actualEndTime") Instant actualEndTime, @Param("endDatePlan") Instant endDatePlan,
+                                         @Param("endDatePlanStart") Instant endDatePlanStart,
+                                         @Param("endDatePlanEnd") Instant endDatePlanEnd,
+                                         Pageable pageable);
 
 }

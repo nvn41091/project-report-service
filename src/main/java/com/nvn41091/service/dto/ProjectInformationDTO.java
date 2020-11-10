@@ -5,6 +5,7 @@ import com.nvn41091.domain.ProjectInformation;
 import java.time.Instant;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * A DTO for the {@link com.nvn41091.domain.ProjectInformation} entity.
@@ -42,6 +43,12 @@ public class ProjectInformationDTO implements Serializable {
     private String customerName;
 
     private String statusValue;
+
+    private Date start;
+
+    private Date endPlan;
+
+    private Date endTime;
 
     public ProjectInformationDTO() {
     }
@@ -173,6 +180,30 @@ public class ProjectInformationDTO implements Serializable {
 
     public void setStatusValue(String statusValue) {
         this.statusValue = statusValue;
+    }
+
+    public Date getStart() {
+        return start;
+    }
+
+    public void setStart(Date start) {
+        this.start = start;
+    }
+
+    public Date getEndPlan() {
+        return endPlan;
+    }
+
+    public void setEndPlan(Date endPlan) {
+        this.endPlan = endPlan;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        endTime = endTime;
     }
 
     @Override

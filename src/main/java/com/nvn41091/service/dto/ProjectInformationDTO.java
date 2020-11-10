@@ -203,7 +203,7 @@ public class ProjectInformationDTO implements Serializable {
     }
 
     public void setEndTime(Date endTime) {
-        endTime = endTime;
+        this.endTime = endTime;
     }
 
     @Override

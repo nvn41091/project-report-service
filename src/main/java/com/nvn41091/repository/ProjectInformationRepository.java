@@ -34,6 +34,9 @@ public interface ProjectInformationRepository extends JpaRepository<ProjectInfor
                     "inner join Company company on c.customerId = company.id and company.status = true where 1=1 " +
                     "AND (:name is null or lower(c.name) like %:name% ESCAPE '&') " +
                     "AND (:code is null or lower(c.code) like %:code% ESCAPE '&') " +
+                    "AND (:startDate is null or c.startDate >= :startDate )" +
+                    "AND (:actualEndTime is null or c.actualEndTime <= :actualEndTime)" +
+                    "AND (:endDatePlan is null or c.endDatePlan between :endDatePlanStart and :endDatePlanEnd )" +
                     "AND c.companyId = :companyId " +
                     "AND (:status is null or c.status = :status)")
     Page<ProjectInformationDTO> doSearch(@Param("name") String name, @Param("code") String code, @Param("status") Long status,

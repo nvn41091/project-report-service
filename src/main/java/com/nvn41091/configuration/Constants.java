@@ -11,5 +11,6 @@ public class Constants {
     public static final String RESULT_VALIDATE_MSG = "RESULT_VALIDATE_MSG";
 
     public static final Long CONST_ROLE_ID_FOR_USER = 3L;
+    public static final Long CONST_ROLE_ID_FOR_ADMIN = 2L;
     public static final Long CONST_USER_ADMIN_ID = 1L;
 }

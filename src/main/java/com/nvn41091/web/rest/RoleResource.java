@@ -114,7 +114,7 @@ public class RoleResource {
     @PreAuthorize("hasAuthority(\"ROLE#DELETE\")")
     public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
         log.debug("REST request to delete Role : {}", id);
-        if (id.equals(Constants.CONST_ROLE_ID_FOR_USER)) {
+        if (id.equals(Constants.CONST_ROLE_ID_FOR_USER) || id.equals(Constants.CONST_ROLE_ID_FOR_ADMIN)) {
             throw new BadRequestAlertException(Translator.toLocale("error.role.defaultUser"), ENTITY_NAME, "id_not_delete");
         }
         roleService.delete(id);

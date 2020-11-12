@@ -58,6 +58,7 @@ public class CompanyServiceImpl implements CompanyService {
         UserDTO userDTO = SecurityUtils.getCurrentUser().get();
         if (companyDTO.getId() == null) {
             // Validate truong hop them moi
+            companyDTO.setCreateBy(userDTO.getId());
         } else {
             // Validate truong hop update
             if (companyRepository.findAllById(companyDTO.getId()).size() == 0) {
@@ -72,7 +73,6 @@ public class CompanyServiceImpl implements CompanyService {
             throw new BadRequestAlertException(Translator.toLocale("error.company.emailExist"), "company", "company.notExist");
         }
         companyDTO.setUpdateTime(Instant.now());
-        companyDTO.setCreateBy(userDTO.getId());
         Company company = companyMapper.toEntity(companyDTO);
         company = companyRepository.save(company);
         if (companyDTO.getId() == null) {

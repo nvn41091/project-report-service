@@ -1,15 +1,14 @@
 package com.nvn41091.service.impl;
 
+import com.nvn41091.configuration.Constants;
 import com.nvn41091.security.SecurityUtils;
+import com.nvn41091.service.CompanyRoleService;
 import com.nvn41091.service.CompanyService;
 import com.nvn41091.domain.Company;
 import com.nvn41091.repository.CompanyRepository;
 import com.nvn41091.service.CompanyUserService;
 import com.nvn41091.service.UserRoleService;
-import com.nvn41091.service.dto.CompanyDTO;
-import com.nvn41091.service.dto.CompanyUserDTO;
-import com.nvn41091.service.dto.UserDTO;
-import com.nvn41091.service.dto.UserRoleDTO;
+import com.nvn41091.service.dto.*;
 import com.nvn41091.service.mapper.CompanyMapper;
 import com.nvn41091.utils.DataUtil;
 import com.nvn41091.utils.Translator;
@@ -43,16 +42,20 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final UserRoleService userRoleService;
 
-    public CompanyServiceImpl(CompanyRepository companyRepository, CompanyMapper companyMapper, CompanyUserService companyUserService, UserRoleService userRoleService) {
+    private final CompanyRoleService companyRoleService;
+
+    public CompanyServiceImpl(CompanyRepository companyRepository, CompanyMapper companyMapper, CompanyUserService companyUserService, UserRoleService userRoleService, CompanyRoleService companyRoleService) {
         this.companyRepository = companyRepository;
         this.companyMapper = companyMapper;
         this.companyUserService = companyUserService;
         this.userRoleService = userRoleService;
+        this.companyRoleService = companyRoleService;
     }
 
     @Override
     public CompanyDTO save(CompanyDTO companyDTO) {
         log.debug("Request to save Company : {}", companyDTO);
+        UserDTO userDTO = SecurityUtils.getCurrentUser().get();
         if (companyDTO.getId() == null) {
             // Validate truong hop them moi
         } else {
@@ -69,14 +72,16 @@ public class CompanyServiceImpl implements CompanyService {
             throw new BadRequestAlertException(Translator.toLocale("error.company.emailExist"), "company", "company.notExist");
         }
         companyDTO.setUpdateTime(Instant.now());
+        companyDTO.setCreateBy(userDTO.getId());
         Company company = companyMapper.toEntity(companyDTO);
         company = companyRepository.save(company);
         if (companyDTO.getId() == null) {
-            UserDTO userDTO = SecurityUtils.getCurrentUser().get();
             CompanyUserDTO companyUserDTO = new CompanyUserDTO(null, userDTO.getId(), company.getId(), Boolean.TRUE, Instant.now());
-            UserRoleDTO userRoleDTO = new UserRoleDTO(null, userDTO.getId(), 3L, company.getId(), Instant.now());
+            UserRoleDTO userRoleDTO = new UserRoleDTO(null, userDTO.getId(), Constants.CONST_ROLE_ID_FOR_USER, company.getId(), Instant.now());
+            CompanyRoleDTO companyRoleDTO = new CompanyRoleDTO(null, company.getId(), Constants.CONST_ROLE_ID_FOR_USER, Instant.now());
             userRoleService.save(userRoleDTO);
             companyUserService.save(companyUserDTO);
+            companyRoleService.save(companyRoleDTO);
         }
         return companyMapper.toDto(company);
     }
@@ -93,11 +98,13 @@ public class CompanyServiceImpl implements CompanyService {
     @Transactional(readOnly = true)
     public Page<CompanyDTO> doSearch(CompanyDTO companyDTO, Pageable pageable) {
         log.debug("Request to search Companies");
+        UserDTO current = SecurityUtils.getCurrentUser().get();
         return companyRepository.doSearch(DataUtil.makeLikeParam(companyDTO.getCode()),
                 DataUtil.makeLikeParam(companyDTO.getName()),
                 DataUtil.makeLikeParam(companyDTO.getEmail()),
                 DataUtil.makeLikeParam(companyDTO.getTel()),
                 companyDTO.isStatus(),
+                current.getId(),
                 pageable).map(companyMapper::toDto);
     }
 

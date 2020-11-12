@@ -22,16 +22,18 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
             "where 1=1 " +
             "AND (:code is null or lower(c.code) like %:code% ESCAPE '&') " +
             "AND (:name is null or lower(c.name) like %:name% ESCAPE '&') " +
-            "AND cr.companyId = :companyId " +
-            "AND (:status is null or c.status = :status)",
+            "AND cr.companyId = :companyId AND (:userId = :constUserId or c.id <> :constRoleId) " +
+            "AND (:status is null or c.status = :status) ",
             countQuery = "SELECT count(c) from Role c " +
                     "INNER JOIN CompanyRole cr on c.id = cr.roleId " +
                     "where 1=1 " +
                     "AND (:code is null or lower(c.code) like %:code% ESCAPE '&') " +
                     "AND (:name is null or lower(c.name) like %:name% ESCAPE '&') " +
-                    "AND cr.companyId = :companyId " +
+                    "AND cr.companyId = :companyId AND (:userId = :constUserId or c.id <> :constRoleId) " +
                     "AND (:status is null or c.status = :status)")
-    Page<Role> doSearch(@Param("code") String code, @Param("name") String name, @Param("status") Boolean status, @Param("companyId") Long companyId, Pageable pageable);
+    Page<Role> doSearch(@Param("code") String code, @Param("name") String name, @Param("status") Boolean status,
+                        @Param("companyId") Long companyId, @Param("userId") Long userId,
+                        @Param("constUserId") Long constUserId, @Param("constRoleId") Long constRoleId, Pageable pageable);
 
     List<Role> findAllById(Long id);
 

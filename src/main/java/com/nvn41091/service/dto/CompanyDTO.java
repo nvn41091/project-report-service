@@ -30,6 +30,8 @@ public class CompanyDTO implements Serializable {
 
     private Boolean status;
 
+    private Long createBy;
+
     
     public Long getId() {
         return id;
@@ -95,6 +97,14 @@ public class CompanyDTO implements Serializable {
         this.status = status;
     }
 
+    public Long getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(Long createBy) {
+        this.createBy = createBy;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -124,6 +134,7 @@ public class CompanyDTO implements Serializable {
             ", description='" + getDescription() + "'" +
             ", updateTime='" + getUpdateTime() + "'" +
             ", status='" + isStatus() + "'" +
+            ", createBy=" + getCreateBy() +
             "}";
     }
 }

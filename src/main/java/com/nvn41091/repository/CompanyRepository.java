@@ -22,15 +22,18 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
             "AND (:name is null or lower(c.name) like %:name% ESCAPE '&') " +
             "AND (:email is null or lower(c.email) like %:email% ESCAPE '&') " +
             "AND (:tel is null or lower(c.tel) like %:tel% ESCAPE '&') " +
-            "AND (:status is null or c.status = :status)",
+            "AND (:status is null or c.status = :status) " +
+            "AND c.createBy = :userId ",
             countQuery = "SELECT count(c) from Company c where 1=1 " +
                     "AND (:code is null or lower(c.code) like %:code% ESCAPE '&') " +
                     "AND (:name is null or lower(c.name) like %:name% ESCAPE '&') " +
                     "AND (:email is null or lower(c.email) like %:email% ESCAPE '&') " +
                     "AND (:tel is null or lower(c.tel) like %:tel% ESCAPE '&') " +
-                    "AND (:status is null or c.status = :status)")
+                    "AND (:status is null or c.status = :status) " +
+                    "AND c.createBy = :userId")
     Page<Company> doSearch(@Param("code") String code, @Param("name") String name,
-                           @Param("email") String email, @Param("tel") String tel, @Param("status") Boolean status, Pageable pageable);
+                           @Param("email") String email, @Param("tel") String tel,
+                           @Param("status") Boolean status, @Param("userId") Long userId, Pageable pageable);
 
     @Query("SELECT u from Company u WHERE upper(u.code) = upper(:code) and ( :id is null or u.id <> :id) ")
     List<Company> findAllByCodeAndIdNotEqual(@Param("code") String code, @Param("id") Long id);
@@ -42,4 +45,6 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
     List<Company> findAllByTelAndIdNotEqual(@Param("tel") String tel, @Param("id") Long id);
 
     List<Company> findAllById(Long id);
+
+    Company findAllByIdAndCreateBy(Long id, Long createBy);
 }

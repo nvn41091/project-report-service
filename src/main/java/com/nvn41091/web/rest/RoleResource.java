@@ -1,6 +1,8 @@
 package com.nvn41091.web.rest;
 
+import com.nvn41091.configuration.Constants;
 import com.nvn41091.service.RoleService;
+import com.nvn41091.utils.Translator;
 import com.nvn41091.web.rest.errors.BadRequestAlertException;
 import com.nvn41091.service.dto.RoleDTO;
 
@@ -112,6 +114,9 @@ public class RoleResource {
     @PreAuthorize("hasAuthority(\"ROLE#DELETE\")")
     public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
         log.debug("REST request to delete Role : {}", id);
+        if (id.equals(Constants.CONST_ROLE_ID_FOR_USER)) {
+            throw new BadRequestAlertException(Translator.toLocale("error.role.defaultUser"), ENTITY_NAME, "id_not_delete");
+        }
         roleService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }

@@ -48,6 +48,10 @@
     {
       "fieldName": "status",
       "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "createBy",
+      "fieldType": "Long"
     }
   ],
   "relationships": [],

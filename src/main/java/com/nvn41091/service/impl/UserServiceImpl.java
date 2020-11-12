@@ -3,10 +3,7 @@ package com.nvn41091.service.impl;
 import com.nvn41091.domain.CompanyUser;
 import com.nvn41091.domain.User;
 import com.nvn41091.domain.UserRole;
-import com.nvn41091.repository.CompanyUserRepository;
-import com.nvn41091.repository.ModuleRepository;
-import com.nvn41091.repository.UserRepository;
-import com.nvn41091.repository.UserRoleRepository;
+import com.nvn41091.repository.*;
 import com.nvn41091.security.SecurityUtils;
 import com.nvn41091.service.UserService;
 import com.nvn41091.service.dto.ResponseJwtDTO;
@@ -59,9 +56,12 @@ public class UserServiceImpl implements UserService {
 
     private final JwtTokenUtils jwtTokenUtils;
 
+    private final CompanyRepository companyRepository;
+
     public UserServiceImpl(PasswordEncoder encoder, UserMapper userMapper, UserRepository repository,
                            UserRoleRepository userRoleRepository, ModuleRepository moduleRepository,
-                           CompanyUserRepository companyUserRepository, JavaMailSender javaMailSender, JwtTokenUtils jwtTokenUtils) {
+                           CompanyUserRepository companyUserRepository, JavaMailSender javaMailSender,
+                           JwtTokenUtils jwtTokenUtils, CompanyRepository companyRepository) {
         this.encoder = encoder;
         this.userMapper = userMapper;
         this.repository = repository;
@@ -70,6 +70,7 @@ public class UserServiceImpl implements UserService {
         this.companyUserRepository = companyUserRepository;
         this.emailSender = javaMailSender;
         this.jwtTokenUtils = jwtTokenUtils;
+        this.companyRepository = companyRepository;
     }
 
     @Override
@@ -159,6 +160,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(User user) {
+        UserDTO current = SecurityUtils.getCurrentUser().get();
+        if (companyRepository.findAllByIdAndCreateBy(current.getCompanyId(), user.getId()) != null) {
+            throw new BadRequestAlertException(Translator.toLocale("error.user.userCreate"), "user", "user.userCreate");
+        }
         if (repository.findAllById(user.getId()).size() == 0) {
             throw new BadRequestAlertException(Translator.toLocale("error.user.notExist"), "user", "user.notExist");
         }

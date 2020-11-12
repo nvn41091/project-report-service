@@ -49,6 +49,16 @@ public class CompanyRoleDTO implements Serializable {
         this.updateTime = updateTime;
     }
 
+    public CompanyRoleDTO() {
+    }
+
+    public CompanyRoleDTO(Long id, Long companyId, Long roleId, Instant updateTime) {
+        this.id = id;
+        this.companyId = companyId;
+        this.roleId = roleId;
+        this.updateTime = updateTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

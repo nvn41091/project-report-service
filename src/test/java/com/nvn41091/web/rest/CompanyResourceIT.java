@@ -1,8 +1,8 @@
 package com.nvn41091.web.rest;
 
+import com.nvn41091.run.ReportApp;
 import com.nvn41091.domain.Company;
 import com.nvn41091.repository.CompanyRepository;
-import com.nvn41091.run.ReportApp;
 import com.nvn41091.service.CompanyService;
 import com.nvn41091.service.dto.CompanyDTO;
 import com.nvn41091.service.mapper.CompanyMapper;
@@ -55,6 +55,9 @@ public class CompanyResourceIT {
     private static final Boolean DEFAULT_STATUS = false;
     private static final Boolean UPDATED_STATUS = true;
 
+    private static final Long DEFAULT_CREATE_BY = 1L;
+    private static final Long UPDATED_CREATE_BY = 2L;
+
     @Autowired
     private CompanyRepository companyRepository;
 
@@ -86,7 +89,8 @@ public class CompanyResourceIT {
             .email(DEFAULT_EMAIL)
             .description(DEFAULT_DESCRIPTION)
             .updateTime(DEFAULT_UPDATE_TIME)
-            .status(DEFAULT_STATUS);
+            .status(DEFAULT_STATUS)
+            .createBy(DEFAULT_CREATE_BY);
         return company;
     }
     /**
@@ -103,7 +107,8 @@ public class CompanyResourceIT {
             .email(UPDATED_EMAIL)
             .description(UPDATED_DESCRIPTION)
             .updateTime(UPDATED_UPDATE_TIME)
-            .status(UPDATED_STATUS);
+            .status(UPDATED_STATUS)
+            .createBy(UPDATED_CREATE_BY);
         return company;
     }
 
@@ -134,6 +139,7 @@ public class CompanyResourceIT {
         assertThat(testCompany.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testCompany.getUpdateTime()).isEqualTo(DEFAULT_UPDATE_TIME);
         assertThat(testCompany.isStatus()).isEqualTo(DEFAULT_STATUS);
+        assertThat(testCompany.getCreateBy()).isEqualTo(DEFAULT_CREATE_BY);
     }
 
     @Test
@@ -174,7 +180,8 @@ public class CompanyResourceIT {
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].updateTime").value(hasItem(DEFAULT_UPDATE_TIME.toString())))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())));
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())))
+            .andExpect(jsonPath("$.[*].createBy").value(hasItem(DEFAULT_CREATE_BY.intValue())));
     }
     
     @Test
@@ -194,7 +201,8 @@ public class CompanyResourceIT {
             .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.updateTime").value(DEFAULT_UPDATE_TIME.toString()))
-            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.booleanValue()));
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.booleanValue()))
+            .andExpect(jsonPath("$.createBy").value(DEFAULT_CREATE_BY.intValue()));
     }
     @Test
     @Transactional
@@ -223,7 +231,8 @@ public class CompanyResourceIT {
             .email(UPDATED_EMAIL)
             .description(UPDATED_DESCRIPTION)
             .updateTime(UPDATED_UPDATE_TIME)
-            .status(UPDATED_STATUS);
+            .status(UPDATED_STATUS)
+            .createBy(UPDATED_CREATE_BY);
         CompanyDTO companyDTO = companyMapper.toDto(updatedCompany);
 
         restCompanyMockMvc.perform(put("/api/companies")
@@ -242,6 +251,7 @@ public class CompanyResourceIT {
         assertThat(testCompany.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testCompany.getUpdateTime()).isEqualTo(UPDATED_UPDATE_TIME);
         assertThat(testCompany.isStatus()).isEqualTo(UPDATED_STATUS);
+        assertThat(testCompany.getCreateBy()).isEqualTo(UPDATED_CREATE_BY);
     }
 
     @Test

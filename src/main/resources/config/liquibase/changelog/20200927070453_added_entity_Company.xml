@@ -37,6 +37,9 @@
             <column name="status" type="boolean">
                 <constraints nullable="true" />
             </column>
+            <column name="create_by" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
         <dropDefaultValue tableName="company" columnName="update_time" columnDataType="datetime"/>
@@ -68,6 +71,7 @@
             <column name="description" type="string"/>
             <column name="update_time" type="datetime"/>
             <column name="status" type="boolean"/>
+            <column name="create_by" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

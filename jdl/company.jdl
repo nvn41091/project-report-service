@@ -7,6 +7,7 @@ entity Company {
     description String maxlength(500)
     updateTime Instant
     status Boolean
+    createBy Long
 }
 dto Company with mapstruct
 paginate Company with pagination

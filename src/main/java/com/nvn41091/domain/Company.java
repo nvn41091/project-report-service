@@ -24,11 +24,11 @@ public class Company implements Serializable {
     private Long id;
 
     @Size(max = 100)
-    @Column(name = "code", length = 100, nullable = false)
+    @Column(name = "code", length = 100)
     private String code;
 
     @Size(max = 250)
-    @Column(name = "name", length = 250, nullable = false)
+    @Column(name = "name", length = 250)
     private String name;
 
     @Size(max = 30)
@@ -48,6 +48,9 @@ public class Company implements Serializable {
 
     @Column(name = "status")
     private Boolean status;
+
+    @Column(name = "create_by")
+    private Long createBy;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -148,6 +151,19 @@ public class Company implements Serializable {
     public void setStatus(Boolean status) {
         this.status = status;
     }
+
+    public Long getCreateBy() {
+        return createBy;
+    }
+
+    public Company createBy(Long createBy) {
+        this.createBy = createBy;
+        return this;
+    }
+
+    public void setCreateBy(Long createBy) {
+        this.createBy = createBy;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -178,6 +194,7 @@ public class Company implements Serializable {
             ", description='" + getDescription() + "'" +
             ", updateTime='" + getUpdateTime() + "'" +
             ", status='" + isStatus() + "'" +
+            ", createBy=" + getCreateBy() +
             "}";
     }
 }

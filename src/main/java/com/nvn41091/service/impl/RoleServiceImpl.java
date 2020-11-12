@@ -1,5 +1,6 @@
 package com.nvn41091.service.impl;
 
+import com.nvn41091.configuration.Constants;
 import com.nvn41091.domain.CompanyRole;
 import com.nvn41091.domain.User;
 import com.nvn41091.repository.RoleModuleRepository;
@@ -101,6 +102,9 @@ public class RoleServiceImpl implements RoleService {
                 DataUtil.makeLikeParam(roleDTO.getName()),
                 roleDTO.isStatus(),
                 current.getCompanyId(),
+                current.getId(),
+                Constants.CONST_USER_ADMIN_ID,
+                Constants.CONST_ROLE_ID_FOR_USER,
                 pageable)
                 .map(roleMapper::toDto);
     }

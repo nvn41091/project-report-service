@@ -26,7 +26,7 @@ public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
             " inner join ( select * from action WHERE status = 1 ) a on rm.action_id = a.id", nativeQuery = true)
     List<Object[]> getUserRole(@Param("id") Long id,@Param("companyId")  Long companyId);
 
-    void deleteAllByUserId(Long id);
+    void deleteAllByUserIdAndCompanyId(Long id, Long companyId);
 
     void deleteAllByRoleId(Long roleId);
 

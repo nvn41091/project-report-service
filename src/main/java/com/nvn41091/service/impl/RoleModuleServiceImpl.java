@@ -1,10 +1,13 @@
 package com.nvn41091.service.impl;
 
+import com.nvn41091.configuration.Constants;
 import com.nvn41091.domain.RoleModule;
 import com.nvn41091.repository.RoleModuleRepository;
+import com.nvn41091.security.SecurityUtils;
 import com.nvn41091.service.RoleModuleService;
 import com.nvn41091.service.dto.RoleModuleDTO;
 import com.nvn41091.service.dto.TreeViewDTO;
+import com.nvn41091.service.dto.UserDTO;
 import com.nvn41091.service.mapper.RoleModuleMapper;
 import com.nvn41091.utils.DataUtil;
 import org.slf4j.Logger;
@@ -91,7 +94,8 @@ public class RoleModuleServiceImpl implements RoleModuleService {
 
     @Override
     public List<TreeViewDTO> getALl(Long id) {
-        return roleModuleRepository.getAllModuleAndActionByRoleId(id)
+        UserDTO current = SecurityUtils.getCurrentUser().get();
+        return roleModuleRepository.getAllModuleAndActionByRoleId(id, current.getCompanyId(), Constants.CONST_COMPANY_ID_ADMIN, Constants.CONST_ROLE_ID_FOR_ADMIN)
                 .stream().map(objects -> new TreeViewDTO(DataUtil.safeToString(objects[0]),
                         DataUtil.safeToLong(objects[2]),
                         DataUtil.safeToString(objects[1]),

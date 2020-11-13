@@ -13,4 +13,5 @@ public class Constants {
     public static final Long CONST_ROLE_ID_FOR_USER = 3L;
     public static final Long CONST_ROLE_ID_FOR_ADMIN = 2L;
     public static final Long CONST_USER_ADMIN_ID = 1L;
+    public static final Long CONST_COMPANY_ID_ADMIN = 17L;
 }

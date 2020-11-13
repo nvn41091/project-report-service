@@ -167,7 +167,7 @@ public class UserServiceImpl implements UserService {
         if (repository.findAllById(user.getId()).size() == 0) {
             throw new BadRequestAlertException(Translator.toLocale("error.user.notExist"), "user", "user.notExist");
         }
-        this.userRoleRepository.deleteAllByUserId(user.getId());
+        this.userRoleRepository.deleteAllByUserIdAndCompanyId(user.getId(), current.getCompanyId());
         this.companyUserRepository.deleteByUserIdAndCompanyId(user.getId(), current.getCompanyId());
     }
 

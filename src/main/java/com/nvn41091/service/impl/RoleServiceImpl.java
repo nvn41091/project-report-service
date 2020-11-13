@@ -61,6 +61,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public RoleDTO save(RoleDTO roleDTO) {
         log.debug("Request to save Role : {}", roleDTO);
+        UserDTO current = SecurityUtils.getCurrentUser().get();
         if (roleDTO.getId() != null) {
             // Validate cap nhat
             if (roleRepository.findAllById(roleDTO.getId()).size() == 0) {
@@ -69,14 +70,13 @@ public class RoleServiceImpl implements RoleService {
         } else {
             // Validate them moi
         }
-        if (roleRepository.findAllByCodeAndIdNotEqual(roleDTO.getCode(), roleDTO.getId()).size() > 0) {
+        if (roleRepository.findAllByCodeAndIdNotEqualAndCompanyId(roleDTO.getCode(), roleDTO.getId(), current.getCompanyId()).size() > 0) {
             throw new BadRequestAlertException(Translator.toLocale("error.role.codeExist"), "role", "role.codeExist");
         }
         roleDTO.setUpdateTime(Instant.now());
         Role role = roleMapper.toEntity(roleDTO);
         role = roleRepository.save(role);
         if (roleDTO.getId() == null) {
-            UserDTO current = SecurityUtils.getCurrentUser().get();
             CompanyRoleDTO companyRoleDTO = new CompanyRoleDTO();
             companyRoleDTO.setRoleId(role.getId());
             companyRoleDTO.setCompanyId(current.getCompanyId());
@@ -137,7 +137,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<RoleDTO> searchByCodeOrName(RoleDTO roleDTO) {
-        return roleRepository.searchByCodeOrName(roleDTO.getName())
+        return roleRepository.searchByCodeOrName(roleDTO.getName(), roleDTO.getId(), Constants.CONST_COMPANY_ID_ADMIN, Constants.CONST_ROLE_ID_FOR_ADMIN)
                 .stream().map(roleMapper::toDto).collect(Collectors.toList());
     }
 }

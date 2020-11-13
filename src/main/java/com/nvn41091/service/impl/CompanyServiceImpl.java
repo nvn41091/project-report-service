@@ -91,7 +91,7 @@ public class CompanyServiceImpl implements CompanyService {
     public Page<CompanyDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Companies");
         return companyRepository.findAll(pageable)
-            .map(companyMapper::toDto);
+                .map(companyMapper::toDto);
     }
 
     @Override
@@ -114,7 +114,7 @@ public class CompanyServiceImpl implements CompanyService {
     public Optional<CompanyDTO> findOne(Long id) {
         log.debug("Request to get Company : {}", id);
         return companyRepository.findById(id)
-            .map(companyMapper::toDto);
+                .map(companyMapper::toDto);
     }
 
     @Override
@@ -123,8 +123,8 @@ public class CompanyServiceImpl implements CompanyService {
         if (companyRepository.findAllById(id).size() == 0) {
             throw new BadRequestAlertException(Translator.toLocale("error.company.notExist"), "company", "company.notExist");
         }
-        companyRepository.deleteById(id);
         companyUserService.deleteByCompanyId(id);
         userRoleService.deleteByCompanyId(id);
+        companyRepository.deleteById(id);
     }
 }

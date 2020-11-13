@@ -1,5 +1,6 @@
 package com.nvn41091.service.impl;
 
+import com.nvn41091.repository.ModuleActionRepository;
 import com.nvn41091.service.ActionService;
 import com.nvn41091.domain.Action;
 import com.nvn41091.repository.ActionRepository;
@@ -33,9 +34,12 @@ public class ActionServiceImpl implements ActionService {
 
     private final ActionMapper actionMapper;
 
-    public ActionServiceImpl(ActionRepository actionRepository, ActionMapper actionMapper) {
+    private final ModuleActionRepository moduleActionRepository;
+
+    public ActionServiceImpl(ActionRepository actionRepository, ActionMapper actionMapper, ModuleActionRepository moduleActionRepository) {
         this.actionRepository = actionRepository;
         this.actionMapper = actionMapper;
+        this.moduleActionRepository = moduleActionRepository;
     }
 
     @Override
@@ -78,6 +82,9 @@ public class ActionServiceImpl implements ActionService {
         log.debug("Request to delete Action : {}", id);
         if (actionRepository.findAllById(id).size() == 0) {
             throw new BadRequestAlertException(Translator.toLocale("error.action.notExist"), "action", "action.notExist");
+        }
+        if (moduleActionRepository.findAllByActionId(id).size() > 0) {
+            throw new BadRequestAlertException(Translator.toLocale("error.action.using"), "action", "action.using");
         }
         actionRepository.deleteById(id);
     }

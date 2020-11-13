@@ -13,7 +13,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link CompanyUser}.
@@ -67,5 +69,11 @@ public class CompanyUserServiceImpl implements CompanyUserService {
     @Override
     public void deleteByCompanyId(Long companyId) {
         companyUserRepository.deleteByUserId(companyId);
+    }
+
+    @Override
+    public List<CompanyUserDTO> findAllByCompanyId(Long id) {
+        return companyUserRepository.findAllByCompanyId(id)
+                .stream().map(companyUserMapper::toDto).collect(Collectors.toList());
     }
 }

@@ -16,5 +16,7 @@ public interface ModuleActionRepository extends JpaRepository<ModuleAction, Long
 
     List<ModuleAction> getAllByModuleId(Long id);
 
+    List<ModuleAction> findAllByActionId(Long id);
+
     void deleteAllByModuleId(Long id);
 }

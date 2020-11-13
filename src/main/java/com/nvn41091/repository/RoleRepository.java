@@ -37,12 +37,13 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
 
     List<Role> findAllById(Long id);
 
-    @Query("SELECT u from Role u WHERE upper(u.code) = upper(:code) AND ( :id is null or u.id <> :id) ")
-    List<Role> findAllByCodeAndIdNotEqual(@Param("code") String code, @Param("id") Long id );
+    @Query("SELECT u from Role u INNER JOIN CompanyRole cr on cr.roleId = u.id and cr.companyId = :companyId WHERE upper(u.code) = upper(:code) AND ( :id is null or u.id <> :id) ")
+    List<Role> findAllByCodeAndIdNotEqualAndCompanyId(@Param("code") String code, @Param("id") Long id, @Param("companyId") Long companyId );
 
-    @Query(value = "SELECT r FROM Role r WHERE r.status = true " +
-            "AND (:name is null or lower(r.name) like %:name% ESCAPE '&' or lower(r.code) like %:name% ESCAPE '&' ) ")
-    List<Role> searchByCodeOrName(@Param("name") String name);
+    @Query(value = "SELECT r FROM Role r inner join CompanyRole cr on cr.roleId = r.id and cr.companyId = :companyId WHERE r.status = true " +
+            "AND (:name is null or lower(r.name) like %:name% ESCAPE '&' or lower(r.code) like %:name% ESCAPE '&' ) " +
+            "AND (:companyId = :constCompanyId or (r.id <> :constRoleAdmin )) ")
+    List<Role> searchByCodeOrName(@Param("name") String name, @Param("companyId") Long companyId, @Param("constCompanyId") Long constCompanyId, @Param("constRoleAdmin") Long constRoleAdmin);
 
     @Query(value = "SELECT r FROM Role r " +
             "INNER JOIN CompanyRole cr on r.id = cr.roleId and r.status = true " +

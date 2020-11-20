@@ -47,4 +47,8 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
     List<Company> findAllById(Long id);
 
     Company findAllByIdAndCreateBy(Long id, Long createBy);
+
+    @Query(value = "SELECT DISTINCT new Company(c.id, c.name) from Company c WHERE " +
+            "(:name is null or lower(c.name) like %:name% ESCAPE '&' or lower(c.code) like %:name% ESCAPE '&') ")
+    Page<Company> autoCompleteCompany(@Param("name") String name, Pageable pageable);
 }

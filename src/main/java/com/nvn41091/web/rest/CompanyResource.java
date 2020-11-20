@@ -114,4 +114,10 @@ public class CompanyResource {
         companyService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
+
+    @PostMapping("/autoCompleteCustomer")
+    @PreAuthorize("hasAuthority(\"PRI#SEARCH\") or hasAuthority(\"PRI#UPDATE\") or hasAuthority(\"PRI#INSERT\")")
+    public ResponseEntity<List<CompanyDTO>> autoCompleteCustomer(@RequestBody CompanyDTO companyDTO) {
+        return ResponseEntity.ok(companyService.autoCompleteCustomer(companyDTO));
+    }
 }

@@ -52,6 +52,14 @@ public class Company implements Serializable {
     @Column(name = "create_by")
     private Long createBy;
 
+    public Company() {
+    }
+
+    public Company(Long id, @Size(max = 250) String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;

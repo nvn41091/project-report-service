@@ -1,11 +1,11 @@
 package com.nvn41091.service.impl;
 
 import com.nvn41091.configuration.Constants;
+import com.nvn41091.domain.Company;
+import com.nvn41091.repository.CompanyRepository;
 import com.nvn41091.security.SecurityUtils;
 import com.nvn41091.service.CompanyRoleService;
 import com.nvn41091.service.CompanyService;
-import com.nvn41091.domain.Company;
-import com.nvn41091.repository.CompanyRepository;
 import com.nvn41091.service.CompanyUserService;
 import com.nvn41091.service.UserRoleService;
 import com.nvn41091.service.dto.*;
@@ -15,14 +15,14 @@ import com.nvn41091.utils.Translator;
 import com.nvn41091.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.xml.crypto.Data;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -126,5 +126,12 @@ public class CompanyServiceImpl implements CompanyService {
         companyUserService.deleteByCompanyId(id);
         userRoleService.deleteByCompanyId(id);
         companyRepository.deleteById(id);
+    }
+
+    @Override
+    public List<CompanyDTO> autoCompleteCustomer(CompanyDTO companyDTO) {
+        Pageable request = PageRequest.of(0, 10);
+        return companyRepository.autoCompleteCompany(DataUtil.makeLikeParam(companyDTO.getName()), request)
+                .map(companyMapper::toDto).getContent();
     }
 }

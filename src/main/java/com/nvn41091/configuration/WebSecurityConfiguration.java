@@ -1,7 +1,5 @@
 package com.nvn41091.configuration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.nvn41091.security.JwtAuthenticationEntryPoint;
 import com.nvn41091.security.JwtRequestFilter;
 import com.nvn41091.security.JwtUserDetailsService;
@@ -26,8 +24,6 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.ZoneOffset;
 import java.util.TimeZone;
 

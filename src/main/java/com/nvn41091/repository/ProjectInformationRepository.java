@@ -21,7 +21,7 @@ public interface ProjectInformationRepository extends JpaRepository<ProjectInfor
     @Query(value = "SELECT new com.nvn41091.service.dto.ProjectInformationDTO(c, co.name, ap.value) " +
             "from ProjectInformation c " +
             "left join AppParam ap on c.status = ap.id and ap.status = true " +
-            "inner join Company co on c.customerId = co.id and co.status = true where 1=1 " +
+            "left join Company co on c.customerId = co.id and co.status = true where 1=1 " +
             "AND (:name is null or lower(c.name) like %:name% ESCAPE '&') " +
             "AND (:code is null or lower(c.code) like %:code% ESCAPE '&')" +
             "AND (:startDate is null or c.startDate >= :startDate )" +
@@ -31,7 +31,7 @@ public interface ProjectInformationRepository extends JpaRepository<ProjectInfor
             "AND (:status is null or c.status = :status)",
             countQuery = "SELECT count(c) from ProjectInformation c " +
                     "left join AppParam ap on c.status = ap.id and ap.status = true " +
-                    "inner join Company company on c.customerId = company.id and company.status = true where 1=1 " +
+                    "left join Company company on c.customerId = company.id and company.status = true where 1=1 " +
                     "AND (:name is null or lower(c.name) like %:name% ESCAPE '&') " +
                     "AND (:code is null or lower(c.code) like %:code% ESCAPE '&') " +
                     "AND (:startDate is null or c.startDate >= :startDate )" +

@@ -14,4 +14,12 @@ public class Constants {
     public static final Long CONST_ROLE_ID_FOR_ADMIN = 2L;
     public static final Long CONST_USER_ADMIN_ID = 1L;
     public static final Long CONST_COMPANY_ID_ADMIN = 17L;
+
+    static final String[] AUTH_WHITELIST = {
+            "/swagger-resources/**",
+            "/swagger-ui.html",
+            "/v2/api-docs",
+            "/webjars/**",
+            "/error"
+    };
 }

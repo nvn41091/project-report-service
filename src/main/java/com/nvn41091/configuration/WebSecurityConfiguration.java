@@ -3,9 +3,7 @@ package com.nvn41091.configuration;
 import com.nvn41091.security.JwtAuthenticationEntryPoint;
 import com.nvn41091.security.JwtRequestFilter;
 import com.nvn41091.security.JwtUserDetailsService;
-import com.nvn41091.security.ResponseHeaderInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,12 +18,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.time.ZoneOffset;
-import java.util.TimeZone;
 
 @Configuration
 @EnableWebSecurity
@@ -57,25 +49,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    @Bean
-    public Jackson2ObjectMapperBuilderCustomizer init() {
-        return builder -> builder.timeZone(TimeZone.getTimeZone(ZoneOffset.UTC));
-    }
-
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("*").allowedMethods("GET", "POST", "PUT", "DELETE");
-            }
-
-            @Override
-            public void addInterceptors(InterceptorRegistry registry) {
-                registry.addInterceptor(new ResponseHeaderInterceptor());
-            }
-        };
-    }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -87,6 +60,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/register").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/request-email").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/request-password").permitAll()
+                .antMatchers("/swagger-ui.html").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()
@@ -99,7 +73,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/error");
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers(Constants.AUTH_WHITELIST);
     }
 }

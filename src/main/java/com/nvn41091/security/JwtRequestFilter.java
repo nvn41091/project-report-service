@@ -1,5 +1,6 @@
 package com.nvn41091.security;
 
+import com.nvn41091.configuration.Constants;
 import com.nvn41091.domain.User;
 import com.nvn41091.repository.UserRepository;
 import com.nvn41091.service.UserRoleService;
@@ -42,16 +43,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
     private UserMapper userMapper;
 
-    @SneakyThrows
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        final String requestTokenHeader = request.getHeader("Authorization");
+        final String requestTokenHeader = request.getHeader(Constants.AUTHORIZATION_HEADER);
         String usernameAndCompanyId = null;
         String jwtToken = null;
         String username = null;
         Long companyId = null;
 
-        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
+        if (requestTokenHeader != null && requestTokenHeader.startsWith(Constants.AUTHORIZATION_HEADER_START)) {
             jwtToken = requestTokenHeader.substring(7);
             try {
                 usernameAndCompanyId = jwtTokenUtil.getUsernameFromToken(jwtToken);

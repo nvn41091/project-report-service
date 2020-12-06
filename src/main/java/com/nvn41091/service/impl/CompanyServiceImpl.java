@@ -61,15 +61,15 @@ public class CompanyServiceImpl implements CompanyService {
             companyDTO.setCreateBy(userDTO.getId());
         } else {
             // Validate truong hop update
-            if (companyRepository.findAllById(companyDTO.getId()).size() == 0) {
+            if (companyRepository.findAllById(companyDTO.getId()).isEmpty()) {
                 throw new BadRequestAlertException(Translator.toLocale("error.company.notExist"), "company", "company.notExist");
             }
         }
         // Validate chung
-        if (companyRepository.findAllByCodeAndIdNotEqual(companyDTO.getCode(), companyDTO.getId()).size() > 0) {
+        if (!companyRepository.findAllByCodeAndIdNotEqual(companyDTO.getCode(), companyDTO.getId()).isEmpty()) {
             throw new BadRequestAlertException(Translator.toLocale("error.company.codeExist"), "company", "company.notExist");
         }
-        if (companyRepository.findAllByEmailAndIdNotEqual(companyDTO.getEmail(), companyDTO.getId()).size() > 0) {
+        if (!companyRepository.findAllByEmailAndIdNotEqual(companyDTO.getEmail(), companyDTO.getId()).isEmpty()) {
             throw new BadRequestAlertException(Translator.toLocale("error.company.emailExist"), "company", "company.notExist");
         }
         companyDTO.setUpdateTime(Instant.now());

@@ -43,10 +43,8 @@ public class AppParamServiceImpl implements AppParamService {
     @Override
     public AppParamDTO save(AppParamDTO appParamDTO) {
         log.debug("Request to save AppParam : {}", appParamDTO);
-        if (appParamDTO.getId() != null) {
-            if (appParamRepository.findAllById(appParamDTO.getId()).size() == 0) {
-                throw new BadRequestAlertException(Translator.toLocale("error.appParam.notExist"), "appParam", "appParam.notExist");
-            }
+        if (appParamDTO.getId() != null && appParamRepository.findAllById(appParamDTO.getId()).isEmpty()) {
+            throw new BadRequestAlertException(Translator.toLocale("error.appParam.notExist"), "appParam", "appParam.notExist");
         }
         appParamDTO.setUpdateTime(Instant.now());
         AppParam appParam = appParamMapper.toEntity(appParamDTO);
@@ -59,7 +57,7 @@ public class AppParamServiceImpl implements AppParamService {
     public Page<AppParamDTO> findAll(Pageable pageable) {
         log.debug("Request to get all AppParams");
         return appParamRepository.findAll(pageable)
-            .map(appParamMapper::toDto);
+                .map(appParamMapper::toDto);
     }
 
     @Override
@@ -84,7 +82,7 @@ public class AppParamServiceImpl implements AppParamService {
     public Optional<AppParamDTO> findOne(Long id) {
         log.debug("Request to get AppParam : {}", id);
         return appParamRepository.findById(id)
-            .map(appParamMapper::toDto);
+                .map(appParamMapper::toDto);
     }
 
     @Override

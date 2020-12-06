@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StopWatch;
@@ -27,11 +28,17 @@ import static springfox.documentation.builders.PathSelectors.regex;
 @EnableSwagger2
 public class SwaggerConfig {
 
-    private final Logger log = LoggerFactory.getLogger(SwaggerConfig.class);
+    private final Logger logger = LoggerFactory.getLogger(SwaggerConfig.class);
+
+    private Environment env;
+
+    public SwaggerConfig(Environment env) {
+        this.env = env;
+    }
 
     @Bean
     public Docket swaggerSpringfoxDocket() {
-        log.debug("Starting Swagger");
+        logger.info("Starting Swagger");
         StopWatch watch = new StopWatch();
         watch.start();
 
@@ -56,12 +63,14 @@ public class SwaggerConfig {
                 .build();
 
         watch.stop();
-        log.debug("Started Swagger in {} ms", watch.getTotalTimeMillis());
+        logger.info("Started Swagger in {} ms", watch.getTotalTimeMillis());
         return docket;
     }
 
     private ApiInfo getApiInfo() {
-        Contact contact = new Contact(Constants.USER_FULLNAME, Constants.USER_URL, Constants.USER_EMAIL);
+        Contact contact = new Contact(env.getProperty("swagger.username"),
+                env.getProperty("swagger.facebook_url"),
+                env.getProperty("swagger.email"));
         return new ApiInfoBuilder()
                 .title("Project Report Swagger")
                 .description("Test API For Project Report")

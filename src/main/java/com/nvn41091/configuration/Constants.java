@@ -12,9 +12,7 @@ public class Constants {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String AUTHORIZATION_HEADER_START = "Bearer ";
     public static final String DEFAULT_INCLUDE_PATTERN = "/api/.*";
-    public static final String USER_FULLNAME = "Nguyễn Văn Ngọc";
-    public static final String USER_URL= "https://facebook.com/nvn.hus";
-    public static final String USER_EMAIL = "ngoc.nv0410@gmail.com";
+    public static final String ACTION = "action";
 
     public static final char DEFAULT_ESCAPE_CHAR = '&';
     public static final Integer TIME_TYPE_DATE = 1;

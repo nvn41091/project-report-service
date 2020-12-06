@@ -1,5 +1,6 @@
 package com.nvn41091.service.impl;
 
+import com.nvn41091.configuration.Constants;
 import com.nvn41091.repository.ModuleActionRepository;
 import com.nvn41091.service.ActionService;
 import com.nvn41091.domain.Action;
@@ -49,12 +50,12 @@ public class ActionServiceImpl implements ActionService {
             // valdate truong them moi
         } else {
             // Validate truong cap nhat
-            if (actionRepository.findAllById(actionDTO.getId()).size() == 0) {
-                throw new BadRequestAlertException(Translator.toLocale("error.action.notExist"), "action", "action.notExist");
+            if (actionRepository.findAllById(actionDTO.getId()).isEmpty()) {
+                throw new BadRequestAlertException(Translator.toLocale("error.action.notExist"), Constants.ACTION, "action.notExist");
             }
         }
-        if (actionRepository.findAllByCodeAndIdNotEqual(actionDTO.getCode(), actionDTO.getId()).size() > 0) {
-            throw new BadRequestAlertException(Translator.toLocale("error.action.codeExist"), "action", "action.exits");
+        if (!actionRepository.findAllByCodeAndIdNotEqual(actionDTO.getCode(), actionDTO.getId()).isEmpty()) {
+            throw new BadRequestAlertException(Translator.toLocale("error.action.codeExist"), Constants.ACTION, "action.exits");
         }
         actionDTO.setUpdateTime(Instant.now());
         Action action = actionMapper.toEntity(actionDTO);
@@ -80,11 +81,11 @@ public class ActionServiceImpl implements ActionService {
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Action : {}", id);
-        if (actionRepository.findAllById(id).size() == 0) {
-            throw new BadRequestAlertException(Translator.toLocale("error.action.notExist"), "action", "action.notExist");
+        if (actionRepository.findAllById(id).isEmpty()) {
+            throw new BadRequestAlertException(Translator.toLocale("error.action.notExist"), Constants.ACTION, "action.notExist");
         }
-        if (moduleActionRepository.findAllByActionId(id).size() > 0) {
-            throw new BadRequestAlertException(Translator.toLocale("error.action.using"), "action", "action.using");
+        if (!moduleActionRepository.findAllByActionId(id).isEmpty()) {
+            throw new BadRequestAlertException(Translator.toLocale("error.action.using"), Constants.ACTION, "action.using");
         }
         actionRepository.deleteById(id);
     }

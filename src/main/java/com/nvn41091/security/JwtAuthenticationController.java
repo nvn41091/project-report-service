@@ -49,7 +49,7 @@ public class JwtAuthenticationController {
     @PostMapping(value = "/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody UserDTO user,
                                                        HttpServletRequest request) throws Exception {
-        authenticate(user.getUserName(), user.getPasswordHash());;
+        authenticate(user.getUserName(), user.getPasswordHash());
         final String fingerprint = request.getHeader("fingerprint");
         repository.updateUserByFingerPrint(fingerprint, user.getUserName());
         List<ResponseJwtDTO> result = userService.createToken(user);

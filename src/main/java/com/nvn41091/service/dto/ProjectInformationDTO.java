@@ -29,7 +29,7 @@ public class ProjectInformationDTO implements Serializable {
     @Size(max = 500)
     private String money;
 
-    private Long customerId;
+    private String customerId;
 
     private Long companyId;
 
@@ -126,11 +126,11 @@ public class ProjectInformationDTO implements Serializable {
         this.money = money;
     }
 
-    public Long getCustomerId() {
+    public String getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(Long customerId) {
+    public void setCustomerId(String customerId) {
         this.customerId = customerId;
     }
 

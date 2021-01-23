@@ -45,7 +45,7 @@ public class ProjectInformation implements Serializable {
     private String money;
 
     @Column(name = "customer_id")
-    private Long customerId;
+    private String customerId;
 
     @Column(name = "company_id")
     private Long companyId;
@@ -147,16 +147,16 @@ public class ProjectInformation implements Serializable {
         this.money = money;
     }
 
-    public Long getCustomerId() {
+    public String getCustomerId() {
         return customerId;
     }
 
-    public ProjectInformation customerId(Long customerId) {
+    public ProjectInformation customerId(String customerId) {
         this.customerId = customerId;
         return this;
     }
 
-    public void setCustomerId(Long customerId) {
+    public void setCustomerId(String customerId) {
         this.customerId = customerId;
     }
 
